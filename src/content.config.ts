@@ -176,33 +176,10 @@ const esportesCollection = defineCollection({
 
 // Export collections
 export const collections = {
-  // To prevent, getEntry (Content fetching API) throws error when collection does not exist, we specify a default collection along with the schema of each required collection
   [blogFolder]: blogCollection,
   blog: blogCollection,
-  [servicesFolder]: serviceCollection,
-  services: serviceCollection,
-  [portfolioFolder]: portfolioCollection,
-  portfolio: portfolioCollection,
-
-  pages: pagesCollection,
   sections: defineCollection({
     loader: glob({ base: "./src/content/sections", pattern: "**/*.{md,mdx}" }),
-  }),
-  homepage: defineCollection({
-    loader: glob({ base: "./src/content/homepage", pattern: "**/*.{md,mdx}" }),
-  }),
-  "about-us": defineCollection({
-    loader: glob({ base: "./src/content/about-us", pattern: "**/*.{md,mdx}" }),
-  }),
-  contact: defineCollection({
-    loader: glob({ base: "./src/content/contact", pattern: "**/*.{md,mdx}" }),
-  }),
-  faq: defineCollection({
-    loader: glob({ base: "./src/content/faq", pattern: "**/*.{md,mdx}" }),
-  }),
-  team: teamCollection,
-  pricing: defineCollection({
-    loader: glob({ base: "./src/content/pricing", pattern: "**/*.{md,mdx}" }),
   }),
   esportes: esportesCollection,
   quadras: quadrasCollection,
