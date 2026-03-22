@@ -9,6 +9,7 @@ import type { JSONLDProps } from "@/lib/utils/JsonLdGenerator";import FooterTwo 
 import BreakpointIndicator from "@/components/widgets/BreakpointIndicator.astro";
 import FooterThree from "@/components/global/FooterThree.astro";
 import WhatsAppFloat from "@/components/WhatsAppFloat.astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 interface Props extends JSONLDProps {
   className?: string;
@@ -197,6 +198,7 @@ className = fitToScreen
       });
     </script>
     <WhatsAppFloat />
+    <SpeedInsights />
     <BreakpointIndicator />
   </body>
 </html>
