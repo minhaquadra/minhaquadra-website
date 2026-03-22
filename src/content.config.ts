@@ -204,9 +204,6 @@ export const collections = {
   pricing: defineCollection({
     loader: glob({ base: "./src/content/pricing", pattern: "**/*.{md,mdx}" }),
   }),
-  author: defineCollection({
-    loader: glob({ base: "./src/content/author", pattern: "**/*.{md,mdx}" }),
-  }),
   esportes: esportesCollection,
   quadras: quadrasCollection,
 };
