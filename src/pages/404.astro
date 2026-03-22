@@ -1,0 +1,51 @@
+---
+import Base from "@/layouts/Base.astro";
+import CustomButton from "@/components/CustomButton.astro";
+---
+
+<Base title="Página não encontrada" disableTagline={true} fitToScreen={false}>
+  <section class="not-found-section">
+    <div class="container">
+      <div class="flex flex-col items-center gap-y-10">
+        <div class="space-y-4 text-center text-lg">
+          <h1 class="not-found-number text-8xl font-semibold sm:text-9xl md:text-[16rem]">404</h1>
+          <h2 class="not-found-text text-h2-sm md:text-h2">Parece que você se perdeu.</h2>
+          <p class="not-found-text">
+            O link que você seguiu provavelmente está quebrado ou a página foi removida.
+          </p>
+        </div>
+        <CustomButton
+          class="not-found-btn uppercase"
+          label="Voltar ao Início"
+          url="/"
+          variant="text"
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .not-found-section {
+    background-color: #002d3c;
+    padding-bottom: 10rem;
+  }
+
+  .not-found-number {
+    color: #b4fa50;
+  }
+
+  .not-found-text {
+    color: #ffffff;
+  }
+
+  .not-found-btn {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+  }
+
+  .not-found-btn:hover {
+    color: #e1ffa5 !important;
+    border-color: #e1ffa5 !important;
+  }
+</style>

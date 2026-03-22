@@ -1,0 +1,1114 @@
+---
+import Base from "@/layouts/Base.astro";
+import CustomButton from "@/layouts/components/CustomButton.astro";
+import AgendaFeatures from "@/components/AgendaFeatures.astro";
+import PricingSection from "@/layouts/components/sections/PricingSection.astro";
+import TestimonialGrid from "@/layouts/components/sections/TestimonialGrid.astro";
+import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+import Features from "@/layouts/components/sections/Features.astro";
+import Clients from "@/layouts/components/sections/Clients.astro";
+
+const APP_URL = "https://app.minhaquadra.com.br/login";
+
+// --- Seção 7 — Parceiros masonry ---
+const partnersLeft = [
+  {
+    name: "Astral Beach Sports",
+    local: "Estoril, Belo Horizonte",
+    description: "Três quadras de areia - Futevôlei, Beach Tennis e Vôlei.",
+    tags: ["Beach Tennis", "Futevôlei", "Vôlei"],
+    link: "https://app.minhaquadra.com.br/",
+    image: "/images/minhaquadra/parceiros/astral-beach.jpg",
+    aspectRatio: "2/3",
+  },
+  {
+    name: "All Sports Arena",
+    local: "Padre Eustáquio, Belo Horizonte",
+    description: "Várias quadras de todos esportes: Society, Peteca, Basquete, Futsal.",
+    tags: ["Society", "Futsal", "Basquete", "Peteca"],
+    link: "https://app.minhaquadra.com.br/",
+    image: "/images/minhaquadra/parceiros/all-sports.jpg",
+    aspectRatio: "4/3",
+  },
+];
+const partnersRight = [
+  {
+    name: "Círculo Militar",
+    local: "Gutierrez, Belo Horizonte",
+    description: "Clube com quadras esportivas de Tênis e Beach Tennis.",
+    tags: ["Tênis", "Beach Tennis"],
+    link: "https://app.minhaquadra.com.br/",
+    image: "/images/minhaquadra/parceiros/circulo-militar.jpg",
+    aspectRatio: "4/3",
+  },
+  {
+    name: "Quadra do Don Don",
+    local: "Nova Cachoeirinha, Belo Horizonte",
+    description: "Duas quadras de futsal adaptáveis para vôlei.",
+    tags: ["Futsal", "Vôlei"],
+    link: "https://app.minhaquadra.com.br/",
+    image: "/images/minhaquadra/parceiros/don-don.jpg",
+    aspectRatio: "3/4",
+  },
+];
+
+// --- Seção 8 — Depoimentos ---
+const testimonials = [
+  {
+    enable: true,
+    content: "O maior diferencial para mim foi o pagamento online. O 'calote' de cliente que reserva e não aparece simplesmente acabou. Isso deu uma segurança financeira que eu não tinha e otimizou meu fluxo de caixa.",
+    customer: { name: "João", role: "All Sports Arena" },
+  },
+  {
+    enable: true,
+    content: "A plataforma é completa e muito fácil de usar. Os próprios clientes elogiam o tempo todo como é simples e profissional reservar pelo link. O Minha Quadra elevou o nível do meu negócio.",
+    customer: { name: "Loren", role: "Círculo Militar" },
+  },
+  {
+    enable: true,
+    content: "Nossa taxa de ocupação aumentou depois que entramos no Minha Quadra. A plataforma traz alguns clientes durante o mês, pessoas que nos encontram pelo Google ou pelo app. É uma ferramenta de marketing que realmente coloca reservas na agenda.",
+    customer: { name: "André Lobato", role: "Astral Beach Sports" },
+  },
+];
+
+// --- Seção 10 — FAQ ---
+const faqsParceiros = [
+  {
+    enable: true,
+    title: "Posso trocar de plano depois?",
+    content: "Sim, você pode trocar seu plano a qualquer momento. Muitos clientes começam com o Plano Variável e trocam para o Plano Fixo assim que começam a realizar várias reservas pelo Minha Quadra.",
+  },
+  {
+    enable: true,
+    title: "Existe algum custo para os meus clientes?",
+    content: "Não. O Minha Quadra é gratuito para quem quer jogar. Seus clientes encontram e reservam sua quadra sem pagar nada pela plataforma — eles pagam apenas pelo horário que reservam.",
+  },
+  {
+    enable: true,
+    title: "Como funciona o cancelamento?",
+    content: "Você pode cancelar sua assinatura a qualquer momento, sem multa e sem burocracia. Basta entrar em contato com nosso suporte. Após o cancelamento, sua quadra permanece ativa até o fim do período já pago.",
+  },
+  {
+    enable: true,
+    title: "Como funciona o suporte?",
+    content: "Nosso time está disponível via WhatsApp e e-mail para ajudar você com dúvidas, configurações e qualquer problema que surgir. Parceiros do Plano Fixo contam com atendimento prioritário e acompanhamento mais próximo durante a integração.",
+  },
+];
+
+const steps = [
+  {
+    title: "Você cria seu anúncio",
+    text: "Anuncie seu estabelecimento e suas quadras no Minha Quadra. Gerencie todas as informações em um único lugar.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    image: "/images/minhaquadra/parceiros/step-1.jpg",
+  },
+  {
+    title: "A galera encontra sua quadra",
+    text: "Seu cliente é atraído para o Minha Quadra através do nosso trabalho de divulgação e acaba encontrando seu espaço.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+    image: "/images/minhaquadra/parceiros/step-2.jpg",
+  },
+  {
+    title: "Disponibilidade e Agenda",
+    text: "De forma simples, prática e rápida, o cliente acessa sua agenda e verifica a disponibilidade de horários.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>`,
+    image: "/images/minhaquadra/parceiros/step-3.jpg",
+  },
+  {
+    title: "Reserva da quadra",
+    text: "Seu cliente paga a reserva (ou o sinal) online e você recebe o dinheiro. Você ganha tempo para cuidar do que realmente importa.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    image: "/images/minhaquadra/parceiros/step-4.jpg",
+  },
+];
+---
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Posso trocar de plano depois?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim, você pode trocar seu plano a qualquer momento. Muitos clientes começam com o Plano Variável e trocam para o Plano Fixo assim que começam a realizar várias reservas pelo Minha Quadra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Existe algum custo para os meus clientes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. O Minha Quadra é gratuito para quem quer jogar. Seus clientes encontram e reservam sua quadra sem pagar nada pela plataforma — eles pagam apenas pelo horário que reservam."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como funciona o cancelamento?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Você pode cancelar sua assinatura a qualquer momento, sem multa e sem burocracia. Basta entrar em contato com nosso suporte. Após o cancelamento, sua quadra permanece ativa até o fim do período já pago."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como funciona o suporte?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nosso time está disponível via WhatsApp e e-mail para ajudar você com dúvidas, configurações e qualquer problema que surgir. Parceiros do Plano Fixo contam com atendimento prioritário e acompanhamento mais próximo durante a integração."
+      }
+    }
+  ]
+}
+</script>
+
+<Base
+  metaTitle="Para Donos de Quadra — Minha Quadra Parceiros"
+  metaDescription="Cadastre sua quadra no Minha Quadra. Mais visibilidade, mais reservas e gestão 100% digital. Sistema de agenda online, pagamento integrado e suporte dedicado."
+>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────── -->
+  <section class="pn-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+
+        <h1>
+          <!-- Linha 1: left -->
+          <span
+            class="text-display-5 md:text-display-3 lg:text-display-2 xl:text-display-1 block leading-tight font-semibold break-words pn-title-line1"
+            data-aos="reveal-anim-left">
+            Levamos mais clientes
+          </span>
+
+          <!-- Linha 2: right, em verde secondary -->
+          <div class="pn-title-row">
+            <span
+              class="text-display-5 md:text-display-3 lg:text-display-2 xl:text-display-1 leading-tight font-semibold break-words pn-title-line2"
+              data-aos="reveal-anim-right">
+              para sua quadra.
+            </span>
+          </div>
+        </h1>
+
+        <!-- Subtitle + CTA -->
+        <div class="mt-12 max-w-2xl space-y-8" data-aos="reveal-anim-right" data-aos-delay="300">
+          <p class="pn-subtitle">
+            Conectamos sua quadra a milhares de pessoas que buscam locais para jogar. Você ganha mais visibilidade, mais reservas e uma gestão 100% digital — tudo em um só lugar.
+          </p>
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-accent uppercase pn-cta-btn"
+            label="EXPERIMENTAR O MINHA QUADRA"
+            url={APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Marquee ──────────────────────────────────────────────────── -->
+  <div class="pn-marquee-wrap">
+    <Features
+      sectionSpaceTop={false}
+      content={{
+        enable: true,
+        listSeparatorImage: "/images/icons/svg/star.svg",
+        marquee: {
+          elementWidthAuto: true,
+          pauseOnHover: false,
+          reverse: "",
+          duration: "55s",
+        },
+        list: [
+          "Mais Reservas",
+          "Pagamento Online",
+          "Agenda Digital",
+          "Mais Visibilidade",
+          "Zero Ligações",
+          "Gestão Fácil",
+          "100% Digital",
+          "Suporte Dedicado",
+        ],
+      }}
+    />
+  </div>
+
+  <!-- ── Como funciona — Intro ─────────────────────────────────────── -->
+  <section class="pn-intro">
+    <div class="container grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center lg:gap-y-20">
+      <div class="max-w-3xl">
+        <h2 class="text-display-6 xs:text-display-5 md:text-display-4 xl:text-display-3 pn-intro-title">
+          <span class="block" data-aos="reveal-anim-left">Como fazemos</span>
+          <span class="block" data-aos="reveal-anim-right" data-aos-delay="150">isso?</span>
+        </h2>
+      </div>
+      <div class="space-y-10 max-w-lg" data-aos="fade-up" data-aos-delay="100">
+        <p class="text-lg pn-intro-text">
+          Por meio da tecnologia, nós juntamos quem quer jogar com o espaço para jogar. Somos uma plataforma de Marketing que divulga suas quadras e facilita todo o processo de reserva dos espaços.
+        </p>
+        <p class="text-lg pn-intro-text">
+          Seus clientes encontram sua quadra em <a href="/" class="text-primary underline">minhaquadra.com.br</a> e nas nossas páginas de esporte: <a href="/esportes/beach-tennis/" class="text-primary underline">Beach Tennis</a>, <a href="/esportes/padel/" class="text-primary underline">Padel</a>, <a href="/esportes/futebol-society/" class="text-primary underline">Futebol Society</a> e <a href="/esportes/futsal/" class="text-primary underline">Futsal</a>, entre outros.
+        </p>
+        <CustomButton
+          hoverEffect="creative-fill"
+          class="uppercase pn-intro-btn"
+          label="EXPERIMENTAR O MINHA QUADRA"
+          url={APP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Steps — iPhone mockup + cards ───────────────────────────── -->
+  <section class="pn-steps">
+    <div class="container grid grid-cols-1 items-start gap-x-16 space-y-16 lg:grid-cols-2 lg:space-y-0">
+
+      <!-- ── Placeholder de imagem (sticky) ── -->
+      <div class="pn-img-wrap lg:sticky lg:top-16" data-aos="fade-up">
+        <div class="pn-img-frame">
+          {steps.map((step, i) => (
+            <div
+              class:list={["pn-img-slide", i === 0 && "pn-img-slide--active"]}
+              data-pn-slide={i}>
+              <img
+                src={step.image}
+                alt={step.title}
+                class="pn-img-real"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Cards à direita -->
+      <div class="grid w-full grid-cols-1 gap-6">
+        {steps.map((step, index) => (
+          <div class="pn-step-card" data-pn-card={index} data-aos="fade-up" data-aos-delay={index * 100}>
+            <div class="flex min-h-full flex-col space-y-16 p-6 md:px-8 md:py-10">
+              <div class="flex min-h-full flex-1 flex-col items-start space-y-8">
+                <div class="flex w-full flex-wrap-reverse justify-between gap-5 md:flex-row">
+                  <h3 class="text-h5 pn-step-card-title">{step.title}</h3>
+                  <div class="pn-step-card-icon h-10 w-10 flex-shrink-0" set:html={step.icon} />
+                </div>
+                <p class="pn-step-card-desc md:pe-20">{step.text}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Seção 3 — CTA Intermediário ──────────────────────────────── -->
+  <section class="pn-cta">
+    <div class="container grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center lg:gap-y-20">
+      <div class="max-w-3xl">
+        <h2 class="text-display-6 xs:text-display-5 md:text-display-4 xl:text-display-3 pn-cta-title">
+          <span class="block" data-aos="reveal-anim-left">Queremos trabalhar</span>
+          <span class="block" data-aos="reveal-anim-right" data-aos-delay="150">para você</span>
+        </h2>
+      </div>
+      <div class="space-y-10 max-w-lg" data-aos="fade-up" data-aos-delay="100">
+        <p class="text-lg pn-cta-desc">
+          Chega de perder o dia inteiro na confusão respondendo clientes no Whatsapp e passando informações de disponibilidade. O Minha Quadra faz tudo isso para você.
+        </p>
+        <CustomButton
+          hoverEffect="creative-fill"
+          class="uppercase pn-cta-action-btn"
+          label="CADASTRAR MINHA QUADRA"
+          url={APP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Seção 4 — Agenda Features ─────────────────────────────────── -->
+  <AgendaFeatures />
+
+  <!-- ── Seção 5 — Traga Sua Quadra ──────────────────────────────── -->
+  <section class="pn-banner">
+    <div class="pn-banner-overlay">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center space-y-8">
+          <h2
+            class="text-display-5 md:text-display-3 lg:text-display-2 pn-banner-title"
+            data-aos="reveal-anim-left">
+            Traga sua quadra para o futuro.
+          </h2>
+          <p class="text-lg pn-banner-text" data-aos="fade-up" data-aos-delay="150">
+            O mercado de quadras esportivas está evoluindo, e sua quadra precisa acompanhar este movimento para continuar no topo. Venha fazer parte!
+          </p>
+          <div data-aos="fade-up" data-aos-delay="300">
+            <CustomButton
+              hoverEffect="creative-fill"
+              class="uppercase pn-banner-btn"
+              label="CADASTRAR MINHA QUADRA"
+              url={APP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Seção 6 — Pricing ────────────────────────────────────────── -->
+  <div class="pn-pricing-wrap">
+    <PricingSection content={{
+      enable: true,
+      title: "Planos e preços",
+      list: [
+        {
+          enable: true,
+          name: "Plano Variável",
+          description: "*Inclui todas as taxas de pagamento online",
+          price: { prependValue: "", value: "20%", appendValue: "sobre reservas" },
+          features: ["Anuncie suas quadras", "Agenda digital", "Automatize pagamentos", "Suporte do Minha Quadra"],
+          button: { enable: true, label: "EXPERIMENTAR DE GRAÇA", url: APP_URL },
+        },
+        {
+          enable: true,
+          name: "Plano Fixo",
+          description: "+ taxas de pagamento online (1,2% PIX e 3,99% + R$0,39 no cartão)",
+          price: { prependValue: "", value: "R$ 149,90", appendValue: "/mês" },
+          features: ["Tenha destaque na plataforma", "Traga mais clientes para sua quadra", "Anuncie suas quadras", "Controle reservas com a agenda digital", "Automatize pagamentos", "Suporte especial do Minha Quadra"],
+          button: { enable: true, label: "CADASTRAR MINHA QUADRA", url: APP_URL },
+        },
+      ],
+    }} />
+  </div>
+
+  <!-- ── Seção 7+8 — Depoimentos + Logos ──────────────────────────── -->
+  <div class="pn-testimonials-wrap">
+    <!-- Título -->
+    <div class="container pn-testi-header">
+      <h2 class="text-h1-sm md:text-h1 mx-auto max-w-3xl text-center pn-testi-title" data-aos="fade-up">
+        O que dizem nossos clientes
+      </h2>
+    </div>
+    <!-- Logos de parceiros -->
+    <div class="pn-testi-logos">
+      <Clients content={{
+        enable: true,
+        title: "",
+        list: [
+          { alt: "Parceiro 1", src: "/images/clients/1.svg" },
+          { alt: "Parceiro 2", src: "/images/clients/2.svg" },
+          { alt: "Parceiro 3", src: "/images/clients/3.svg" },
+          { alt: "Parceiro 4", src: "/images/clients/4.svg" },
+          { alt: "Parceiro 5", src: "/images/clients/5.svg" },
+          { alt: "Parceiro 6", src: "/images/clients/6.svg" },
+        ],
+        options: { appearance: "dark", columnsPerRow: 6 },
+      }} />
+    </div>
+    <!-- Slider de depoimentos (sem título) -->
+    <TestimonialGrid content={{
+      enable: true,
+      title: "",
+      list: testimonials,
+      options: { appearance: "dark" },
+    }} />
+  </div>
+
+  <!-- ── Seção 9 — CTA Final ───────────────────────────────────────── -->
+  <section class="pn-cta-final">
+    <div class="container grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center">
+      <div class="max-w-3xl">
+        <h2 class="text-display-6 xs:text-display-5 md:text-display-4 xl:text-display-3 pn-cta-final-title">
+          <span class="block" data-aos="reveal-anim-left">Ainda está</span>
+          <span class="block" data-aos="reveal-anim-right" data-aos-delay="150">em dúvida?</span>
+        </h2>
+      </div>
+      <div class="space-y-10 max-w-lg" data-aos="fade-up" data-aos-delay="100">
+        <p class="text-lg pn-cta-final-desc">
+          Marque uma conversa com o nosso time para ver como podemos te ajudar da melhor forma.
+        </p>
+        <CustomButton
+          hoverEffect="creative-fill"
+          class="uppercase pn-cta-final-btn"
+          label="MARCAR UMA CONVERSA"
+          url="https://wa.me/5531982546222?text=Olá%2C%20gostaria%20de%20agendar%20uma%20conversa%20para%20entender%20como%20o%20Minha%20Quadra%20pode%20me%20ajudar!"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Seção 10 — FAQ ────────────────────────────────────────────── -->
+  <section class="pn-faq">
+    <div class="container space-y-14">
+      <h2 class="text-h1-sm md:text-h1 mx-auto max-w-3xl text-center pn-faq-title" data-aos="fade-up">
+        Perguntas comuns
+      </h2>
+      <AccordionList content={faqsParceiros} />
+    </div>
+  </section>
+
+</Base>
+
+<style>
+
+  /* -- MARQUEE ------------------------------------- */
+  .pn-marquee-wrap :global(section) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .pn-marquee-wrap :global(.bg-accent-blue) {
+    background-color: #b4fa50 !important;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  /* Texto do marquee — cor primary */
+  .pn-marquee-wrap :global(.bg-accent-blue span),
+  .pn-marquee-wrap :global(.bg-accent-blue p),
+  .pn-marquee-wrap :global(.bg-accent-blue li),
+  .pn-marquee-wrap :global(.bg-accent-blue [class*="text"]) {
+    color: #002d3c !important;
+  }
+
+  /* Asterisco — cor alternate #007d8c */
+  .pn-marquee-wrap :global(.bg-accent-blue img) {
+    filter: invert(37%) sepia(72%) saturate(480%) hue-rotate(152deg) brightness(88%) contrast(96%) !important;
+  }
+
+  /* -- HERO ---------------------------------------- */
+  .pn-hero {
+    background-color: #002d3c;
+    padding-top: 8rem;
+    padding-bottom: 6rem;
+    padding-left: max(2rem, 6vw);
+    padding-right: max(2rem, 6vw);
+    overflow-x: hidden;
+  }
+
+  .pn-title-line1 {
+    color: #f5f5f5;
+  }
+
+  .pn-title-line2 {
+    color: #b4fa50;
+    display: block;
+    text-align: end;
+  }
+
+  .pn-title-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 1.5rem;
+  }
+
+  .pn-subtitle {
+    color: #f5f5f5;
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+  @media (min-width: 768px) {
+    .pn-subtitle { font-size: 1.25rem; }
+  }
+
+  /* CTA button — mesmo estilo do hero da home (btn-accent base) */
+  :global(a.pn-cta-btn.btn) {
+    font-weight: 500;
+  }
+  :global(a.pn-cta-btn.creative-hover-anim .hover-bg) {
+    background: #b4fa50;
+  }
+  :global(a.pn-cta-btn.creative-hover-anim:hover) {
+    color: #002d3c !important;
+  }
+
+  /* -- INTRO (estilo "Pronto para jogar?") --------- */
+  .pn-intro {
+    background-color: #007d8c;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .pn-intro-title {
+    color: #e1ffa5;
+  }
+
+  .pn-intro-text {
+    color: #f5f5f5;
+  }
+
+  /* Botão: #b4fa50 bg / #002d3c texto; hover: #002d3c bg / #e1ffa5 texto */
+  :global(a.pn-intro-btn.btn) {
+    background-color: #b4fa50;
+    color: #002d3c;
+    border-color: #b4fa50;
+    font-weight: 500;
+  }
+  :global(a.pn-intro-btn.creative-hover-anim .hover-bg) {
+    background: #002d3c;
+  }
+  :global(a.pn-intro-btn.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #002d3c !important;
+  }
+
+  /* ================================================
+     STEPS — iPhone + Cards
+  ================================================ */
+  .pn-steps {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 7rem;
+  }
+
+  /* --- Cards (direita) --- */
+  .pn-step-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+    transition: border-color 0.4s ease, background-color 0.4s ease;
+  }
+  .pn-step-card.pn-card--active {
+    border-color: rgba(180, 250, 80, 0.35);
+    background-color: rgba(255, 255, 255, 0.09);
+  }
+  .pn-step-card-title { color: #e1ffa5; }
+  .pn-step-card-desc  { color: #f5f5f5; line-height: 1.65; }
+  .pn-step-card-icon  { color: #b4fa50; }
+  .pn-step-card-icon svg { width: 100%; height: 100%; stroke: currentColor; }
+
+  /* ================================================
+     IMAGE PLACEHOLDER (substitui iPhone)
+  ================================================ */
+
+  .pn-img-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+
+  .pn-img-frame {
+    position: relative;
+    width: 100%;
+    height: 78vh;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .pn-img-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .pn-img-slide--active { opacity: 1; }
+
+  .pn-img-real {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+
+  /* -- CTA INTERMEDIÁRIO (Seção 3) ------------------- */
+  .pn-cta {
+    background-color: #b4fa50;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .pn-cta-title {
+    color: #002d3c;
+  }
+
+  .pn-cta-desc {
+    color: #002d3c;
+    line-height: 1.75;
+  }
+
+  /* Botão: #002d3c bg / #e1ffa5 texto; hover: #007d8c bg / #e1ffa5 texto */
+  :global(a.pn-cta-action-btn.btn) {
+    background-color: #002d3c;
+    color: #e1ffa5;
+    border-color: #002d3c;
+    font-weight: 500;
+  }
+  :global(a.pn-cta-action-btn.creative-hover-anim .hover-bg) {
+    background: #007d8c;
+  }
+  :global(a.pn-cta-action-btn.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* -- SEÇÃO 5 — BANNER TRAGA SUA QUADRA ------------- */
+  .pn-banner {
+    background-color: #b4fa50;
+  }
+
+  .pn-banner-overlay {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .pn-banner-title {
+    color: #002d3c;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .pn-banner-text {
+    color: #002d3c;
+    line-height: 1.75;
+  }
+
+  :global(a.pn-banner-btn.btn) {
+    background-color: #002d3c;
+    color: #e1ffa5;
+    border-color: #002d3c;
+    font-weight: 500;
+  }
+  :global(a.pn-banner-btn.creative-hover-anim .hover-bg) {
+    background: #007d8c;
+  }
+  :global(a.pn-banner-btn.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* -- SEÇÃO 7+8 — DEPOIMENTOS + LOGOS ------------------ */
+  .pn-testimonials-wrap {
+    background-color: #002d3c;
+  }
+
+  .pn-testi-header {
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Logos no fundo escuro */
+  .pn-testi-logos :global(section) {
+    background-color: transparent !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .pn-testi-logos :global(li),
+  .pn-testi-logos :global(ul) {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    outline-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  /* Aumenta altura das logos e do container */
+  .pn-testi-logos :global(.relative.h-8) {
+    height: 3.5rem !important;
+  }
+
+  .pn-testi-logos :global(.h-8) {
+    height: 3.5rem !important;
+  }
+
+  /* Corrige a translação do hover para a nova altura */
+  .pn-testi-logos :global(li:hover img) {
+    transform: translateY(-3.5rem) !important;
+  }
+
+  /* Inverte logos para ficarem brancos no fundo escuro */
+  .pn-testi-logos :global(img) {
+    filter: brightness(0) invert(1);
+    opacity: 0.55;
+  }
+
+  .pn-testi-logos :global(li:hover img) {
+    opacity: 0.9;
+  }
+
+  .pn-testimonials-wrap :global(section) {
+    background-color: transparent;
+    padding-top: 3rem;
+    padding-bottom: 8rem;
+  }
+
+  /* Título do slider (não afeta o pn-testi-title) */
+  .pn-testimonials-wrap :global(h2:not(.pn-testi-title)) {
+    color: #f5f5f5 !important;
+  }
+
+  .pn-testi-title {
+    color: #b4fa50 !important;
+  }
+
+  /* Cards: fundo levemente transparente */
+  .pn-testimonials-wrap :global(.bg-theme-darker) {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Quote icon: tertiary */
+  .pn-testimonials-wrap :global(.text-accent) {
+    color: #e1ffa5 !important;
+  }
+
+  /* Texto do depoimento */
+  .pn-testimonials-wrap :global(.text-light p) {
+    color: #f5f5f5 !important;
+  }
+
+  /* Nome do cliente */
+  .pn-testimonials-wrap :global(h3.text-h5) {
+    color: #e1ffa5 !important;
+  }
+
+  /* Papel / quadra */
+  .pn-testimonials-wrap :global(.font-primary.text-lg) {
+    color: #b4b4b9 !important;
+    opacity: 1 !important;
+  }
+
+  /* Paginação swiper — oculta bolinhas */
+  .pn-testimonials-wrap :global(.testimonial-pagination) {
+    display: none !important;
+  }
+
+  .pn-testimonials-wrap :global(.swiper-wrapper) {
+    padding-bottom: 0 !important;
+  }
+
+  /* -- SEÇÃO 9 — CTA FINAL ------------------------------- */
+  .pn-cta-final {
+    background-color: #007d8c;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+
+  .pn-cta-final-title { color: #e1ffa5; }
+
+  .pn-cta-final-desc {
+    color: #f5f5f5;
+    line-height: 1.75;
+  }
+
+  :global(a.pn-cta-final-btn.btn) {
+    background-color: #e1ffa5;
+    color: #007d8c;
+    border-color: #e1ffa5;
+    font-weight: 500;
+  }
+  :global(a.pn-cta-final-btn.creative-hover-anim .hover-bg) {
+    background: #002d3c;
+  }
+  :global(a.pn-cta-final-btn.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #002d3c !important;
+  }
+
+  /* -- SEÇÃO 10 — FAQ ------------------------------------ */
+  .pn-faq {
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+  }
+
+  .pn-faq-title { color: #002d3c; }
+
+  :global(.pn-faq .hs-accordion-group),
+  :global(.pn-faq .hs-accordion) {
+    border-color: #002d3c !important;
+  }
+
+  :global(.pn-faq .text-dark) {
+    color: #002d3c !important;
+  }
+
+  :global(.pn-faq .hs-accordion-toggle.text-dark),
+  :global(.pn-faq button.hs-accordion-toggle) {
+    color: #002d3c !important;
+  }
+
+  :global(.pn-faq .prose-styles),
+  :global(.pn-faq .prose-styles p),
+  :global(.pn-faq .hs-accordion-content *) {
+    color: #002d3c !important;
+  }
+
+  /* -- SEÇÃO 6 — PRICING -------------------------------- */
+  /* -- SEÇÃO 6 — PRICING -------------------------------- */
+  .pn-pricing-wrap :global(section) {
+    background-color: var(--color-alternate);
+    padding-bottom: 7rem !important;
+  }
+
+  .pn-pricing-wrap :global(.bg-theme-light) {
+    background-color: var(--color-tertiary) !important;
+  }
+
+  .pn-pricing-wrap :global(.grid) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    max-width: 66rem;
+    margin-inline: auto;
+    align-items: stretch;
+  }
+
+  /* Garante que o card ocupa toda a altura da célula e reduz espaçamento vertical */
+  .pn-pricing-wrap :global(.bg-theme-light) {
+    height: 100%;
+  }
+
+  /* Plano Fixo tem subtítulo com linha a mais — reduz padding-top para compensar */
+  .pn-pricing-wrap :global(.grid > :nth-child(2) .bg-theme-light) {
+    padding-top: 1.25rem !important;
+  }
+
+  .pn-pricing-wrap :global(.space-y-10) {
+    gap: 1.25rem !important;
+    row-gap: 1.25rem !important;
+  }
+
+  .pn-pricing-wrap :global(.space-y-10 > * + *) {
+    margin-top: 1.25rem !important;
+  }
+
+  /* Features alinhadas ao topo — card deixa de usar justify-between */
+  .pn-pricing-wrap :global(.justify-between) {
+    justify-content: flex-start !important;
+  }
+
+  /* Botão empurrado para o fundo */
+  .pn-pricing-wrap :global(.justify-between > a.btn) {
+    margin-top: auto !important;
+  }
+
+  /* Gap menor entre subtítulo e lista de destaques */
+  .pn-pricing-wrap :global(.space-y-10 > div.space-y-4) {
+    margin-bottom: 0.75rem !important;
+  }
+  .pn-pricing-wrap :global(.space-y-10 > ul) {
+    margin-top: 0 !important;
+  }
+
+  .pn-pricing-wrap :global(.space-y-4) {
+    row-gap: 0.625rem !important;
+  }
+
+  .pn-pricing-wrap :global(.space-y-4 > * + *) {
+    margin-top: 0.625rem !important;
+  }
+
+  /* Descrição colada ao preço */
+  .pn-pricing-wrap :global(.space-y-4 > div) {
+    margin-bottom: 0 !important;
+  }
+  .pn-pricing-wrap :global(.space-y-4 > p.text-lg) {
+    margin-top: 0.15rem !important;
+    margin-bottom: 0 !important;
+  }
+  @media (max-width: 639px) {
+    .pn-pricing-wrap :global(.grid) {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  .pn-pricing-wrap :global(h2) {
+    color: #b4fa50;
+  }
+
+  /* Títulos dos planos */
+  .pn-pricing-wrap :global(h3.text-h5),
+  .pn-pricing-wrap :global(h3.md\:text-h4) {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Preço — cor alternate, sem quebra de linha e line-height reduzido */
+  .pn-pricing-wrap :global(.text-display-6),
+  .pn-pricing-wrap :global(.sm\:text-display-5),
+  .pn-pricing-wrap :global(.md\:text-display-4) {
+    color: #007d8c !important;
+    white-space: nowrap;
+    line-height: 1.1 !important;
+  }
+
+  /* Espaço entre o valor e o append */
+  .pn-pricing-wrap :global(.font-secondary.font-semibold .text-lg) {
+    margin-left: 0.5rem;
+  }
+
+  /* Features — maiores e em caixa alta */
+  .pn-pricing-wrap :global(.font-secondary.space-y-4) {
+    font-size: 1rem !important;
+  }
+  .pn-pricing-wrap :global(.font-secondary.space-y-4 span) {
+    text-transform: none;
+  }
+
+  /* Botões — mesmo estilo do banner "Traga sua quadra" */
+  .pn-pricing-wrap :global(a.btn) {
+    background-color: #002d3c !important;
+    color: #e1ffa5 !important;
+    border-color: #002d3c !important;
+    font-weight: 500;
+  }
+  .pn-pricing-wrap :global(a.creative-hover-anim .hover-bg) {
+    background: #007d8c !important;
+  }
+  .pn-pricing-wrap :global(a.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* -- Contador de quadras (hover via CSS global) --------- */
+  :global(.pn-counter-btn:hover:not(:disabled)) {
+    background: #005f6b !important;
+  }
+  :global(.pn-counter-btn:disabled) {
+    opacity: 0.35 !important;
+    cursor: default !important;
+  }
+
+  /* Links em destaque no texto — verde secondary */
+  :global(p a:not(.btn):not([data-post-link]), li a:not(.btn):not([data-post-link]), span a:not(.btn):not([data-post-link])) {
+    color: #b4fa50 !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  :global(p a:not(.btn):hover, li a:not(.btn):hover, span a:not(.btn):hover) {
+    color: #e1ffa5 !important;
+  }
+</style>
+
+<script>
+  (() => {
+    const cards = document.querySelectorAll<HTMLElement>("[data-pn-card]");
+    const slides = document.querySelectorAll<HTMLElement>("[data-pn-slide]");
+    if (!cards.length || !slides.length) return;
+
+    let activeIdx = 0;
+
+    function setActive(idx: number) {
+      if (idx === activeIdx) return;
+      activeIdx = idx;
+
+      // Switch slides
+      slides.forEach((s) => s.classList.remove("pn-img-slide--active"));
+      const target = document.querySelector(`[data-pn-slide="${idx}"]`);
+      if (target) target.classList.add("pn-img-slide--active");
+
+      // Highlight active card
+      cards.forEach((c) => c.classList.remove("pn-card--active"));
+      cards[idx]?.classList.add("pn-card--active");
+    }
+
+    // Activate first card immediately
+    cards[0]?.classList.add("pn-card--active");
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number((entry.target as HTMLElement).dataset.pnCard ?? 0);
+            setActive(idx);
+          }
+        });
+      },
+      {
+        rootMargin: "-30% 0px -30% 0px",
+        threshold: 0,
+      }
+    );
+
+    cards.forEach((card) => obs.observe(card));
+  })();
+</script>
+
+<script>
+  // -- Contador de quadras — Plano Fixo --
+  (() => {
+    const PRICES = ['149,99', '229,99', '299,99', '329,99', '349,99'];
+    let count = 1;
+
+    const pricingCards = document.querySelectorAll<HTMLElement>('.pn-pricing-wrap .bg-theme-light');
+    const fixoCard = pricingCards[1];
+    if (!fixoCard) return;
+
+    const h3 = fixoCard.querySelector<HTMLElement>('h3');
+    const priceWrap = fixoCard.querySelector<HTMLElement>('.font-secondary.font-semibold');
+    if (!h3 || !priceWrap) return;
+
+    // Encontra o text node do preço (antes do <span class="text-lg">)
+    const priceTextNode = [...priceWrap.childNodes].find(
+      (n) => n.nodeType === Node.TEXT_NODE
+    ) as Text | undefined;
+    if (!priceTextNode) return;
+
+    // Estilos base para botão
+    const btnStyle = `
+      width:2rem;height:2.4rem;border-radius:0;border:none;
+      background:#007d8c;color:#e1ffa5;font-size:1.2rem;line-height:1;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s;flex-shrink:0;
+    `;
+
+    // Cria o contador
+    const counter = document.createElement('div');
+    counter.className = 'pn-quadra-counter';
+    counter.style.cssText = `
+      display:flex;align-items:center;gap:0;
+      background:#002d3c;border-radius:0;padding:0;flex-shrink:0;overflow:hidden;
+    `;
+    counter.innerHTML = `
+      <button class="pn-counter-btn" id="pn-dec" aria-label="Diminuir" style="${btnStyle}">−</button>
+      <span id="pn-label" style="font-size:0.8rem;font-weight:600;color:#e1ffa5;white-space:nowrap;min-width:5.5rem;text-align:center;padding:0 0.5rem;">1 quadra</span>
+      <button class="pn-counter-btn" id="pn-inc" aria-label="Aumentar" style="${btnStyle}">+</button>
+    `;
+
+    // Envolve h3 + contador numa linha flex
+    const row = document.createElement('div');
+    row.style.cssText = `
+      display:flex;align-items:center;justify-content:space-between;
+      gap:0.75rem;margin-bottom:1rem;
+    `;
+    h3.style.marginBottom = '0';
+    h3.parentNode!.insertBefore(row, h3);
+    row.appendChild(h3);
+    row.appendChild(counter);
+
+    // Subtítulo "primeiro mês grátis"
+    const promo = document.createElement('p');
+    promo.textContent = 'Primeiro mês grátis';
+    promo.style.cssText = `
+      font-size:1.1rem;font-weight:600;color:#007d8c;
+      margin-top:0.25rem;margin-bottom:0;letter-spacing:0.03em;
+      text-transform:uppercase;
+    `;
+    row.insertAdjacentElement('afterend', promo);
+
+    const decBtn = document.getElementById('pn-dec') as HTMLButtonElement;
+    const incBtn = document.getElementById('pn-inc') as HTMLButtonElement;
+    const label  = document.getElementById('pn-label') as HTMLSpanElement;
+
+    function render() {
+      priceTextNode.nodeValue = `R$ ${PRICES[count - 1]}`;
+      label.textContent = `${count} quadra${count > 1 ? 's' : ''}`;
+      decBtn.disabled = count === 1;
+      incBtn.disabled = count === PRICES.length;
+    }
+
+    decBtn.addEventListener('click', () => { if (count > 1) { count--; render(); } });
+    incBtn.addEventListener('click', () => { if (count < PRICES.length) { count++; render(); } });
+
+    render();
+  })();
+</script>

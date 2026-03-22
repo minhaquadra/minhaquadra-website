@@ -1,0 +1,98 @@
+---
+import { getLocaleUrlCTM } from "@/lib/utils/languageParser.ts";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { markdownify } from "@/lib/utils/textConverter";
+import { splitProtectedText } from "@/lib/utils/splitProtectedText";
+import SocialComponent from "@/components/widgets/Social.astro";
+import social from "@/config/social.json";
+import SubscriptionForm from "@/components/widgets/SubscriptionForm.astro";
+import { useTranslations } from "@/lib/utils/languageParser.ts";
+const { footerSpaceTop = true } = Astro.props;
+
+const config = parseTomlToJson("./src/config/config.toml");
+const t = await useTranslations(Astro.currentLocale as string);
+
+let {
+  copyright,
+  footerDescription,
+  subscription,
+  contactInfo: { address, email, phone },
+} = config.settings;
+
+footerDescription = footerDescription || t("footer.description") || "";
+
+const copyrightText = copyright.text || t("footer.copyright") || "";
+const copyrightParts = splitProtectedText(copyrightText);
+---
+
+<footer class:list={[!footerSpaceTop && "mt-0"]}>
+  <div class="container">
+    <div
+      class="has-footer-padding grid space-y-12 border-b-2 border-black py-16 md:py-20 lg:grid-cols-8 lg:space-y-0 xl:py-32">
+      <div class="col-span-3 flex flex-col gap-y-4">
+        <SubscriptionForm {...subscription} />
+      </div>
+
+      <div class="col-span-5 grid gap-y-10 md:grid-cols-3">
+        <div class="lg:col-start-2">
+          {
+            t("footer.menuTitleLinks") && (
+              <h3
+                class="text-h5 mb-6 text-inherit"
+                set:html={t("footer.menuTitleLinks")}
+              />
+            )
+          }
+          <ul class="flex flex-col gap-2">
+            {
+              t("footerTertiary").map((menu: { name: string; url: string }) => (
+                <li>
+                  <a
+                    class="transition duration-300 hover:opacity-70"
+                    href={getLocaleUrlCTM(menu.url, Astro.currentLocale)}
+                    set:html={menu.name}
+                  />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          {
+            t("footer.contact") && (
+              <h3
+                class="text-h5 mb-6 text-inherit"
+                set:html={t("footer.contact")}
+              />
+            )
+          }
+
+          {address && <p set:html={markdownify(address)} />}
+          {phone && <p class="mt-4 md:mt-6" set:html={markdownify(phone)} />}
+          {email && <p set:html={markdownify(email)} />}
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-wrap items-center justify-between gap-x-8 gap-y-6 py-6">
+      {
+        config.settings.copyright?.enable && (
+          <ul class="has-list has-list-slash prose-a:text-inherit flex flex-wrap gap-y-2">
+            {copyrightParts.map((value) => (
+              <li class="prose-a:text-text-default/70 prose-a:hover:text-text-default">
+                <span set:html={markdownify(value)} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <SocialComponent
+        size="lg"
+        layout="dark"
+        class="gap-5"
+        linkType="follow"
+        list={social.main.filter((s) => s.enable)}
+      />
+    </div>
+  </div>
+</footer>

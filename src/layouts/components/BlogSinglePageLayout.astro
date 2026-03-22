@@ -1,0 +1,320 @@
+---
+import TOC from "./widgets/TableOfContents.astro";
+import Breadcrumbs from "@/components/widgets/Breadcrumbs.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import OptimizedImage from "./utilities/OptimizedImage.astro";
+import PaginationForSingle from "./widgets/PaginationForSingle.astro";
+import { useTranslations } from "@/lib/utils/languageParser";
+import Social from "./widgets/Social.astro";
+import SocialData from "@/config/social.json";
+import type { CollectionEntry } from "astro:content";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { render } from "astro:content";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+interface Props {
+  content: CollectionEntry<"blog">;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const {
+  data: { title, date, image, author, categories, tags },
+} = content;
+
+const config = parseTomlToJson("./src/config/config.toml");
+const { tableOfContents } = config.settings.markup;
+
+const { Content, headings } = await render(content);
+const tocHeadings = headings?.filter((heading) => heading.depth > 1);
+const authorName = author || content.data.author || "";
+
+const formatDatePtBR = (d: Date | string) =>
+  format(new Date(d), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+
+// Check if table of contents is enable
+const tocEnabled =
+  tableOfContents?.enable && tocHeadings && tocHeadings.length > 0;
+
+const t = await useTranslations(Astro.currentLocale as string);
+
+// Article JSON-LD
+import extractSlug from "@/lib/utils/extractSlug";
+const slug = extractSlug(content).split("/").pop();
+const siteUrl = "https://minhaquadra.com.br";
+const pageUrl = `${siteUrl}/blog/${slug}/`;
+const imageUrl = image ? `${siteUrl}${image.startsWith("/src/assets") ? "" : "/images/blog/"}${image.replace(/^\/images\/blog\//, "")}` : "";
+const dateISO = date ? new Date(date).toISOString() : "";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": content.data.description || content.data.metaDescription || "",
+  "image": imageUrl,
+  "datePublished": dateISO,
+  "dateModified": dateISO,
+  "author": {
+    "@type": "Organization",
+    "name": "Minha Quadra",
+    "url": siteUrl,
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Minha Quadra",
+    "url": siteUrl,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteUrl}/images/logo-verde.png`,
+    },
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
+
+<style is:global>
+  /* ── Breadcrumb inline (above image) ── */
+  .blog-single-breadcrumb {
+    background: transparent !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .blog-single-breadcrumb > div {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .blog-single-breadcrumb a,
+  .blog-single-breadcrumb li,
+  .blog-single-breadcrumb ol {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+  .blog-single-breadcrumb a:hover {
+    color: #e1ffa5 !important;
+  }
+  .blog-single-breadcrumb span {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+  /* Barras separadoras — pseudo-elemento ::after do slash-dark */
+  .blog-single-breadcrumb .has-list-slash.slash-dark li:not(:last-child) > *:first-child::after,
+  .blog-single-breadcrumb .has-list-slash li:not(:last-child) > *:first-child::after {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  /* ── Table of Contents ── */
+  .single-page-content .hs-accordion button,
+  .single-page-content .hs-accordion button span,
+  .single-page-content .hs-accordion nav a,
+  .single-page-content .hs-accordion nav li,
+  .single-page-content .hs-accordion nav ol {
+    color: #f5f5f5 !important;
+  }
+  .single-page-content .hs-accordion nav ol {
+    counter-reset: none;
+  }
+  .single-page-content .hs-accordion nav li::marker {
+    color: #f5f5f5 !important;
+  }
+  .single-page-content .hs-accordion button {
+    border-color: rgba(245, 245, 245, 0.2) !important;
+  }
+  .single-page-content .hs-accordion nav a:hover {
+    color: #e1ffa5 !important;
+  }
+
+  /* ── Sidebar on dark blog single page ── */
+  body.bg-body-dark .sticky-sidebar {
+    color: #f5f5f5;
+  }
+  body.bg-body-dark .sticky-sidebar h2 {
+    color: #f5f5f5;
+    border-color: rgba(245, 245, 245, 0.15);
+  }
+  body.bg-body-dark .sticky-sidebar a {
+    color: #ffffff;
+  }
+  body.bg-body-dark .sticky-sidebar a:hover {
+    color: #e1ffa5;
+  }
+  body.bg-body-dark .sticky-sidebar input[type="text"] {
+    background: transparent;
+    color: #f5f5f5;
+    border-color: rgba(245, 245, 245, 0.3);
+  }
+  body.bg-body-dark .sticky-sidebar input[type="text"]::placeholder {
+    color: rgba(245, 245, 245, 0.4);
+    opacity: 1;
+  }
+  body.bg-body-dark .sticky-sidebar button[type="submit"] {
+    color: #f5f5f5;
+  }
+  body.bg-body-dark .sticky-sidebar .flex.flex-wrap a {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f5f5;
+  }
+  body.bg-body-dark .sticky-sidebar .flex.flex-wrap a:hover {
+    background: #b4fa50;
+    color: #002d3c;
+  }
+  body.bg-body-dark .sticky-sidebar h3,
+  body.bg-body-dark .sticky-sidebar h3 a {
+    color: #f5f5f5 !important;
+  }
+  body.bg-body-dark .sticky-sidebar span {
+    color: rgba(245, 245, 245, 0.6);
+  }
+  body.bg-body-dark .sticky-sidebar .border-b {
+    border-color: rgba(245, 245, 245, 0.2);
+  }
+
+  /* ── Blog post prose content ── */
+  .single-page-content .content h2,
+  .single-page-content .content h3,
+  .single-page-content .content h4,
+  .single-page-content .content h5,
+  .single-page-content .content h6 {
+    color: #e1ffa5 !important;
+  }
+  .single-page-content .content p,
+  .single-page-content .content li,
+  .single-page-content .content td,
+  .single-page-content .content th,
+  .single-page-content .content blockquote {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .single-page-content .content ul {
+    list-style: disc !important;
+    padding-left: 1.5rem !important;
+  }
+  .single-page-content .content ol {
+    list-style: decimal !important;
+    padding-left: 1.5rem !important;
+  }
+  .single-page-content .content ul li::marker,
+  .single-page-content .content ol li::marker {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+  /* ── Imagens do conteúdo — tamanho retangular padronizado ── */
+  .single-page-content .content img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    display: block;
+  }
+
+  .single-page-content .content a {
+    color: #b4fa50;
+  }
+  .single-page-content .content a:hover {
+    color: #e1ffa5;
+  }
+  .single-page-content .content strong {
+    color: #ffffff;
+  }
+  .single-page-content .content hr,
+  .single-page-content .border-t-2 {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+</style>
+
+<div
+  class:list={[
+    "has-video-modal space-y-10 lg:col-span-8 lg:p-5",
+    className,
+  ]}>
+  <Breadcrumbs class="blog-single-breadcrumb" />
+
+  {
+    image && (
+      <OptimizedImage
+        width={896}
+        height={500}
+        alt={title}
+        src={image as string}
+        class:list={["h-125 w-full object-cover rounded-lg"]}
+      />
+    )
+  }
+
+  <div class="max-w-full space-y-6">
+    <ul
+      class="flex flex-wrap items-center gap-x-5 gap-y-1 tracking-wide"
+      style="color: rgba(255,255,255,0.7);">
+      {
+        date && (
+          <li class="before:bg-white/40 relative pe-5 before:absolute before:top-1/2 before:end-0 before:h-1 before:w-1 before:-translate-y-1/2 before:rounded-full before:content-['']">
+            {date && markdownify(formatDatePtBR(date))}
+          </li>
+        )
+      }
+
+      {
+        categories?.map((category) => (
+          <li class="before:bg-white/40 relative pe-5 before:absolute before:top-1/2 before:end-0 before:h-1 before:w-1 before:-translate-y-1/2 before:rounded-full before:content-['']">
+            {markdownify(category)}
+          </li>
+        ))
+      }
+
+      {
+        authorName && (
+          <li class="before:bg-white/40 relative">Por {markdownify(authorName)}</li>
+        )
+      }
+    </ul>
+    {title && <h1 class="text-h2-sm md:text-h2" style="color: #b4fa50;" set:html={title} />}
+    {tocEnabled && tocHeadings && <TOC toc={tocHeadings} marker={false} />}
+    {
+      Content && (
+        <div class="prose-styles content has-video-modal">
+          <Content />
+        </div>
+      )
+    }
+    <div
+      class="mt-10 flex w-full flex-wrap justify-between gap-x-10 gap-y-5 md:mt-14">
+      <ul
+        class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm tracking-wide"
+        style="color: rgba(255,255,255,0.7);">
+        {
+          tags?.map((tag) => (
+            <li
+              class="before:bg-white/20 relative pe-5 capitalize before:absolute before:top-1/2 before:end-0 before:h-4 before:w-px before:-translate-y-1/2 before:rotate-12 before:rounded-full before:content-[''] last:pe-0 last:before:hidden"
+              set:html={markdownify(tag)}
+            />
+          ))
+        }
+      </ul>
+      <div class="flex items-center gap-5" style="color: rgba(255,255,255,0.7);">
+        <span>{t("blog.share")}</span>
+        <Social
+          layout="light"
+          linkType="share"
+          list={SocialData.main}
+          currentPage={content}
+        />
+      </div>
+    </div>
+    {
+      content && content.collection && (
+        <div class="mt-10 border-t-2 pt-10" style="border-color: rgba(255,255,255,0.15);">
+          <PaginationForSingle
+            prevBtnText={t("blog.paginationPrevious")}
+            nextBtnText={t("blog.paginationNext")}
+            collection={content.collection}
+            currentPage={content}
+          />
+        </div>
+      )
+    }
+  </div>
+</div>

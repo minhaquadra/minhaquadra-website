@@ -1,0 +1,228 @@
+---
+import { markdownify, toSentenceCase } from "@/lib/utils/textConverter";
+import {
+  getLocaleUrlCTM,
+  useTranslations,
+} from "@/lib/utils/languageParser.ts";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+import CustomButton from "@/components/CustomButton.astro";
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  index?: number;
+  class?: string;
+  translations?: any;
+  content: CollectionEntry<"portfolio">;
+  options: CollectionEntry<"portfolio">["data"]["options"];
+  [key: string]: any;
+};
+
+let {
+  index,
+  rest,
+  content,
+  options: { layout = "masonry" } = {},
+  translations,
+  options,
+  class: className,
+} = Astro.props;
+
+let {
+  id,
+  collection,
+  data: { title, categories, image, description, customSlug },
+} = content;
+
+const t = await useTranslations(Astro.currentLocale as string);
+const slug = getLocaleUrlCTM(customSlug || id, Astro.currentLocale, collection);
+const hasCategories = Array.isArray(categories) && categories.length > 0;
+const isDarkAppearance = options?.appearance === "dark";
+---
+
+{
+  layout === "masonry" || layout === "grid" ? (
+    // For Masonry and Grid Layouts
+    <div
+      class:list={[
+        className,
+        "group",
+        layout === "grid" && "flex flex-col items-start justify-start",
+        isDarkAppearance ? "text-white" : "text-text-default",
+      ]}
+      {...rest}>
+      {image && (
+        <a
+          title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}
+          class:list={[
+            "order-1 inline-block w-full overflow-hidden",
+            layout === "grid" && "mb-8",
+          ]}
+          href={slug}
+          {...{
+            "data-aos":
+              index !== undefined &&
+              ["reveal-anim-left", "reveal-anim-right", "reveal-anim-top"][
+                index % 3
+              ],
+          }}>
+          <OptimizedImage
+            src={image}
+            alt={title || "Project image"}
+            class:list={[
+              "scale-110 object-cover transition duration-500 group-hover:translate-x-2",
+              layout === "masonry" ? "max-h-200" : "h-100",
+            ]}
+          />
+        </a>
+      )}
+
+      {hasCategories && (
+        <ul
+          class:list={[
+            "flex flex-wrap items-center gap-x-2 gap-y-1 opacity-80",
+            layout === "grid" && "order-3 mt-3",
+            isDarkAppearance ? "text-light" : "text-inherit",
+          ]}>
+          {categories.map((category: string, index: number) => (
+            <>
+              {index > 0 && <li>/</li>}
+              <li set:html={markdownify(category)} />
+            </>
+          ))}
+        </ul>
+      )}
+
+      {title && (
+        <h3 class="text-h3-sm md:text-h3 order-2 leading-snug text-inherit">
+          <a
+            href={slug}
+            title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}>
+            {title}
+          </a>
+        </h3>
+      )}
+
+      {description && <p class="mt-4" set:html={markdownify(description)} />}
+
+      {layout === "masonry" && (
+        <CustomButton
+          url={slug}
+          variant="text"
+          label={translations("common.viewProject")}
+          title={title}
+          class:list={[
+            "mt-3 uppercase",
+            isDarkAppearance && "text-light border-border-light",
+          ]}
+        />
+      )}
+    </div>
+  ) : layout === "slider" ? (
+    // For Slider Layout
+    <div
+      class:list={[
+        className,
+        "text-light relative flex h-112.5 min-h-full w-full items-end p-5 md:p-10",
+        "after:from-theme-dark after:via-theme-dark/50 after:absolute after:start-0 after:-z-10 after:w-full after:bg-linear-to-t after:to-transparent after:transition-all after:duration-300 group-[.swiper-slide-active]/project-slide:after:h-full after:max-md:bottom-0 after:max-md:h-full after:md:-bottom-4 after:md:h-0 after:md:opacity-0",
+        "group-[.swiper-slide-active]/project-slide:after:bottom-0 group-[.swiper-slide-active]/project-slide:after:opacity-100",
+        "md:h-135",
+      ]}
+      {...rest}>
+      {image && (
+        <OptimizedImage
+          class="absolute top-0 start-0 -z-10 min-h-full min-w-[calc(100%+2rem)] -translate-x-8 object-cover duration-500 group-[.swiper-slide-active]/project-slide:-translate-x-4"
+          src={image}
+          alt={title || "Project image"}
+        />
+      )}
+      <a
+        href={slug}
+        title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}
+        class="absolute inset-0"
+      />
+      <div class="mt-auto w-full translate-y-5 space-y-4 opacity-0 transition-all duration-1000! group-[.swiper-slide-active]/project-slide:translate-y-0 group-[.swiper-slide-active]/project-slide:opacity-100">
+        {hasCategories && (
+          <ul
+            class:list={[
+              "flex flex-wrap items-center gap-x-2 gap-y-1 opacity-80",
+              isDarkAppearance ? "text-light" : "text-inherit",
+            ]}>
+            {categories.map((category: string, index: number) => (
+              <>
+                {index > 0 && <li>/</li>}
+                <li set:html={markdownify(category)} />
+              </>
+            ))}
+          </ul>
+        )}
+        {title && (
+          <h3 class="md:text-h3 text-h3-sm mt-0 leading-snug text-inherit">
+            <a
+              href={slug}
+              title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}>
+              {title}
+            </a>
+          </h3>
+        )}
+      </div>
+    </div>
+  ) : layout === "full-width" ? (
+    // For Full Width Layout
+    <div
+      class:list={[
+        className,
+        "text-light group relative flex h-[500px] min-h-full w-full items-end border p-7 md:p-10 hover:md:after:bottom-0 hover:md:after:opacity-100",
+        "after:from-theme-dark after:via-theme-dark/50 after:absolute after:start-0 after:z-20 after:w-full after:bg-linear-to-t after:to-transparent after:transition-all after:duration-300 hover:after:h-full after:max-md:bottom-0 after:max-md:h-full after:md:-bottom-4 after:md:h-0 after:md:opacity-0",
+      ]}
+      {...rest}>
+      {image && (
+        <OptimizedImage
+          class="absolute top-0 start-0 z-20 h-full w-full -translate-x-8 scale-110 object-cover duration-500 group-hover:-translate-x-4"
+          src={image}
+          alt={title || "Project image"}
+        />
+      )}
+      <a
+        href={slug}
+        title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}
+        class="absolute inset-0"
+      />
+      <div class="z-30 mt-auto flex w-full flex-col items-start gap-x-10 transition-all duration-500 max-lg:space-y-4 md:translate-y-5 md:opacity-0 group-hover:md:translate-y-0 group-hover:md:opacity-100 lg:flex-row lg:items-center lg:justify-between">
+        <div class="space-y-4 lg:max-w-4/5">
+          {hasCategories && (
+            <ul
+              class:list={[
+                "flex flex-wrap items-center gap-x-2 gap-y-1 text-sm",
+                isDarkAppearance && "text-light/80",
+              ]}>
+              {categories.map((category: string, index: number) => (
+                <>
+                  {index > 0 && <li>/</li>}
+                  <li set:html={markdownify(category)} />
+                </>
+              ))}
+            </ul>
+          )}
+          {title && (
+            <h3 class="lg:text-h3 text-h4-sm mt-0 leading-snug text-inherit">
+              <a
+                href={slug}
+                title={toSentenceCase(
+                  t("common.learnMoreAbout") + " " + title,
+                )}>
+                {title}
+              </a>
+            </h3>
+          )}
+        </div>
+        <CustomButton
+          url={slug}
+          class="text-light border-light uppercase"
+          variant="text"
+          title={title}
+          label={translations("common.viewProject")}
+        />
+      </div>
+    </div>
+  ) : null
+}

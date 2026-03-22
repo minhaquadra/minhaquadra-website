@@ -1,0 +1,87 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import PageHeader from "@/components/widgets/PageHeader.astro";
+import { getTaxonomy } from "@/lib/taxonomyParser.astro";
+import { supportedLanguages } from "@/lib/utils/languageParser.ts";
+import { slugifyyy, titleify } from "@/lib/utils/textConverter";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import BlogLayout from "@/components/BlogLayout.astro";
+
+
+export async function getStaticPaths() {
+  const paths = await Promise.all(
+    supportedLanguages.map(async (lang) => {
+      const config = parseTomlToJson("./src/config/config.toml");
+      const {
+        blogFolder: blogFolder,
+        multilingual: { defaultLanguage, showDefaultLangInUrl },
+      } = config.settings;
+
+      const postIndex = await getEntryCTM(
+        blogFolder as "blog",
+        "-index",
+        lang.languageCode,
+      );
+      const tags = await getTaxonomy(
+        blogFolder as "blog",
+        "tags",
+        lang.languageCode,
+      );
+
+      const paths = tags.map((tag) => ({
+        params: {
+          tag: slugifyyy(tag.slug),
+          lang:
+            lang.languageCode === defaultLanguage && !showDefaultLangInUrl
+              ? undefined
+              : lang.languageCode,
+        },
+        props: { tag, postIndex, blogFolder },
+      }));
+
+      // If draft true in index.md file frontmatter don't include any page related to this page collection in production
+      if (postIndex?.data.draft && import.meta.env.PROD) {
+        return [];
+      }
+
+      return paths;
+    }),
+  );
+
+  return paths.flat();
+}
+
+const { tag, blogFolder, postIndex } = Astro.props;
+
+let post = await getEntryCTM(
+  blogFolder as "blog",
+  "post-1",
+  Astro.currentLocale,
+);
+
+// Check if blog posts exist in the folder
+let title = titleify(`${tag.name} posts`);
+const description = post?.data.description || postIndex?.data.description;
+---
+
+<Base {...postIndex?.data} title={title} description={description} disableTagline={true}>
+  <PageHeader
+    content={{ hiddenPaths: ["Tag"], title: `Tag: ${titleify(tag.name)}` }}
+  />
+  <BlogLayout
+    pageType="list"
+    sidebar={{
+      enable: true,
+      sticky: true,
+    }}
+    contentList={{
+      options: postIndex?.data.options,
+      filter: { tag: tag },
+      breadcrumb: true,
+      breadcrumbExcludedPaths: ["Tag"],
+    }}
+    content={{ ...post, ...post?.data }}
+  />
+  <!-- <CallToAction sectionSpaceTop={false} /> -->
+</Base>

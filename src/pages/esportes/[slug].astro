@@ -1,0 +1,738 @@
+---
+import { getCollection } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import OptimizedImage from "@/layouts/components/utilities/OptimizedImage.astro";
+import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+import CustomButton from "@/layouts/components/CustomButton.astro";
+import BlogCard from "@/layouts/components/cards/BlogCard.astro";
+import { getCollectionCTM } from "@/lib/contentParser.astro";
+import dateFormat from "@/lib/utils/dateFormat";
+import "swiper/css/bundle";
+
+export async function getStaticPaths() {
+  const esportes = await getCollection("esportes");
+  return esportes.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { sport: entry.data },
+  }));
+}
+
+const { sport } = Astro.props;
+const {
+  title, slug, metaTitle, metaDescription,
+  heroSubtitle, description, image, ctaText,
+  howToPlay, equipment, courtTypes,
+  benefits, faq, relatedSports,
+} = sport;
+
+const APP_URL = `https://app.minhaquadra.com.br/?esporte=${slug}`;
+const SITE_URL = "https://minhaquadra.com.br";
+
+// Esportes relacionados
+const allSports = await getCollection("esportes");
+const relatedSportsData = allSports
+  .filter((s) => relatedSports.includes(s.data.slug))
+  .map((s) => s.data);
+
+// Posts do blog relacionados
+const allPosts = await getCollectionCTM("blog", Astro.currentLocale);
+const sportTerm = title.toLowerCase();
+const relatedPosts = (allPosts as any[])
+  .filter((p) =>
+    !p.data.draft &&
+    (p.data.categories?.some((c: string) =>
+      c.toLowerCase().includes(sportTerm) ||
+      c.toLowerCase().replace(/\s+/g, "-") === slug
+    ) ||
+    p.data.tags?.some((t: string) =>
+      t.toLowerCase().includes(sportTerm) || t === slug
+    ))
+  )
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 6);
+
+const displayPosts = relatedPosts;
+
+// Price map for FAQ
+const priceMap: Record<string, string> = {
+  "beach-tennis": "R$ 80 a R$ 150",
+  "tenis": "R$ 60 a R$ 120",
+  "padel": "R$ 80 a R$ 160",
+  "volei": "R$ 60 a R$ 120",
+  "futevolei": "R$ 50 a R$ 100",
+  "futsal": "R$ 80 a R$ 180",
+  "futebol-society": "R$ 100 a R$ 250",
+  "basquete": "R$ 50 a R$ 100",
+  "pickleball": "R$ 60 a R$ 120",
+  "volei-de-praia": "R$ 50 a R$ 100",
+};
+const priceRange = priceMap[slug] ?? "R$ 60 a R$ 150";
+
+const extraFaqs = [
+  {
+    question: `Onde encontrar aulas de ${title} perto de mim?`,
+    answer: `Pelo Minha Quadra você pode encontrar quadras que oferecem aulas de ${title} com professores especializados. Filtre por esporte e localização para ver as opções disponíveis na sua região.`,
+  },
+  {
+    question: `Quanto custa alugar uma quadra de ${title}?`,
+    answer: `O aluguel de quadras de ${title} no Brasil varia em média de ${priceRange} por hora, dependendo da região, horário e estrutura da quadra. No Minha Quadra você compara preços entre diversas opções perto de você antes de reservar.`,
+  },
+];
+
+// Accordion items para FAQ
+const faqItems = [...faq, ...extraFaqs].map((f: { question: string; answer: string }) => ({
+  enable: true,
+  title: f.question,
+  content: f.answer,
+}));
+
+// JSON-LD schemas
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+    { "@type": "ListItem", position: 2, name: "Esportes", item: `${SITE_URL}/esportes/` },
+    { "@type": "ListItem", position: 3, name: `Quadras de ${title}`, item: `${SITE_URL}/esportes/${slug}/` },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [...faq, ...extraFaqs].map((f: { question: string; answer: string }) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+---
+
+<Base
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  canonical={`${SITE_URL}/esportes/${slug}/`}
+  image={image}
+  fitToScreen={false}
+  hasHeaderDarkBackground={true}
+  footerLayout="footer-3"
+>
+  <!-- JSON-LD -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+
+  <!-- ── SEÇÃO 1 — BREADCRUMB ─────────────────────────────────── -->
+  <nav class="es-bc" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="es-bc__list" role="list">
+        <li role="listitem"><a href="/" class="es-bc__link">Home</a></li>
+        <li aria-hidden="true" class="es-bc__sep">/</li>
+        <li role="listitem"><a href="/esportes/" class="es-bc__link">Esportes</a></li>
+        <li aria-hidden="true" class="es-bc__sep">/</li>
+        <li role="listitem"><span class="es-bc__current">{title}</span></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── SEÇÃO 2 — HERO ───────────────────────────────────────── -->
+  <section class="es-hero">
+
+    <!-- Imagem grande com overlay -->
+    {image && (
+      <div class="es-hero__img-wrap">
+        <img
+          src={image}
+          alt={`Quadras de ${title}`}
+          width={1440}
+          height={580}
+          loading="eager"
+          class="es-hero__img"
+        />
+        <div class="es-hero__img-overlay" aria-hidden="true" />
+      </div>
+    )}
+
+    <!-- Bloco de texto abaixo da imagem -->
+    <div class="container es-hero__body">
+      <h1>
+        <span
+          class="es-hero__line1 block"
+          data-aos="reveal-anim-left">
+          Quadras de
+        </span>
+        <span
+          class="es-hero__line2 block"
+          data-aos="reveal-anim-right">
+          {title}.
+        </span>
+      </h1>
+
+      <div class="mt-10 max-w-2xl space-y-8" data-aos="reveal-anim-right" data-aos-delay="300">
+        <p class="es-hero__subtitle">{heroSubtitle}</p>
+        <div class="flex flex-wrap gap-4 items-center">
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-accent es-hero-btn"
+            label={ctaText}
+            url={APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-secondary es-hero-btn2"
+            label="Cadastrar minha quadra"
+            url="/parceiros/"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 3 — O QUE É + COMO FUNCIONA ───────────────────── -->
+  <section class="es-whatitis overflow-hidden">
+    <div class="container">
+      <div class="mx-auto w-full max-w-6xl space-y-12 md:space-y-20">
+        <div class="mx-auto max-w-full space-y-8 lg:max-w-4xl">
+
+          <h2 class="text-h2-sm md:text-h2" data-aos="reveal-anim-left">
+            O que é {title}?
+          </h2>
+
+          <div class="prose-styles content" data-aos="fade-up" data-aos-delay="80">
+            {description.split("\n\n").map((para: string) => <p>{para}</p>)}
+
+            <h3>Como funciona</h3>
+            {howToPlay.split("\n\n").map((para: string) => <p>{para}</p>)}
+
+            <h3>Equipamentos</h3>
+            <p>{equipment}</p>
+
+            <h3>Tipos de quadra</h3>
+            <p>{courtTypes}</p>
+
+            <h3>Aulas de {title}</h3>
+            <p>Além de alugar quadras para jogar com amigos, você pode encontrar aulas de {title} para todos os níveis no Minha Quadra. Muitas quadras parceiras oferecem aulas com professores especializados, desde iniciantes até jogadores avançados.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 4 — POR QUE PRATICAR ──────────────────────────── -->
+  <section class="es-benefits">
+    <div class="container">
+
+      <h2 class="es-benefits__title" data-aos="reveal-anim-left">
+        Por que jogar {title}?
+      </h2>
+
+      <div class="es-benefits__grid">
+        {benefits.map((b: { title: string; text: string }, i: number) => (
+          <div class="es-benefit" data-aos="fade-up" data-aos-delay={i * 80}>
+            <div class="es-benefit__header">
+              <h3 class="es-benefit__name">{b.title}</h3>
+              <div class="es-benefit__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
+            </div>
+            <p class="es-benefit__text">{b.text}</p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 5 — CTA APP ────────────────────────────────────── -->
+  <section class="es-cta-mid">
+    <div class="container">
+      <div class="grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center lg:gap-y-20">
+
+        <div class="max-w-3xl">
+          <h2 class="es-cta-mid__title" data-aos="reveal-anim-left">
+            Encontre quadras de {title} para alugar perto de você
+          </h2>
+        </div>
+
+        <div class="max-w-lg space-y-10">
+          <p class="es-cta-mid__desc" data-aos="fade-up" data-aos-delay="100">
+            Compare opções, veja horários disponíveis e reserve sua quadra online.
+          </p>
+          <div data-aos="fade-up" data-aos-delay="200">
+            <CustomButton
+              hoverEffect="creative-fill"
+              class="es-cta-btn"
+              label={`Explorar quadras de ${title}`}
+              url={APP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 6 — BLOG + EXPLORE ESPORTES ────────────────────── -->
+  <section class="es-blog">
+    <div class="overflow-hidden">
+      <div class="container">
+        <h2 class="es-blog__title" data-aos="reveal-anim-left">
+          Saiba mais sobre {title}
+        </h2>
+      </div>
+
+      {relatedPosts.length > 0 ? (
+        <div class="container">
+          <div>
+            <div id="es-blog-posts-slider" class="swiper overflow-visible!" data-count={displayPosts.length}>
+              <div class="swiper-wrapper overflow-visible! pb-10">
+                {displayPosts.map((post: any) => {
+                  const postHref = post.slug ? `/blog/${post.slug}/` : `/blog/creative/`;
+                  return (
+                    <div class="swiper-slide group/project-slide h-auto! overflow-hidden!">
+                      <div class="text-light relative flex aspect-square w-full items-end p-5 md:p-8 after:from-theme-dark after:via-theme-dark/50 after:absolute after:start-0 after:-z-10 after:w-full after:bg-linear-to-t after:to-transparent after:transition-all after:duration-300 group-[.swiper-slide-active]/project-slide:after:h-full after:max-md:bottom-0 after:max-md:h-full after:md:-bottom-4 after:md:h-0 after:md:opacity-0 group-[.swiper-slide-active]/project-slide:after:bottom-0 group-[.swiper-slide-active]/project-slide:after:opacity-100">
+                        {post.data.image && (
+                          <OptimizedImage
+                            class="absolute top-0 start-0 -z-10 min-h-full min-w-[calc(100%+2rem)] -translate-x-8 object-cover duration-500 group-[.swiper-slide-active]/project-slide:-translate-x-4"
+                            src={post.data.image}
+                            alt={post.data.title}
+                            width={800}
+                            height={600}
+                          />
+                        )}
+                        <a href={postHref} class="absolute inset-0" title={post.data.title} />
+                        <div class="mt-auto w-full translate-y-5 space-y-4 opacity-0 transition-all duration-1000! group-[.swiper-slide-active]/project-slide:translate-y-0 group-[.swiper-slide-active]/project-slide:opacity-100">
+                          {post.data.categories?.[0] && (
+                            <p class="text-sm opacity-80">{post.data.categories[0]}</p>
+                          )}
+                          <h3 class="md:text-h3 text-h3-sm mt-0 leading-snug text-inherit">
+                            <a href={postHref}>{post.data.title}</a>
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="container">
+          <p class="es-blog__fallback">
+            Em breve: dicas, guias e as melhores quadras de {title} no Brasil.
+          </p>
+        </div>
+      )}
+
+      <!-- Explore outros esportes — integrado -->
+      <div class="container">
+        <div class="es-explore" data-aos="fade-up">
+          <h3 class="es-explore__title">Explore outros esportes</h3>
+          <div class="es-explore__grid">
+            {allSports
+              .filter((s) => s.data.slug !== slug)
+              .map((s) => (
+                <a href={`/esportes/${s.data.slug}/`} class="es-explore__chip">
+                  {s.data.title}
+                  <span aria-hidden="true">→</span>
+                </a>
+              ))}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener("load", async function () {
+      const { Swiper } = await import("swiper");
+      const { Autoplay } = await import("swiper/modules");
+
+      const blogSlider = document.querySelector("#es-blog-posts-slider") as HTMLElement;
+      if (!blogSlider) return;
+
+      const count = parseInt(blogSlider.dataset.count || "1", 10);
+      const canLoop = count >= 2;
+
+      new Swiper(blogSlider, {
+        modules: [Autoplay],
+        speed: 800,
+        spaceBetween: 24,
+        slidesPerView: 1,
+        breakpoints: {
+          768: { slidesPerView: 2, spaceBetween: 32 },
+        },
+        ...(canLoop && { loopAdditionalSlides: 2 }),
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+        },
+        loop: canLoop,
+      });
+    });
+  </script>
+
+  <!-- ── SEÇÃO 8 — FAQ ─────────────────────────────────────────── -->
+  <section class="es-faq">
+    <div class="container">
+      <h2 class="es-faq__title" data-aos="fade-up">
+        Perguntas frequentes sobre {title}
+      </h2>
+      <AccordionList content={faqItems} />
+    </div>
+  </section>
+
+</Base>
+
+<style is:global>
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 1 — BREADCRUMB
+  ═══════════════════════════════════════════════════════════════ */
+  .es-bc {
+    background-color: #002d3c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 6rem; /* compensa header fixed */
+  }
+
+  .es-bc .container {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .es-bc__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .es-bc__link {
+    color: rgba(245, 245, 245, 0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .es-bc__link:hover { color: #b4fa50; }
+
+  .es-bc__sep { color: rgba(245, 245, 245, 0.25); user-select: none; }
+
+  .es-bc__current {
+    color: #b4fa50;
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 2 — HERO
+  ═══════════════════════════════════════════════════════════════ */
+  .es-hero {
+    background-color: #002d3c;
+    padding-top: 0 !important;
+  }
+
+  /* — Imagem grande no topo — */
+  .es-hero__img-wrap {
+    position: relative;
+    width: 100%;
+    height: clamp(220px, 38vw, 560px);
+    overflow: hidden;
+  }
+
+  .es-hero__img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block;
+  }
+
+  .es-hero__img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 45, 60, 0.15) 0%,
+      rgba(0, 45, 60, 0.50) 100%
+    );
+  }
+
+  /* — Bloco de texto abaixo da imagem — */
+  .es-hero__body {
+    padding-top: 3.5rem;
+    padding-bottom: 6rem;
+    overflow-x: hidden;
+  }
+
+  .es-hero__line1 {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 600;
+    color: #f5f5f5;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .es-hero__line2 {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .es-hero__subtitle {
+    font-size: 1.125rem;
+    color: #f5f5f5;
+    line-height: 1.75;
+  }
+  @media (min-width: 768px) {
+    .es-hero__subtitle { font-size: 1.25rem; }
+  }
+
+  /* Botão primário creative-fill — sobrescreve cor do hover-bg */
+  a.es-hero-btn.creative-hover-anim .hover-bg {
+    background: #b4fa50;
+  }
+  a.es-hero-btn.creative-hover-anim:hover {
+    color: #002d3c !important;
+  }
+
+  /* Segundo botão — filled com #b4fa50 como cor base */
+  a.es-hero-btn2.btn {
+    background-color: #b4fa50 !important;
+    border-color: #b4fa50 !important;
+    color: #002d3c !important;
+    font-weight: 500;
+  }
+  a.es-hero-btn2.creative-hover-anim .hover-bg {
+    background: #e1ffa5;
+  }
+  a.es-hero-btn2.creative-hover-anim:hover {
+    color: #002d3c !important;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 3 — O QUE É + COMO FUNCIONA
+  ═══════════════════════════════════════════════════════════════ */
+  .es-whatitis {
+    background-color: #007d8c;
+    padding-top: 5rem;
+    padding-bottom: 7rem;
+  }
+
+  .es-whatitis h2 {
+    color: #e1ffa5 !important;
+  }
+
+  .es-whatitis .content h3 {
+    color: #e1ffa5 !important;
+  }
+
+  .es-whatitis .content p,
+  .es-whatitis .content li {
+    color: #f5f5f5 !important;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 4 — BENEFÍCIOS
+  ═══════════════════════════════════════════════════════════════ */
+  .es-benefits {
+    background-color: #002d3c;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .es-benefits__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.15;
+    margin-bottom: 3rem;
+    max-width: 28ch;
+  }
+
+  .es-benefits__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) { .es-benefits__grid { grid-template-columns: 1fr 1fr; } }
+
+  /* Card — estilo mq-step-card ("Veja como é fácil") */
+  .es-benefit {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 768px) { .es-benefit { padding: 2.5rem 2rem; } }
+
+  .es-benefit__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .es-benefit__name {
+    font-size: var(--text-h5);
+    font-weight: 600;
+    color: #e1ffa5;
+    line-height: 1.3;
+  }
+
+  .es-benefit__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #b4fa50;
+    flex-shrink: 0;
+  }
+  .es-benefit__icon svg { width: 100%; height: 100%; }
+
+  .es-benefit__text {
+    font-size: 1rem;
+    color: #f5f5f5;
+    line-height: 1.65;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 5 — CTA MEIO DE PÁGINA
+  ═══════════════════════════════════════════════════════════════ */
+  .es-cta-mid {
+    background-color: #b4fa50;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .es-cta-mid__title {
+    font-size: clamp(2.25rem, 5vw, 5rem);
+    font-weight: 600;
+    color: #002d3c;
+    line-height: 1.1;
+  }
+
+  .es-cta-mid__desc {
+    font-size: 1.125rem;
+    color: #002d3c;
+    line-height: 1.75;
+  }
+
+  /* Botão — #002d3c bg / #e1ffa5 text; hover: #007d8c bg / #e1ffa5 text */
+  a.es-cta-btn.btn {
+    background-color: #002d3c !important;
+    border-color: #002d3c !important;
+    color: #e1ffa5 !important;
+    font-weight: 500;
+  }
+  a.es-cta-btn.creative-hover-anim .hover-bg {
+    background: #007d8c;
+  }
+  a.es-cta-btn.creative-hover-anim:hover {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 6 — BLOG + EXPLORE ESPORTES
+  ═══════════════════════════════════════════════════════════════ */
+  .es-blog {
+    background-color: #002d3c;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .es-blog__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #b4fa50;
+    margin-bottom: 3rem;
+  }
+
+  /* Fallback — sem posts */
+  .es-blog__fallback {
+    font-size: 1.125rem;
+    color: rgba(245, 245, 245, 0.45);
+    padding: 3rem 0;
+  }
+
+  /* — Explore outros esportes (integrado na seção blog) — */
+  .es-explore {
+    margin-top: 2rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(180, 250, 80, 0.12);
+  }
+
+  .es-explore__title {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-weight: 600;
+    color: #f5f5f5;
+    margin-bottom: 2rem;
+  }
+
+  .es-explore__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .es-explore__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(225, 255, 165, 0.15);
+    padding: 0.625rem 1.125rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(245, 245, 245, 0.8);
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .es-explore__chip:hover {
+    background-color: rgba(180, 250, 80, 0.08);
+    border-color: rgba(180, 250, 80, 0.45);
+    color: #b4fa50;
+  }
+  .es-explore__chip span { color: #b4fa50; transition: transform 0.2s; }
+  .es-explore__chip:hover span { transform: translateX(3px); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SEÇÃO 8 — FAQ
+  ═══════════════════════════════════════════════════════════════ */
+  .es-faq {
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+  }
+
+  .es-faq__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #002d3c;
+    text-align: center;
+    max-width: 40ch;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+  }
+
+  /* Acordeão light sobre #f5f5f5 */
+  .es-faq .hs-accordion-group,
+  .es-faq .hs-accordion { border-color: rgba(0, 45, 60, 0.15) !important; }
+  .es-faq .text-dark { color: #002d3c !important; }
+  .es-faq button.hs-accordion-toggle { color: #002d3c !important; }
+  .es-faq .hs-accordion-content,
+  .es-faq .hs-accordion-content * { color: rgba(0, 45, 60, 0.8) !important; }
+</style>

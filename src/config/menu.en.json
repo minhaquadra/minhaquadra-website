@@ -1,0 +1,71 @@
+{
+  "headerPrimary": [
+    {
+      "enable": true,
+      "name": "Home",
+      "url": "/",
+      "hasChildren": true,
+      "children": [
+        { "enable": true, "name": "Minha Quadra", "url": "/" },
+        { "enable": true, "name": "Parceiros", "url": "/parceiros/" }
+      ]
+    },
+    {
+      "enable": true,
+      "name": "Esportes",
+      "url": "/esportes/",
+      "hasChildren": true,
+      "children": [
+        { "enable": true, "name": "Beach Tennis", "url": "/esportes/beach-tennis/" },
+        { "enable": true, "name": "Padel", "url": "/esportes/padel/" },
+        { "enable": true, "name": "Futebol Society", "url": "/esportes/futebol-society/" },
+        { "enable": true, "name": "Futsal", "url": "/esportes/futsal/" },
+        { "enable": true, "name": "Tênis", "url": "/esportes/tenis/" },
+        { "enable": true, "name": "Vôlei", "url": "/esportes/volei/" },
+        { "enable": true, "name": "Vôlei de Praia", "url": "/esportes/volei-de-praia/" },
+        { "enable": true, "name": "Futevôlei", "url": "/esportes/futevolei/" },
+        { "enable": true, "name": "Basquete", "url": "/esportes/basquete/" },
+        { "enable": true, "name": "Pickleball", "url": "/esportes/pickleball/" }
+      ]
+    },
+    {
+      "enable": true,
+      "name": "Blog",
+      "url": "/blog/creative/"
+    },
+    {
+      "enable": true,
+      "name": "Políticas",
+      "url": "/politicas/"
+    },
+    {
+      "enable": true,
+      "name": "Contato",
+      "url": "/contato/"
+    }
+  ],
+  "footerPrimary": {
+    "title": "Esportes",
+    "menus": [
+      { "enable": true, "name": "Esportes", "url": "/esportes/" },
+      { "enable": true, "name": "Beach Tennis", "url": "/esportes/beach-tennis/" },
+      { "enable": true, "name": "Padel", "url": "/esportes/padel/" },
+      { "enable": true, "name": "Futebol Society", "url": "/esportes/futebol-society/" },
+      { "enable": true, "name": "Futsal", "url": "/esportes/futsal/" },
+      { "enable": true, "name": "Tênis", "url": "/esportes/tenis/" }
+    ]
+  },
+  "footerSecondary": {
+    "title": "Links",
+    "menus": [
+      { "enable": true, "name": "Blog", "url": "/blog/creative/" },
+      { "enable": true, "name": "Parceiros", "url": "/parceiros/" },
+      { "enable": true, "name": "Políticas", "url": "/politicas/" },
+      { "enable": true, "name": "Termos de Uso", "url": "/termos-de-uso/" },
+      { "enable": true, "name": "Privacidade", "url": "/politica-de-privacidade/" }
+    ]
+  },
+  "navigation": {
+    "buttonLabel": "MINHA QUADRA"
+  }
+}

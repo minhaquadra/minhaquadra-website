@@ -1,0 +1,34 @@
+{
+  "main": [
+    {
+      "enable": false,
+      "label": "facebook",
+      "icon": "FaFacebook",
+      "url": ""
+    },
+    {
+      "enable": false,
+      "label": "twitter",
+      "icon": "FaXTwitter",
+      "url": ""
+    },
+    {
+      "enable": true,
+      "label": "instagram",
+      "icon": "FaInstagram",
+      "url": "https://www.instagram.com/minhaquadra_/"
+    },
+    {
+      "enable": true,
+      "label": "tiktok",
+      "icon": "FaTiktok",
+      "url": "https://www.tiktok.com/@minha.quadra"
+    },
+    {
+      "enable": true,
+      "label": "linkedin",
+      "icon": "FaLinkedin",
+      "url": "https://www.linkedin.com/company/minha-quadra"
+    }
+  ]
+}

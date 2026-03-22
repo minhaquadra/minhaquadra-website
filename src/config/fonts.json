@@ -1,0 +1,24 @@
+{
+  "fontFamily": [
+    {
+      "name": "Clash Grotesk",
+      "src": [],
+      "preload": false,
+      "provider": "local-hosted",
+      "display": "swap",
+      "cssVariable": "font-primary",
+      "fallback": "sans-serif",
+      "locallyHosted": false
+    },
+    {
+      "name": "Clash Display",
+      "src": [],
+      "preload": false,
+      "display": "swap",
+      "cssVariable": "font-secondary",
+      "provider": "local-hosted",
+      "fallback": "sans-serif",
+      "locallyHosted": false
+    }
+  ]
+}

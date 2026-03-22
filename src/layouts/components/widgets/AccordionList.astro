@@ -1,0 +1,78 @@
+---
+import ReactIcons from "@/helpers/ReactIcons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import uniqueIdGenerator from "@/lib/utils/uniqueIdGenerator";
+
+interface Props {
+  content: any;
+  class?: string;
+  [key: string]: any;
+}
+
+const { content: list, ...rest } = Astro.props;
+---
+
+<div class="hs-accordion-group mb-0 divide-y" {...rest}>
+  <div class="hs-accordion-group mx-auto w-full max-w-4xl border-y">
+    {
+      list.map((item: { title: string; content: string }, index: number) => {
+        const id = uniqueIdGenerator(item.title);
+        return (
+          <div
+            class:list={[
+              "hs-accordion relative border-y pe-10 text-start transition-all first:border-t lg:pe-20",
+              index === 0 && "active",
+            ]}
+            id={"accordion-" + id}>
+            <button
+              aria-expanded={index === 0 ? "true" : "false"}
+              class="hs-accordion-toggle text-dark font-secondary text-h6 w-full py-6 text-start font-medium"
+              aria-controls={"accordion-content-" + id}
+              set:html={item.title}
+            />
+
+            <div class="hs-accordion-active:rotate-180 pointer-events-none absolute top-5 end-0 flex transition duration-300">
+              <ReactIcons icon="RxArrowTopRight" class="text-dark text-xl" />
+            </div>
+            <div
+              role="region"
+              id={"accordion-content-" + id}
+              aria-labelledby={"accordion-" + id}
+              class:list={[
+                "hs-accordion-content hs-accordion-active:opacity-100 w-full overflow-hidden opacity-0 transition-all duration-300 ease-linear",
+                index !== 0 && "hidden",
+              ]}>
+              <div class="prose-styles prose-p:first:mt-0 prose-p:last:mb-0 pb-4">
+                <div set:html={markdownify(item.content, true)} />
+              </div>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<script>
+  // Recalculate AOS Elements positions after accordion is opened
+  // @ts-nocheck
+  import AOS from "aos";
+  import HSAccordion from "preline/src/plugins/accordion";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const accordions = document.querySelectorAll(".hs-accordion");
+
+    accordions.forEach((accordion) => {
+      setTimeout(() => {
+        const { element } = HSAccordion.getInstance(
+          `#${accordion.getAttribute("id")}`,
+          true,
+        );
+
+        element.on("open", () => {
+          AOS.refresh();
+        });
+      }, 1000);
+    });
+  });
+</script>

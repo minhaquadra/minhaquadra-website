@@ -1,0 +1,82 @@
+---
+import Social from "./widgets/Social.astro";
+import type { InferEntrySchema } from "astro:content";
+import { markdownify } from "@/lib/utils/textConverter";
+import OptimizedImage from "./utilities/OptimizedImage.astro";
+import { render } from "astro:content";
+
+const { data } = Astro.props.content;
+const { title, image, social, profession, email, phone } =
+  data as InferEntrySchema<"team">;
+
+const { Content } = await render(Astro.props.content);
+---
+
+<section class="overflow-hidden pt-16 md:pt-32">
+  <div class="container">
+    <div
+      class="lg mx-auto grid w-full grid-cols-1 items-center gap-y-10 md:gap-x-12 lg:grid-cols-2">
+      <!-- Image -->
+      {
+        image && (
+          <div class="lg:pe-20">
+            <OptimizedImage
+              src={image}
+              alt={title || "team member"}
+              width={600}
+              height={700}
+              class="h-auto w-full object-cover"
+            />
+          </div>
+        )
+      }
+
+      <!-- Content -->
+      <div class="space-y-10">
+        <div class="space-y-3">
+          {
+            title && (
+              <h1 class="md:text-h2 text-h3-sm font-semibold" set:html={title} />
+            )
+          }
+          {profession && <p class="text-h5 font-medium">{profession}</p>}
+        </div>
+
+        <div class="prose-styles max-w-none text-lg">
+          <Content />
+        </div>
+
+        <div class="space-y-4">
+          <div class="space-y-1 font-medium">
+            {
+              email && (
+                <div
+                  class="font-secondary uppercase"
+                  set:html={markdownify(email)}
+                />
+              )
+            }
+            {
+              phone && (
+                <div class="font-secondary" set:html={markdownify(phone)} />
+              )
+            }
+          </div>
+
+          {
+            social && (
+              <div class="flex gap-4 pt-4">
+                <Social
+                  list={social}
+                  linkType="follow"
+                  layout="dark-modern"
+                  size="sm"
+                />
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+{
+  "blog": {
+    "share": "Compartilhar",
+    "paginationPrevious": "Anterior",
+    "paginationNext": "Próximo"
+  },
+  "common": {
+    "readMore": "LEIA MAIS",
+    "learnMoreAbout": "Saiba mais sobre",
+    "viewDetails": "Ver detalhes",
+    "paginationPrevious": "Anterior",
+    "paginationNext": "Próximo",
+    "emailPlaceholder": "Seu email"
+  },
+  "widgets": {
+    "categoriesTitle": "Categorias",
+    "tagsTitle": "Tags",
+    "recentPostsTitle": "Posts Recentes",
+    "postSearchFormPlaceholder": "Buscar posts..."
+  },
+  "footer": {
+    "description": "Plataforma de reserva de quadras esportivas. Encontre, compare e reserve sua quadra em poucos cliques.",
+    "copyright": "© 2025 Minha Quadra. Todos os direitos reservados.",
+    "menuTitleLinks": "Links Úteis",
+    "contact": "Contato"
+  },
+  "headerOffcanvas": {
+    "description": "Reserve sua quadra em poucos cliques.",
+    "buttonLabel": "MINHA QUADRA"
+  },
+  "subscription": {
+    "title": "Fique por dentro",
+    "note": "Nós respeitamos sua privacidade."
+  }
+}

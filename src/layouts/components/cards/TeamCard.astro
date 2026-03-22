@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { markdownify, toSentenceCase } from "@/lib/utils/textConverter";
+import { getLocaleUrlCTM, useTranslations } from "@/lib/utils/languageParser";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+import extractSlug from "@/lib/utils/extractSlug";
+
+interface Props {
+  content: CollectionEntry<"team">;
+  class?: string;
+}
+
+const { content, class: className, ...rest } = Astro.props;
+const {
+  data: { title, image, profession },
+} = content;
+
+const t = await useTranslations(Astro.currentLocale as string);
+const slug = getLocaleUrlCTM(
+  extractSlug(content),
+  Astro.currentLocale,
+  content.collection,
+);
+---
+
+{
+  image && (
+    <div
+      class:list={[
+        "group after:from-primary/80 after:via-primary/30 to-primary/0 relative overflow-hidden border via-10% after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-linear-to-t after:transition-opacity",
+        className,
+      ]}
+      {...rest}>
+      <OptimizedImage
+        src={image}
+        alt={title}
+        class:list={[
+          "pointer-events-none h-95 w-full object-cover grayscale transition duration-500 group-hover:scale-110 group-hover:grayscale-0",
+        ]}
+      />
+      <div class="absolute bottom-0 start-0 z-20 w-full p-8 text-white transition-all duration-300 group-hover:bottom-0 group-hover:opacity-100 hover:opacity-100 md:-bottom-1 md:opacity-0">
+        {title && (
+          <h3
+            class="text-h5 hover:text-accent font-medium text-white"
+            set:html={markdownify(title)}
+          />
+        )}
+        {profession && (
+          <p class="mt-2 text-sm" set:html={markdownify(profession)} />
+        )}
+      </div>
+      <a
+        title={toSentenceCase(t("common.learnMoreAbout") + " " + title)}
+        class="absolute inset-0 z-30"
+        href={slug}
+      />
+    </div>
+  )
+}

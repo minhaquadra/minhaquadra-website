@@ -1,0 +1,57 @@
+---
+import type { z } from "astro/zod";
+import { markdownify } from "@/lib/utils/textConverter";
+import type { testimonialSectionSchema } from "@/sections.schema";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+type TestimonialCardType = NonNullable<
+  NonNullable<z.infer<typeof testimonialSectionSchema>>["list"]
+>[0];
+
+interface Props {
+  content: TestimonialCardType;
+  class?: string;
+  isDarkAppearance?: boolean;
+}
+
+const { class: className, isDarkAppearance } = Astro.props;
+let {
+  enable,
+  content,
+  customer: { name, role },
+} = Astro.props.content;
+
+if (!enable) {
+  return null;
+}
+---
+
+<div class:list={["relative w-full p-6 " + className]}>
+  <OptimizedImage
+    inlineSvg={true}
+    class:list={["mb-8", isDarkAppearance ? "text-accent" : "text-dark"]}
+    src="/images/testimonial/quote.svg"
+    alt="icon"
+  />
+
+  {
+    content && (
+      <p
+        class="text-lg/loose md:text-xl/relaxed"
+        set:html={markdownify(content)}
+      />
+    )
+  }
+
+  <div class="font-secondary mt-12 space-y-2 font-medium">
+    {name && <h3 class="text-h5 text-inherit" set:html={markdownify(name)} />}
+    {
+      role && (
+        <p
+          class="font-primary text-lg opacity-80"
+          set:html={markdownify(role)}
+        />
+      )
+    }
+  </div>
+</div>

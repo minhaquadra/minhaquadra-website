@@ -1,0 +1,190 @@
+---
+import { getCollection } from "astro:content";
+import Base from "@/layouts/Base.astro";
+
+const SITE_URL = "https://minhaquadra.com.br";
+const esportes = await getCollection("esportes");
+---
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Esportes — Minha Quadra",
+  "description": "Encontre quadras para alugar por esporte: beach tennis, padel, society, futsal, tênis, vôlei e mais.",
+  "url": "https://minhaquadra.com.br/esportes/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Minha Quadra",
+    "url": "https://minhaquadra.com.br"
+  }
+}
+</script>
+
+<Base
+  metaTitle="Esportes — Encontre Quadras para Alugar por Esporte | Minha Quadra"
+  metaDescription="Beach tennis, padel, futebol society, futsal, tênis, vôlei, futevôlei, basquete e mais. Encontre quadras esportivas para alugar perto de você no Minha Quadra."
+  canonical={`${SITE_URL}/esportes/`}
+  fitToScreen={false}
+  hasHeaderDarkBackground={true}
+  footerLayout="footer-3"
+>
+  <section class="esindex-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+        <h1>
+          <span class="esindex-hero__line1 block" data-aos="reveal-anim-left">Esportes no</span>
+          <span class="esindex-hero__line2 block" data-aos="reveal-anim-right">Minha Quadra.</span>
+        </h1>
+        <p class="esindex-hero__subtitle mt-8 max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+          Escolha o seu esporte favorito e encontre as melhores quadras para alugar perto de você.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="esindex-grid-section">
+    <div class="container">
+      <div class="esindex-grid">
+        {esportes.map((sport, i) => (
+          <a
+            href={`/esportes/${sport.data.slug}/`}
+            class="esindex-card"
+            data-aos="fade-up"
+            data-aos-delay={i * 60}
+          >
+            <div class="esindex-card__img-wrap">
+              {sport.data.image && (
+                <img
+                  src={sport.data.image}
+                  alt={`Quadras de ${sport.data.title}`}
+                  class="esindex-card__img"
+                  loading="lazy"
+                  width="600"
+                  height="400"
+                />
+              )}
+              <div class="esindex-card__overlay" aria-hidden="true" />
+            </div>
+            <div class="esindex-card__body">
+              <h2 class="esindex-card__name">{sport.data.title}</h2>
+              <span class="esindex-card__cta">
+                Encontrar quadras <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .esindex-hero {
+    background-color: #002d3c;
+    padding-top: 10rem;
+    padding-bottom: 6rem;
+    overflow-x: hidden;
+  }
+  .esindex-hero__line1 {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 600;
+    color: #f5f5f5;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .esindex-hero__line2 {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .esindex-hero__subtitle {
+    font-size: 1.125rem;
+    color: rgba(245, 245, 245, 0.8);
+    line-height: 1.75;
+  }
+  @media (min-width: 768px) {
+    .esindex-hero__subtitle { font-size: 1.25rem; }
+  }
+  .esindex-grid-section {
+    background-color: #007d8c;
+    padding-top: 5rem;
+    padding-bottom: 7rem;
+  }
+  .esindex-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .esindex-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .esindex-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  }
+  .esindex-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background-color: #002d3c;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .esindex-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+  .esindex-card__img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background-color: rgba(0, 45, 60, 0.6);
+  }
+  .esindex-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .esindex-card:hover .esindex-card__img {
+    transform: scale(1.05);
+  }
+  .esindex-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0, 45, 60, 0.65) 100%);
+  }
+  .esindex-card__body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .esindex-card__name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #e1ffa5;
+    margin: 0;
+    line-height: 1.3;
+  }
+  .esindex-card__cta {
+    font-size: 0.875rem;
+    color: rgba(245, 245, 245, 0.65);
+    transition: color 0.2s;
+  }
+  .esindex-card:hover .esindex-card__cta {
+    color: #b4fa50;
+  }
+  .esindex-card__cta span {
+    color: #b4fa50;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .esindex-card:hover .esindex-card__cta span {
+    transform: translateX(4px);
+  }
+</style>

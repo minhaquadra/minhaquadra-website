@@ -1,0 +1,239 @@
+/* ====================================================== */
+/* Button Style */
+/* ====================================================== */
+
+@utility btn {
+  @apply font-secondary text-light inline-block overflow-hidden px-6 py-4 text-sm font-normal whitespace-nowrap uppercase disabled:cursor-not-allowed xl:px-9 xl:py-5;
+  transition: all 0.3s ease;
+}
+@utility btn-md {
+  @apply px-8 py-5 md:text-lg xl:px-10 xl:py-7;
+}
+
+@utility btn-circle {
+  @apply font-secondary inline-flex h-44 w-44 items-center justify-center rounded-full px-8 py-3 text-center text-sm;
+}
+
+/* Minha Quadra button color system */
+/* On light bg (#f5f5f5): bg-alternate → text-tertiary; hover: bg-tertiary → text-alternate */
+@utility btn-light {
+  background-color: #007d8c;
+  color: #e1ffa5;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #e1ffa5;
+    color: #007d8c;
+  }
+}
+
+/* On dark bg (#002d3c): bg-tertiary → text-alternate; hover: bg-secondary → text-primary */
+@utility btn-accent {
+  background-color: #e1ffa5;
+  color: #007d8c;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #b4fa50;
+    color: #002d3c;
+  }
+}
+@utility btn-text {
+  @apply rounded-none border-b p-0 pb-1.5;
+}
+
+/* Default primary button — same as light bg context */
+@utility btn-primary {
+  background-color: #007d8c;
+  color: #e1ffa5;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #e1ffa5;
+    color: #007d8c;
+  }
+}
+@utility btn-text-primary {
+  @apply text-primary border-b-primary border-b-2;
+}
+@utility btn-text-white {
+  @apply text-light border-b-white;
+}
+@utility btn-outline {
+  @apply text-light border font-medium;
+  transition: all 0.3s ease;
+}
+@utility btn-outline-primary {
+  border-color: #007d8c;
+  color: #007d8c;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #007d8c;
+    color: #e1ffa5;
+  }
+}
+/* On alternate bg (#007d8c): bg-tertiary → text-alternate; hover: bg-primary → text-tertiary */
+@utility btn-outline-transparent {
+  background-color: #e1ffa5;
+  color: #007d8c;
+  border-color: #e1ffa5;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #002d3c;
+    color: #e1ffa5;
+    border-color: #002d3c;
+  }
+}
+
+.btn-outline {
+  & ~ .icon {
+    @apply text-dark flex h-12 w-12 items-center justify-center bg-white;
+
+    svg path {
+      @apply ![fill-color:currentColor];
+    }
+  }
+
+  &.btn-md ~ .icon {
+    @apply h-14 w-14;
+  }
+}
+*[class*="btn-outline-primary"] ~ .icon {
+  @apply bg-primary;
+}
+*[class*="btn-outline-transparent"] ~ .icon {
+  @apply bg-white;
+}
+
+.magnetic-hover-anim:not([disabled="true"]) {
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+.creative-hover-anim:not([disabled="true"]) {
+  @apply relative z-10 overflow-hidden delay-100;
+
+  .hover-bg {
+    @apply translate-centered absolute top-[var(--creative-hover-top)] start-[var(--creative-hover-left)] -z-10 block h-0 w-0 rounded-full;
+    transition:
+      width 0.6s ease,
+      height 0.6s ease;
+  }
+
+  &:hover .hover-bg {
+    width: 56.25rem;
+    height: 56.25rem;
+  }
+
+  &.effect-color-primary .hover-bg {
+    background: var(--color-theme-primary);
+  }
+  &.effect-color-light .hover-bg {
+    background: var(--color-theme-light);
+  }
+  &.effect-color-dark .hover-bg {
+    background: var(--color-theme-dark);
+  }
+  &.effect-color-accent .hover-bg {
+    background: var(--color-accent);
+  }
+
+  &:hover {
+    &.effect-color-primary,
+    &.effect-color-dark {
+      color: var(--color-light) !important;
+    }
+    &.effect-color-light,
+    &.effect-color-accent {
+      color: var(--color-dark) !important;
+    }
+  }
+}
+.text-flip-hover-anim:not([disabled="true"]) {
+  .text-flip-inner {
+    @apply relative inline-block overflow-hidden text-transparent;
+
+    &::before,
+    &::after {
+      content: attr(data-content);
+      @apply pointer-events-none absolute inset-0 text-center transition-all duration-300 ease-in-out;
+    }
+
+    &::before {
+      @apply top-1/2 -translate-y-1/2 opacity-100;
+    }
+
+    &::after {
+      @apply top-full opacity-0;
+    }
+  }
+
+  &:hover .text-flip-inner {
+    &::before {
+      @apply -top-full opacity-0;
+    }
+
+    &::after {
+      @apply top-1/2 -translate-y-1/2 opacity-100;
+    }
+  }
+
+  &.btn-accent,
+  &.btn-light {
+    .text-flip-inner {
+      &::before,
+      &::after {
+        @apply text-dark;
+      }
+    }
+  }
+
+  &.btn-primary {
+    .text-flip-inner {
+      &::before,
+      &::after {
+        @apply text-light;
+      }
+    }
+  }
+
+  &.btn-outline {
+    .text-flip-inner {
+      &::before,
+      &::after {
+        @apply text-dark;
+      }
+    }
+  }
+}
+
+.has-icon-moving-animation {
+  /* @apply overflow-hidden; */
+  &:hover .icon {
+    &.icon-before {
+      @apply -top-full start-full;
+    }
+
+    &.icon-after {
+      @apply top-0 start-0;
+    }
+  }
+
+  .icons-wrapper {
+    @apply relative overflow-hidden;
+  }
+
+  .icon {
+    @apply transition-[top,_left] duration-500 ease-in-out;
+
+    &.icon-before,
+    &.icon-after {
+      @apply absolute inset-0 size-full;
+    }
+
+    &.icon-before {
+      @apply top-0;
+    }
+
+    &.icon-after {
+      @apply top-full -start-full;
+    }
+  }
+}

@@ -1,0 +1,744 @@
+---
+import Base from "@/layouts/Base.astro";
+import CustomButton from "@/layouts/components/CustomButton.astro";
+import OptimizedImage from "@/layouts/components/utilities/OptimizedImage.astro";
+import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+import Features from "@/layouts/components/sections/Features.astro";
+
+// Coluna esquerda (de cima para baixo): Padel → Tênis → Vôlei de Praia → Beach Tennis → Futsal
+// aspect ratios variam como no portfolio masonry original (portrait, landscape, portrait, landscape, square)
+const sportsLeft = [
+  {
+    title: "Padel",
+    slug: "padel",
+    categories: ["Raquete", "Quadra"],
+    image: "/images/minhaquadra/padel.jpg",
+    description: "Encontre quadras de padel com toda a estrutura que você precisa para uma partida incrível.",
+    aspectRatio: "2/3",
+  },
+  {
+    title: "Tênis",
+    slug: "tenis",
+    categories: ["Raquete", "Quadra"],
+    image: "/images/minhaquadra/tenis.jpg",
+    description: "Escolha entre diversas quadras de tênis e marque seu jogo com facilidade.",
+    aspectRatio: "4/3",
+  },
+  {
+    title: "Vôlei de Praia",
+    slug: "volei-de-praia",
+    categories: ["Rede", "Praia"],
+    image: "/images/minhaquadra/volei-de-praia.jpg",
+    description: "Reserve quadras de vôlei de praia e curta o esporte ao ar livre com a galera.",
+    aspectRatio: "3/4",
+  },
+  {
+    title: "Beach Tennis",
+    slug: "beach-tennis",
+    categories: ["Raquete", "Praia"],
+    image: "/images/minhaquadra/beach-tennis.jpg",
+    description: "Reserve quadras de beach tennis na areia e aproveite o melhor do esporte ao ar livre.",
+    aspectRatio: "4/3",
+  },
+  {
+    title: "Futsal",
+    slug: "futsal",
+    categories: ["Futebol", "Quadra"],
+    image: "/images/minhaquadra/futsal.jpg",
+    description: "Reserve quadras de futsal cobertas com piso de qualidade para sua pelada.",
+    aspectRatio: "1/1",
+  },
+];
+
+// Coluna direita (de cima para baixo): Futevôlei → Futebol Society → Pickleball → Basquete → Vôlei
+// Começa com landscape para criar offset visual com a col esquerda (portrait)
+const sportsRight = [
+  {
+    title: "Futevôlei",
+    slug: "futevolei",
+    categories: ["Rede", "Praia"],
+    image: "/images/minhaquadra/futevolei.jpg",
+    description: "Reserve redes de futevôlei na praia e junte futebol e vôlei em uma só modalidade.",
+    aspectRatio: "4/3",
+  },
+  {
+    title: "Futebol Society",
+    slug: "futebol-society",
+    categories: ["Futebol", "Society"],
+    image: "/images/minhaquadra/futebol-society.jpg",
+    description: "Reserve campos de futebol society para jogar com os amigos a qualquer hora.",
+    aspectRatio: "4/3",
+  },
+  {
+    title: "Pickleball",
+    slug: "pickleball",
+    categories: ["Raquete", "Quadra"],
+    image: "/images/minhaquadra/pickleball.jpg",
+    description: "Descubra o esporte que mais cresce no Brasil e reserve uma quadra de pickleball perto de você.",
+    aspectRatio: "2/3",
+  },
+  {
+    title: "Basquete",
+    slug: "basquete",
+    categories: ["Aro", "Quadra"],
+    image: "/images/minhaquadra/basquete.jpg",
+    description: "Ache quadras de basquete disponíveis perto de você e agende na hora.",
+    aspectRatio: "3/4",
+  },
+  {
+    title: "Vôlei",
+    slug: "volei",
+    categories: ["Rede", "Quadra"],
+    image: "/images/minhaquadra/volei.jpg",
+    description: "Encontre quadras de vôlei indoor e outdoor para treinar ou competir.",
+    aspectRatio: "4/3",
+  },
+];
+
+const sports = [...sportsLeft, ...sportsRight];
+
+const APP_URL = "https://app.minhaquadra.com.br/";
+
+const faqs = [
+  {
+    title: "O Minha Quadra é uma quadra?",
+    content:
+      "Não, o Minha Quadra não é uma quadra. Na verdade, o Minha Quadra é uma plataforma que possui várias quadras parceiras. Você pode acessar o nosso Marketplace e encontrar a melhor opção para você.",
+  },
+  {
+    title: "Quais esportes tem no Minha Quadra?",
+    content:
+      "No Minha Quadra você encontra quadras para Padel, Futevôlei, Tênis, Futebol Society, Vôlei de Praia, Pickleball, Beach Tennis, Basquete, Futsal e Vôlei. Nossa rede de parceiros está sempre crescendo, então fique de olho nas novidades!",
+  },
+  {
+    title: "Como funciona o pagamento da reserva?",
+    content:
+      "O pagamento é feito de forma totalmente online, direto pelo aplicativo ou site do Minha Quadra. Aceitamos os principais cartões de crédito, débito e Pix. Após a confirmação do pagamento, você recebe o comprovante da reserva e é só aparecer na hora marcada!",
+  },
+  {
+    title: "Como encontrar quadras esportivas perto de mim?",
+    content:
+      "No Minha Quadra, basta ativar sua localização ou digitar sua cidade. A plataforma mostra todas as quadras disponíveis para alugar na sua região, com filtros por esporte, preço, distância e horário. Temos quadras cobertas e ao ar livre.",
+  },
+  {
+    title: "Posso encontrar aulas de esportes pelo Minha Quadra?",
+    content:
+      "Sim. Além de alugar quadras para jogar com amigos, muitas quadras parceiras oferecem aulas com professores de beach tennis, padel, tênis, futevôlei e outros esportes. Você encontra aulas para iniciantes e avançados diretamente na plataforma.",
+  },
+];
+
+const steps = [
+  {
+    title: "Encontre quadras perto de mim",
+    description: "Habilite a sua localização para encontrar quadras para alugar perto de mim. São várias opções de quadras na sua região, de diferentes esportes e preços.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
+    image: "/images/minhaquadra/steps/step-1.jpg",
+  },
+  {
+    title: "Filtre por esporte, data e horário",
+    description: "Defina o esporte favorito, distância, data e horário de procura. Filtre as opções pelo aplicativo e encontre a quadra ideal para você.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>`,
+    image: "/images/minhaquadra/steps/step-2.jpg",
+  },
+  {
+    title: "Compare preços e estrutura",
+    description: "Veja de forma fácil os horários disponíveis, compare preços e verifique se a quadra é coberta ou ao ar livre. Confirme a escolha com a galera.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>`,
+    image: "/images/minhaquadra/steps/step-3.jpg",
+  },
+  {
+    title: "Alugue online e jogue",
+    description: "Faça o pagamento e reserve sua quadra pelo Minha Quadra. Muitas quadras parceiras também oferecem aula de esportes com professores especializados. Agora é só aparecer e jogar!",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    image: "/images/minhaquadra/steps/step-4.jpg",
+  },
+];
+---
+
+<Base
+  metaTitle="Minha Quadra — Onde o jogo acontece"
+  metaDescription="Encontre e alugue quadras de beach tennis, padel, society, futsal, tênis e vôlei perto de você. Compare preços e reserve online pelo Minha Quadra."
+>
+  <!-- Organization schema -->
+  <script type="application/ld+json" is:inline>{"@context":"https://schema.org","@type":"Organization","name":"Minha Quadra","url":"https://minhaquadra.com.br","logo":"https://minhaquadra.com.br/images/logo-verde.png","description":"Plataforma para encontrar e alugar quadras esportivas online.","sameAs":["https://instagram.com/minhaquadra_"],"contactPoint":{"@type":"ContactPoint","telephone":"+55-31-98254-6222","contactType":"customer service","availableLanguage":"Portuguese"}}</script>
+  <!-- WebSite schema -->
+  <script type="application/ld+json" is:inline>{"@context":"https://schema.org","@type":"WebSite","name":"Minha Quadra","url":"https://minhaquadra.com.br","potentialAction":{"@type":"SearchAction","target":"https://app.minhaquadra.com.br/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────── -->
+  <section class="mq-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+
+        <h1>
+          <!-- Line 1: "Quadras esportivas para" — white, left-aligned -->
+          <span
+            class="text-display-5 md:text-display-4 lg:text-display-3 xl:text-display-2 block leading-tight font-semibold break-words mq-title-line1"
+            data-aos="reveal-anim-left">
+            Quadras esportivas para alugar
+          </span>
+
+          <!-- Line 2: "perto de mim." right-aligned -->
+          <div class="mq-title-row">
+
+            <span
+              class="text-display-5 md:text-display-4 lg:text-display-3 xl:text-display-2 leading-tight font-semibold break-words mq-title-line2"
+              data-aos="reveal-anim-right">
+              perto de mim.
+            </span>
+          </div>
+        </h1>
+
+        <!-- Description + CTA -->
+        <div class="mt-12 max-w-2xl space-y-8" data-aos="reveal-anim-right" data-aos-delay="300">
+          <p class="mq-description">
+            Beach tennis, padel, futebol society, futsal, tênis, vôlei e mais. Compare preços, veja horários disponíveis e reserve sua quadra online — sem precisar ligar.
+          </p>
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-accent mq-btn"
+            label="Explorar o Minha Quadra"
+            url={APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Marquee ──────────────────────────────────────────────────── -->
+  <div class="mq-marquee-wrap">
+    <Features
+      sectionSpaceTop={false}
+      content={{
+        enable: true,
+        listSeparatorImage: "/images/icons/svg/star.svg",
+        marquee: {
+          elementWidthAuto: true,
+          pauseOnHover: false,
+          reverse: "",
+          duration: "55s",
+        },
+        list: [
+          "As melhores quadras estão aqui",
+          "As melhores quadras estão aqui",
+          "As melhores quadras estão aqui",
+          "As melhores quadras estão aqui",
+        ],
+      }}
+    />
+  </div>
+
+  <!-- ── Sports Masonry Section ─────────────────────────────────────── -->
+  <section class="mq-sports">
+    <div class="container space-y-14">
+      <h2 class="text-h1-sm md:text-h1 mx-auto max-w-4xl text-center mq-sports-title">
+        <span class="block" data-aos="reveal-anim-left">Encontre quadras</span>
+        <span class="block" data-aos="reveal-anim-right" data-aos-delay="150">para alugar por esporte</span>
+      </h2>
+
+      <!-- Masonry grid — 2 colunas explícitas -->
+      <div class="mq-masonry">
+        {[sportsLeft, sportsRight].map((col, colIdx) => (
+          <div class:list={["mq-col", colIdx === 1 ? "mq-col-right" : ""]}>
+            {col.map((sport) => (
+              <div class="mq-sport-card group">
+                <!-- Image -->
+                <a
+                  href={`/esportes/${sport.slug}/`}
+                  class="mq-sport-img-wrap"
+                  style={`aspect-ratio: ${sport.aspectRatio}`}
+                  title={sport.title}>
+                  <img
+                    src={sport.image}
+                    alt={sport.title}
+                    class="mq-sport-img"
+                    loading="lazy"
+                    width="800"
+                    onerror="this.style.display='none'"
+                  />
+                </a>
+
+                <!-- Categories -->
+                {sport.categories.length > 0 && (
+                  <ul class="mq-sport-cats">
+                    {sport.categories.map((cat, i) => (
+                      <>
+                        {i > 0 && <li class="opacity-50">/</li>}
+                        <li>{cat}</li>
+                      </>
+                    ))}
+                  </ul>
+                )}
+
+                <!-- Title -->
+                <h3 class="text-h3-sm md:text-h3 leading-snug mq-sport-name">
+                  <a href={`/esportes/${sport.slug}/`}>
+                    {sport.title}
+                  </a>
+                </h3>
+
+                <!-- Description -->
+                <p class="mt-4 mq-sport-desc">{sport.description}</p>
+
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA Section ────────────────────────────────────────────── -->
+  <section class="mq-cta">
+    <div class="container grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center lg:gap-y-20">
+      <div class="max-w-3xl">
+        <h2 class="text-display-6 xs:text-display-5 md:text-display-4 xl:text-display-3 mq-cta-title">
+          <span class="block" data-aos="reveal-anim-left">Pronto para</span>
+          <span class="block" data-aos="reveal-anim-right" data-aos-delay="150">jogar?</span>
+        </h2>
+      </div>
+      <div class="space-y-10 max-w-lg" data-aos="fade-up" data-aos-delay="100">
+        <p class="text-lg mq-cta-desc">
+          Encontre já uma quadra para chamar de sua no nosso Marketplace. As melhores quadras da sua região estão aqui, não perca tempo!
+        </p>
+        <CustomButton
+          hoverEffect="creative-fill"
+          class="uppercase mq-cta-btn"
+          label="Explorar o Minha Quadra"
+          url={APP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Steps / How It Works Section ──────────────────────────────── -->
+  <section class="mq-steps">
+    <div class="container">
+      <h2 class="text-h1-sm md:text-h1 mx-auto max-w-3xl text-center mq-steps-title" data-aos="fade-up">
+        Como alugar uma quadra esportiva online
+      </h2>
+    </div>
+    <div class="container grid grid-cols-1 items-start gap-x-16 space-y-16 lg:grid-cols-2 lg:space-y-0 mq-steps-grid">
+
+      <!-- Imagem sticky à esquerda -->
+      <div class="mq-img-wrap lg:sticky lg:top-16" data-aos="fade-up">
+        <div class="mq-img-frame">
+          {steps.map((step, i) => (
+            <div
+              class:list={["mq-img-slide", i === 0 && "mq-img-slide--active"]}
+              data-mq-slide={i}>
+              <img
+                src={step.image}
+                alt={step.title}
+                class="mq-img-real"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Cards à direita -->
+      <div class="grid w-full grid-cols-1 gap-6">
+        {steps.map((step, index) => (
+          <div class="mq-step-card" data-mq-card={index} data-aos="fade-up" data-aos-delay={index * 100}>
+            <div class="flex min-h-full flex-col space-y-16 p-6 md:px-8 md:py-10">
+              <div class="flex min-h-full flex-1 flex-col items-start space-y-8">
+                <div class="flex w-full flex-wrap-reverse justify-between gap-5 md:flex-row">
+                  <h3 class="text-h5 mq-step-card-title">{step.title}</h3>
+                  <div class="mq-step-card-icon h-10 w-10 flex-shrink-0" set:html={step.icon} />
+                </div>
+                <p class="mq-step-card-desc md:pe-20">{step.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FAQ Section ────────────────────────────────────────────── -->
+  <section class="mq-faq">
+    <div class="container space-y-14">
+      <h2
+        class="text-h1-sm md:text-h1 mx-auto max-w-3xl text-center mq-faq-title"
+        data-aos="fade-up">
+        Perguntas frequentes sobre aluguel de quadras esportivas
+      </h2>
+      <AccordionList content={faqs} data-aos="fade-up" data-aos-delay="100" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* -- MARQUEE ------------------------------ */
+  .mq-marquee-wrap :global(section) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .mq-marquee-wrap :global(.bg-accent-blue) {
+    background-color: #b4fa50 !important;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  /* Texto do marquee — cor primary */
+  .mq-marquee-wrap :global(.bg-accent-blue span),
+  .mq-marquee-wrap :global(.bg-accent-blue p),
+  .mq-marquee-wrap :global(.bg-accent-blue li),
+  .mq-marquee-wrap :global(.bg-accent-blue [class*="text"]) {
+    color: #002d3c !important;
+  }
+
+  /* Asterisco (separador) — cor alternate #007d8c */
+  .mq-marquee-wrap :global(.bg-accent-blue img) {
+    filter: invert(37%) sepia(72%) saturate(480%) hue-rotate(152deg) brightness(88%) contrast(96%) !important;
+  }
+
+  /* -- HERO --------------------------------- */
+  .mq-hero {
+    background-color: #002d3c;
+    padding-top: 8rem;
+    padding-bottom: 6rem;
+    padding-left: max(2rem, 6vw);
+    padding-right: max(2rem, 6vw);
+    overflow-x: hidden;
+  }
+
+  .mq-title-line1 {
+    color: #f5f5f5;
+  }
+  .mq-title-line2 {
+    color: #b4fa50;
+    display: block;
+    text-align: end;
+  }
+
+  .mq-title-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  /* Hide badge on mobile, show from lg */
+  .mq-badge {
+    display: none;
+    color: #f5f5f5;
+    flex-shrink: 0;
+    padding-bottom: 0.35em;
+  }
+  @media (min-width: 1024px) {
+    .mq-badge { display: flex; }
+  }
+
+  .mq-badge-icon {
+    filter: brightness(0) saturate(100%) invert(90%) sepia(60%) saturate(600%) hue-rotate(55deg) brightness(1.05);
+    flex-shrink: 0;
+  }
+
+  .mq-description {
+    color: #f5f5f5;
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+  @media (min-width: 768px) {
+    .mq-description { font-size: 1.25rem; }
+  }
+
+  :global(a.mq-btn.btn) {
+    font-weight: 500;
+  }
+  :global(a.mq-btn.creative-hover-anim .hover-bg) {
+    background: #b4fa50;
+  }
+  :global(a.mq-btn.creative-hover-anim:hover) {
+    color: #002d3c !important;
+  }
+
+  /* -- SPORTS SECTION ----------------------- */
+  .mq-sports {
+    background-color: #007d8c;
+  }
+
+  .mq-sports-title {
+    color: #b4fa50;
+  }
+
+  /* 2-column masonry com colunas explícitas */
+  .mq-masonry {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+  @media (min-width: 1024px) {
+    .mq-masonry {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 5rem;
+    }
+    .mq-col {
+      flex: 1;
+    }
+    .mq-col-right {
+      margin-top: 5rem;
+    }
+  }
+
+  /* Espaçamento entre cards dentro da coluna */
+  .mq-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  /* Espaço extra no final da seção */
+  .mq-sports .container {
+    padding-bottom: 5rem;
+  }
+
+  /* Card */
+  .mq-sport-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Image wrapper — define o aspect-ratio; imagem preenche 100% */
+  .mq-sport-img-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+  }
+
+  /* Image — cobre toda a área do wrapper */
+  .mq-sport-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1);
+    transition: transform 500ms ease, translate 500ms ease;
+  }
+  .mq-sport-card:hover .mq-sport-img {
+    translate: 0.5rem 0;
+  }
+
+  /* Categories */
+  .mq-sport-cats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    opacity: 0.6;
+    font-size: 0.875rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #f5f5f5;
+  }
+
+  /* Sport name */
+  .mq-sport-name {
+    color: #e1ffa5;
+  }
+  .mq-sport-name a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .mq-sport-name a:hover {
+    color: #b4fa50;
+  }
+
+  /* Description */
+  .mq-sport-desc {
+    color: #f5f5f5;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  /* "Encontrar quadras" text button — use primary color */
+  :global(a.mq-sport-btn) {
+    color: #002d3c !important;
+    border-color: #002d3c !important;
+  }
+  :global(a.mq-sport-btn:hover) {
+    color: #b4fa50 !important;
+    border-color: #b4fa50 !important;
+  }
+
+  /* -- STEPS SECTION ------------------------ */
+  .mq-steps {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 7rem;
+  }
+
+  .mq-steps-title {
+    color: #e1ffa5;
+    margin-bottom: 4rem;
+  }
+
+  .mq-steps-grid {
+    padding-top: 0;
+  }
+
+  /* -- Imagem sticky ---------------------------------- */
+  .mq-img-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+
+  .mq-img-frame {
+    position: relative;
+    width: 100%;
+    height: 78vh;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .mq-img-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .mq-img-slide--active { opacity: 1; }
+
+  .mq-img-real {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* -- Cards ------------------------------------------ */
+  .mq-step-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+  }
+
+  .mq-step-card-title {
+    color: #e1ffa5;
+  }
+
+  .mq-step-card-desc {
+    color: #f5f5f5;
+    line-height: 1.65;
+  }
+
+  .mq-step-card-icon {
+    color: #b4fa50;
+  }
+  .mq-step-card-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+  }
+
+  /* -- CTA SECTION -------------------------- */
+  .mq-cta {
+    background-color: #b4fa50;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .mq-cta-title {
+    color: #002d3c;
+  }
+
+  .mq-cta-desc {
+    color: #002d3c;
+  }
+
+  /* Button: #002d3c bg, #e1ffa5 text; hover: #e1ffa5 bg, #007d8c text */
+  :global(a.mq-cta-btn.btn) {
+    background-color: #002d3c;
+    color: #e1ffa5;
+    border-color: #002d3c;
+    font-weight: 500;
+  }
+  :global(a.mq-cta-btn.creative-hover-anim .hover-bg) {
+    background: #007d8c;
+  }
+  :global(a.mq-cta-btn.creative-hover-anim:hover) {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* -- FAQ SECTION -------------------------- */
+  .mq-faq {
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+  }
+
+  .mq-faq-title {
+    color: #002d3c;
+  }
+
+  /* Accordion border lines */
+  :global(.mq-faq .hs-accordion-group),
+  :global(.mq-faq .hs-accordion) {
+    border-color: #002d3c !important;
+  }
+
+  /* Arrow icon */
+  :global(.mq-faq .text-dark) {
+    color: #002d3c !important;
+  }
+
+  /* Question title */
+  :global(.mq-faq .hs-accordion-toggle.text-dark),
+  :global(.mq-faq button.hs-accordion-toggle) {
+    color: #002d3c !important;
+  }
+
+  /* Answer paragraph */
+  :global(.mq-faq .prose-styles),
+  :global(.mq-faq .prose-styles p),
+  :global(.mq-faq .hs-accordion-content *) {
+    color: #002d3c !important;
+  }
+</style>
+
+<script>
+  (() => {
+    const cards  = document.querySelectorAll<HTMLElement>("[data-mq-card]");
+    const slides = document.querySelectorAll<HTMLElement>("[data-mq-slide]");
+
+    if (!cards.length || !slides.length) return;
+
+    function setActive(idx: number) {
+      slides.forEach((s) => s.classList.remove("mq-img-slide--active"));
+      const target = document.querySelector<HTMLElement>(`[data-mq-slide="${idx}"]`);
+      if (target) target.classList.add("mq-img-slide--active");
+    }
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting)
+            setActive(Number((entry.target as HTMLElement).dataset.mqCard ?? 0));
+        });
+      },
+      { rootMargin: "-30% 0px -30% 0px", threshold: 0 }
+    );
+
+    cards.forEach((card) => obs.observe(card));
+  })();
+</script>

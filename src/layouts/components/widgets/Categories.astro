@@ -1,0 +1,75 @@
+---
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { getCollectionCTM } from "@/lib/contentParser.astro";
+import { getTaxonomy } from "@/lib/taxonomyParser.astro";
+import {
+  getLocaleUrlCTM,
+  useTranslations,
+} from "@/lib/utils/languageParser.ts";
+
+interface Category {
+  name: string;
+  slug: string;
+  count: number;
+}
+
+interface Props {
+  class?: string;
+}
+
+const config = parseTomlToJson("./src/config/config.toml");
+const posts = await getCollectionCTM(
+  config.settings.blogFolder as "blog",
+  Astro.currentLocale,
+);
+
+let categories = (await getTaxonomy(
+  config.settings.blogFolder as "blog",
+  "categories",
+  Astro.currentLocale as string,
+)) as Category[];
+
+categories = categories.map((category) => {
+  const count = posts.filter((post) =>
+    post.data.categories?.includes(category.name),
+  ).length;
+
+  const slug = getLocaleUrlCTM(
+    category.slug,
+    Astro.currentLocale,
+    `/${config.settings.blogFolder}/category`,
+  );
+
+  return {
+    ...category,
+    count,
+    slug,
+  };
+});
+
+const t = await useTranslations(Astro.currentLocale as string);
+
+// Sort categories by count
+categories = categories.sort((a, b) => b.count - a.count);
+---
+
+{
+  categories && categories.length > 0 && (
+    <div class="space-y-4">
+      <h2 class="md:text-h4 text-h4-sm mb-3 pb-3">{t("widgets.categoriesTitle")}</h2>
+      <div>
+        {categories.map((category) => (
+          <div class="relative flex items-center gap-4 py-1.5 text-lg transition duration-300 first:pt-0 last:pb-0 hover:underline">
+            <span class="truncate" set:html={category.name} />
+            <a
+              href={category.slug}
+              class="absolute inset-0"
+              title={`Filter posts by ${category.name}`}
+            />
+            <div class="ms-auto text-sm" set:html={`(${category.count})`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

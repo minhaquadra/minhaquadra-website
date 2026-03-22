@@ -1,0 +1,129 @@
+---
+import "swiper/css/bundle";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import overrideObjects from "@/lib/utils/overrideObjects.ts";
+import type { testimonialSectionSchema } from "@/sections.schema";
+import type { z } from "astro/zod";
+import TestimonialCard from "../cards/TestimonialCard.astro";
+
+// Type for this section data
+type TestimonialInterface = z.infer<typeof testimonialSectionSchema> & {
+  options?: {
+    appearance: "light" | "dark";
+  };
+};
+
+type Props = {
+  content?: TestimonialInterface;
+};
+
+// Fetching the default content for the this section
+let defaultContent = (
+  await getEntryCTM("sections", "testimonial", Astro.currentLocale)
+)?.data as TestimonialInterface;
+
+// Enables content customization (e.g., title, description) with a fallback to 'defaultContent' if not provided.
+// The 'content' prop should match the structure of 'defaultContent'.
+// Allows using this section with different content across multiple pages.
+// If 'content' is missing, 'defaultContent' will be used.
+let actualContent = overrideObjects(
+  { ...defaultContent },
+  Astro.props.content,
+) as TestimonialInterface;
+
+// Extracting required values from 'content' object
+let {
+  enable = true,
+  title,
+  list,
+  options,
+} = actualContent as TestimonialInterface;
+
+const isDarkAppearance = options?.appearance === "dark";
+
+if (!enable) {
+  return null;
+}
+---
+
+<section>
+  <div class="container space-y-14">
+    {
+      title && (
+        <h2
+          class:list={[
+            "text-h1-sm md:text-h1 mx-auto max-w-3xl text-center",
+            isDarkAppearance && "text-light",
+          ]}
+          set:html={markdownify(title)}
+        />
+      )
+    }
+    {/* Testimonial Content */}
+    <div id="testimonial-slider-grid" class="swiper">
+      <div class="swiper-wrapper relative pb-16">
+        {
+          list?.map((item) => (
+            <div class="swiper-slide h-auto!">
+              <TestimonialCard
+                content={item}
+                class:list={[
+                  "min-h-full px-10 py-12",
+                  isDarkAppearance
+                    ? "bg-theme-darker text-light"
+                    : "bg-theme-light",
+                ]}
+                isDarkAppearance={isDarkAppearance}
+              />
+            </div>
+          ))
+        }
+      </div>
+      <div
+        class:list={[
+          "swiper-pagination testimonial-pagination flex justify-center [--swiper-pagination-bullet-inactive-opacity:1] max-md:justify-start max-md:[--swiper-pagination-bottom:0px] [&_.swiper-pagination-bullet:not(.swiper-pagination-bullet-active)]:border [&_.swiper-pagination-bullet:not(.swiper-pagination-bullet-active)]:bg-transparent!",
+          isDarkAppearance
+            ? "[--swiper-pagination-color:var(--color-theme-light)]"
+            : "[--swiper-pagination-color:var(--color-theme-dark)]",
+        ]}>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener("load", async function () {
+      const { Swiper } = await import("swiper");
+      const { Autoplay, Pagination } = await import("swiper/modules");
+
+      // Initialize banner Swiper
+      const testimonialSlider = document.querySelector(
+        "#testimonial-slider-grid",
+      ) as HTMLElement;
+
+      // Initialize content Swiper with navigation
+      new Swiper(testimonialSlider, {
+        modules: [Autoplay, Pagination],
+        speed: 800,
+        spaceBetween: 30,
+        slidesPerView: 2,
+        pagination: {
+          el: ".testimonial-pagination",
+          clickable: true,
+        },
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: true,
+        },
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+          1024: {
+            slidesPerView: 2,
+          },
+        },
+        loop: true,
+      });
+    });
+  </script>
+</section>

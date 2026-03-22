@@ -1,0 +1,193 @@
+---
+import type { NavigationLink } from "@/types";
+import { getCollection } from "astro:content";
+import {
+  getLocaleUrlCTM,
+  useTranslations,
+} from "@/lib/utils/languageParser.ts";
+import SportIcon from "@/components/SportIcon";
+
+const menu = Astro.props.menu as NavigationLink;
+const t = await useTranslations(Astro.currentLocale as string);
+
+const allEsportes = await getCollection("esportes");
+const esportesCol1 = allEsportes.slice(0, Math.ceil(allEsportes.length / 2));
+const esportesCol2 = allEsportes.slice(Math.ceil(allEsportes.length / 2));
+
+const has_enable_menu = menu.menus?.filter((m) => m.enable) || [];
+const isMobile = Astro.props.isMobile;
+
+const sportDescriptions: Record<string, string> = {
+  "beach-tennis": "Raquete na areia com rede",
+  "tenis": "Raquete em quadra dura",
+  "padel": "Raquete em quadra fechada",
+  "volei": "Vôlei em quadra coberta",
+  "futevolei": "Vôlei com toque de pé",
+  "futsal": "Futebol em quadra coberta",
+  "futebol-society": "Futebol em grama sintética",
+  "basquete": "Cesta a 3 metros de altura",
+  "pickleball": "Raquete sólida, bola com furos",
+  "volei-de-praia": "Duplas na areia ao ar livre",
+};
+---
+
+<div
+  class:list={[
+    "hs-dropdown-menu mega-menu hs-dropdown-open:pointer-events-auto hs-dropdown-open:opacity-100 hs-dropdown-open:mt-0 has-customized-scrollbar pointer-events-none mt-10 hidden w-full opacity-0 transition-[opacity,margin] max-lg:static! max-lg:transform-none! max-lg:border-s lg:fixed lg:start-0! lg:overflow-auto",
+    isMobile ? "bg-transparent py-0" : "max-h-[90vh] py-4",
+  ]}>
+  <div
+    class:list={[
+      "xl:container-12xl container flex flex-col gap-10 lg:grid lg:grid-cols-3 lg:overflow-auto",
+      isMobile ? "bg-transparent px-0! py-4" : "lg:pb-4",
+    ]}
+    style={!isMobile
+      ? "background: rgba(0,125,140,0.98); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); border-bottom: 1px solid rgba(255,255,255,0.15);"
+      : ""}>
+
+    {/* Pages nav links — rendered if menu has sub-menus */}
+    {
+      menu.menus && has_enable_menu.length > 0 && (
+        <div class="flex flex-col gap-10 text-sm lg:me-5 lg:py-8">
+          {menu.menus.map(
+            (menu_one) =>
+              menu_one.enable && (
+                <div class="flex flex-col gap-5">
+                  {menu_one.name && (
+                    <legend
+                      class="font-secondary border-b pb-3 text-xs tracking-wider"
+                      style="color: rgba(255,255,255,0.55); border-color: rgba(255,255,255,0.2);"
+                      set:html={menu_one.name}
+                    />
+                  )}
+                  {menu_one.children && menu_one.children.length > 0 && (
+                    <div class="flex gap-5 max-lg:flex-wrap">
+                      {menu_one.children.map(
+                        (menu_two) =>
+                          menu_two.enable && (
+                            <div class="flex flex-col gap-4 max-lg:w-full max-lg:min-w-32 lg:flex-1">
+                              {menu_two.name && (
+                                <legend
+                                  class="font-secondary text-xs tracking-wider"
+                                  style="color: rgba(255,255,255,0.4);"
+                                  set:html={menu_two.name}
+                                />
+                              )}
+                              <ul class="tracking-wider [&>li:not(:first-child)>a]:pt-4">
+                                {menu_two.children?.map((child) => (
+                                  <li role="menuitem">
+                                    <a
+                                      href={getLocaleUrlCTM(
+                                        child.url || Astro.url.origin,
+                                        Astro.currentLocale,
+                                      )}
+                                      class="mega-nav-link block transition duration-300">
+                                      {child.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ),
+                      )}
+                    </div>
+                  )}
+                </div>
+              ),
+          )}
+        </div>
+      )
+    }
+
+    {/* Esportes — coluna 1 */}
+    {
+      menu.services && menu.services.enable && (
+        <div class="flex flex-col gap-10 text-sm lg:me-5 lg:py-8">
+          <div class="flex flex-col gap-5">
+            {menu.services.name && (
+              <legend
+                class="font-secondary border-b pb-3 text-xs tracking-wider"
+                style="color: rgba(255,255,255,0.55); border-color: rgba(255,255,255,0.2);"
+                set:html={menu.services.name}
+              />
+            )}
+            <div class="flex flex-1 flex-col gap-4">
+              <div class="space-y-4 tracking-wider">
+                {esportesCol1.map((esporte) => (
+                  <div class="group/item after:translate-centered relative flex items-center justify-start gap-4 py-1.5 after:pointer-events-none after:absolute after:inset-0 after:h-[105%] after:w-[103%] after:rounded after:opacity-0 after:transition after:duration-300 hover:after:opacity-100"
+                    style="--tw-after-bg: rgba(0,0,0,0.12);">
+                    <div
+                      class="flex h-12 w-12 shrink-0 items-center justify-center transition duration-300"
+                      style="background: rgba(255,255,255,0.12);">
+                      <span
+                        class="h-7 w-7 flex items-center justify-center transition duration-300"
+                        style="color: rgba(255,255,255,0.9);">
+                        <SportIcon slug={esporte.data.slug} size={26} />
+                      </span>
+                    </div>
+                    <div class="flex w-[calc(100%-4rem)] shrink-0 flex-col gap-1">
+                      <div style="color: rgba(255,255,255,0.95); font-size: 0.875rem;" set:html={esporte.data.title} />
+                      <p class="truncate" style="color: rgba(255,255,255,0.6); font-size: 0.75rem;">
+                        {sportDescriptions[esporte.data.slug] || ""}
+                      </p>
+                    </div>
+                    <a
+                      class="absolute inset-0 z-10 h-full w-full opacity-0"
+                      href={`/esportes/${esporte.data.slug}/`}
+                      set:html={esporte.data.title}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {/* Esportes — coluna 2 */}
+    {
+      menu.services && menu.services.enable && (
+        <div class="flex flex-col gap-10 text-sm lg:me-5 lg:py-8">
+          <div class="flex flex-col gap-5">
+            <legend
+              class="font-secondary border-b pb-3 text-xs tracking-wider opacity-0 pointer-events-none"
+              style="border-color: rgba(255,255,255,0.2);"
+              aria-hidden="true">
+              &nbsp;
+            </legend>
+            <div class="flex flex-1 flex-col gap-4">
+              <div class="space-y-4 tracking-wider">
+                {esportesCol2.map((esporte) => (
+                  <div class="group/item after:translate-centered relative flex items-center justify-start gap-4 py-1.5 after:pointer-events-none after:absolute after:inset-0 after:h-[105%] after:w-[103%] after:rounded after:opacity-0 after:transition after:duration-300 hover:after:opacity-100"
+                    style="--tw-after-bg: rgba(0,0,0,0.12);">
+                    <div
+                      class="flex h-12 w-12 shrink-0 items-center justify-center transition duration-300"
+                      style="background: rgba(255,255,255,0.12);">
+                      <span
+                        class="h-7 w-7 flex items-center justify-center transition duration-300"
+                        style="color: rgba(255,255,255,0.9);">
+                        <SportIcon slug={esporte.data.slug} size={26} />
+                      </span>
+                    </div>
+                    <div class="flex w-[calc(100%-4rem)] shrink-0 flex-col gap-1">
+                      <div style="color: rgba(255,255,255,0.95); font-size: 0.875rem;" set:html={esporte.data.title} />
+                      <p class="truncate" style="color: rgba(255,255,255,0.6); font-size: 0.75rem;">
+                        {sportDescriptions[esporte.data.slug] || ""}
+                      </p>
+                    </div>
+                    <a
+                      class="absolute inset-0 z-10 h-full w-full opacity-0"
+                      href={`/esportes/${esporte.data.slug}/`}
+                      set:html={esporte.data.title}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</div>

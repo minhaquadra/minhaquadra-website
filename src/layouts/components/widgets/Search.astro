@@ -1,0 +1,246 @@
+---
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { getCollectionCTM } from "@/lib/contentParser.astro";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+import bgOptimizedImage from "@/lib/utils/bgOptimizedImage";
+import { slugifyyy } from "@/lib/utils/textConverter";
+import { generateCategorySlugs } from "@/lib/taxonomyParser.astro";
+import {
+  getLocaleUrlCTM,
+  useTranslations,
+} from "@/lib/utils/languageParser.ts";
+import ReactIcons from "@/helpers/ReactIcons.astro";
+import extractSlug from "@/lib/utils/extractSlug";
+
+interface Props {
+  class: string;
+}
+
+const currentLocale = Astro.currentLocale;
+const config = parseTomlToJson("./src/config/config.toml");
+const blogFolder = config.settings.blogFolder as "blog";
+
+let posts = await getCollectionCTM(blogFolder as "blog", currentLocale);
+posts = await processPosts(posts);
+
+const postJson = sortByDate(posts).map((item) => {
+  return {
+    title: item.data.title,
+    slug: getLocaleUrlCTM(extractSlug(item), currentLocale, blogFolder),
+    date: item.data.date,
+    author: item.data.author,
+    authorImage: item.data.authorImage,
+    image: item.data.image,
+    description: item.data.description,
+    categories: generateCategorySlugs(
+      item.data.categories,
+      currentLocale as string,
+      blogFolder,
+    ),
+  };
+});
+
+async function processPosts(sortedPosts: any) {
+  sortedPosts = await Promise.all(
+    sortedPosts.map(async (post: any) => {
+      const authorEntry = await getEntryCTM(
+        "author",
+        slugifyyy(post.data.author || ""),
+        currentLocale,
+      );
+
+      return {
+        ...post,
+        data: {
+          ...post.data,
+          image: post.data.image && (await bgOptimizedImage(post.data.image)),
+          author: authorEntry?.data.title,
+          authorImage:
+            authorEntry?.data.image &&
+            (await bgOptimizedImage(authorEntry?.data.image)),
+        },
+      };
+    }),
+  );
+
+  return sortedPosts;
+}
+
+const baseURL = Astro.url.origin;
+const t = await useTranslations(Astro.currentLocale as string);
+const learnMoreI18n = t("common.learnMoreAbout");
+const btnLabelReadMoreI18n = t("common.readMore");
+
+const notFoundImage = await bgOptimizedImage("/images/404.svg");
+---
+
+<div class="space-y-4">
+  <form method="post" class="relative flex border-b" id="search">
+    <input
+      name="search"
+      type="text"
+      placeholder={t("widgets.postSearchFormPlaceholder")}
+      class="form-input h-full border-none placeholder:tracking-widest placeholder:opacity-50!"
+    />
+    <button
+      type="submit"
+      class="has-icon-moving-animation flex h-auto items-center justify-center ps-5 pb-5">
+      <span class="sr-only">Subscribe</span>
+      <ReactIcons class="text-2xl" icon="IoSearch" />
+    </button>
+  </form>
+</div>
+
+<script
+  is:inline
+  define:vars={{
+    baseURL,
+    notFoundImage,
+    postJson,
+    blogFolder,
+    learnMoreI18n,
+    btnLabelReadMoreI18n,
+    trailingSlash: config.site.trailingSlash,
+  }}
+>
+  const shouldHaveTrailingSlash = trailingSlash;
+
+  const trailingSlashCheckerInline = (url) => {
+    // Separate the URL path from the fragment (if any)
+    const [urlPath, fragment] = url.split("#");
+
+    // Determine if we need to add or remove a trailing slash
+    const hasTrailingSlash = urlPath.endsWith("/");
+
+    // Adjust the URL path based on the trailing slash rule
+    const adjustedPath = shouldHaveTrailingSlash
+      ? hasTrailingSlash
+        ? urlPath
+        : `${urlPath}/`
+      : hasTrailingSlash
+        ? urlPath.slice(0, -1)
+        : urlPath;
+
+    // Reattach the fragment if it exists
+    const fullURL = fragment ? `${adjustedPath}#${fragment}` : adjustedPath;
+
+    return fullURL;
+  };
+
+  const posts = postJson;
+  let searchResults = document.querySelector(".blog-search-results");
+
+  let prevResults;
+  document.addEventListener("DOMContentLoaded", () => {
+    if (searchResults) prevResults = searchResults?.innerHTML;
+  });
+
+  document.querySelector("#search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const searchTerm = e.target[0].value;
+
+    const pagination = document.querySelector("#pagination");
+    searchResults = document.querySelector(".blog-search-results");
+
+    // Func: add or remove hidden class in respective elements to show or hide search results
+    function handleSearchDisplay(status) {
+      searchResults?.classList.toggle("hidden", !status);
+      pagination?.classList.toggle("hidden", !status);
+    }
+
+    const filteredPosts = posts.filter((post) => {
+      return post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    if (searchTerm === "") {
+      console.log(prevResults);
+      searchResults.innerHTML = prevResults;
+
+      // Hide or show pagination based on filter
+      pagination?.classList.remove("hidden");
+    } else {
+      pagination?.classList.add("hidden");
+
+      // If no posts found, display 404 image with text
+      if (filteredPosts.length === 0) {
+        // HTML template For Not found
+        const notFoundHTML = `
+            <div class="text-center space-y-10 w-full col-span-2 mt-8 md:mt-16">
+              <img class="w-96 mx-auto" src=${notFoundImage} alt="404" />
+              <p class="text-h6">
+                No Posts Found For <span class="text-primary">"${searchTerm}"</span>
+              </p>
+            </div>
+            `;
+        searchResults.innerHTML = notFoundHTML;
+
+        return;
+      }
+
+      searchResults.innerHTML = "";
+      filteredPosts.forEach((post) => {
+        renderBlogPost(post);
+      });
+
+      handleSearchDisplay(true);
+    }
+  });
+
+  // Function to render a blog post
+  function renderBlogPost(post) {
+    // Function to format a date in "17 Jun, 2222" format
+    const dateFormat = (date, pattern = "dd MMM, yyyy") => {
+      const dateObj = new Date(date);
+
+      if (pattern === "dd MMM, yyyy") {
+        const formatter = new Intl.DateTimeFormat("en-US", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        return formatter.format(dateObj);
+      }
+
+      throw new Error(`Unsupported pattern: ${pattern}`);
+    };
+
+    // Clone an existing blog post node from the current layout as a template
+    const blogPostTemplate = document.querySelector(".template-post-search");
+    if (!blogPostTemplate) return;
+
+    const newPost = blogPostTemplate.cloneNode(true);
+
+    // Update its content dynamically
+    newPost.classList.remove("template-post-search");
+    newPost.classList.remove("hidden");
+    newPost.querySelector("img")?.setAttribute("src", post.image || "");
+    newPost.querySelector("img")?.setAttribute("alt", post.title || "");
+    newPost.querySelectorAll("a[data-post-link]").forEach((link) => {
+      link?.setAttribute("href", post.slug || "");
+    });
+    newPost
+      .querySelector("a[href]")
+      ?.setAttribute("title", `${learnMoreI18n} ${post.title}`);
+
+    const titleEl = newPost.querySelector("h2, h3, h4");
+    if (titleEl) titleEl.textContent = post.title;
+
+    // Update the date
+    const dateEl = newPost.querySelector("time, span");
+    if (dateEl) dateEl.textContent = dateFormat(post.date);
+
+    // Replace categories if needed
+    const categoriesWrapper = newPost.querySelector(".post-categories");
+    if (categoriesWrapper && post.categories) {
+      categoriesWrapper.innerHTML = post.categories
+        .map(
+          (category) =>
+            `<a href="${trailingSlashCheckerInline(`/${blogFolder}/category/${category.slug}`)}">${category.name}</a>`,
+        )
+        .join(" • ");
+    }
+
+    searchResults.appendChild(newPost);
+  }
+</script>

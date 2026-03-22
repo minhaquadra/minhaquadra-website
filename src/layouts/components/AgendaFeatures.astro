@@ -1,0 +1,341 @@
+---
+// AgendaFeatures.astro
+// Seção de features da agenda com imagem animada e grid 2x2 de cards
+
+const features = [
+  {
+    title: "Agenda digital",
+    description:
+      "Substitua sua agenda de papel e as planilhas confusas. Acabe com as reservas duplicadas.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>`,
+  },
+  {
+    title: "Notificações",
+    description:
+      "Receba notificações no sistema e via email quando houver novas reservas. Fique por dentro de tudo.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>`,
+  },
+  {
+    title: "Foque no importante",
+    description:
+      "Automatize o trabalho chato. Foque no seu cliente, na sua equipe e no crescimento do seu negócio.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+    </svg>`,
+  },
+  {
+    title: "Financeiro integrado",
+    description:
+      "Visualize rapidamente se a reserva está paga ou se ainda é preciso cobrar o cliente.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>`,
+  },
+];
+---
+
+<section class="af-section">
+  <div class="container">
+
+    <!-- Título + subtítulo -->
+    <div class="af-header">
+      <h2 class="text-h1-sm md:text-h1 af-title">
+        Controle todas as suas reservas
+      </h2>
+      <p class="text-lg af-subtitle">
+        Organize sua rotina e gerencie horários de clientes avulsos, mensalistas, aulas e day use. Seu cliente reserva os horários livres que sobrarem direto pelo Minha Quadra, sem complicação.
+      </p>
+    </div>
+
+    <!-- Imagem grande animada -->
+    <div class="af-img-wrap" id="af-img">
+      <div class="af-img-inner">
+        <img
+          src="/images/minhaquadra/parceiros/agenda-preview.jpg"
+          alt="Preview da agenda do Minha Quadra"
+          class="af-img"
+          loading="lazy"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Placeholder quando imagem não existe -->
+        <div class="af-img-placeholder" aria-hidden="true">
+          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" class="af-placeholder-svg">
+            <rect width="800" height="500" rx="16" fill="#e8e8e8"/>
+            <!-- Header bar -->
+            <rect x="0" y="0" width="800" height="52" rx="16" fill="#002d3c"/>
+            <rect x="0" y="26" width="800" height="26" fill="#002d3c"/>
+            <circle cx="28" cy="26" r="8" fill="#e1ffa5" opacity="0.7"/>
+            <circle cx="52" cy="26" r="8" fill="#b4fa50" opacity="0.5"/>
+            <circle cx="76" cy="26" r="8" fill="#007d8c" opacity="0.5"/>
+            <!-- Sidebar -->
+            <rect x="0" y="52" width="180" height="448" fill="#f0f0f0"/>
+            <rect x="16" y="76" width="148" height="12" rx="6" fill="#b4b4b9" opacity="0.5"/>
+            <rect x="16" y="104" width="148" height="36" rx="8" fill="#007d8c" opacity="0.15"/>
+            <rect x="16" y="152" width="148" height="36" rx="8" fill="#b4b4b9" opacity="0.1"/>
+            <rect x="16" y="200" width="148" height="36" rx="8" fill="#b4b4b9" opacity="0.1"/>
+            <rect x="16" y="248" width="148" height="36" rx="8" fill="#b4b4b9" opacity="0.1"/>
+            <!-- Main content -->
+            <rect x="196" y="68" width="580" height="36" rx="8" fill="#002d3c" opacity="0.08"/>
+            <!-- Calendar grid -->
+            <rect x="196" y="120" width="80" height="70" rx="6" fill="white" stroke="#e1ffa5" stroke-width="1.5"/>
+            <rect x="288" y="120" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="380" y="120" width="80" height="70" rx="6" fill="#007d8c" opacity="0.12"/>
+            <rect x="472" y="120" width="80" height="70" rx="6" fill="white" stroke="#b4fa50" stroke-width="1.5"/>
+            <rect x="564" y="120" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="656" y="120" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="196" y="204" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="288" y="204" width="80" height="70" rx="6" fill="#b4fa50" opacity="0.18"/>
+            <rect x="380" y="204" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="472" y="204" width="80" height="70" rx="6" fill="white" stroke="#e1ffa5" stroke-width="1.5"/>
+            <rect x="564" y="204" width="80" height="70" rx="6" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="656" y="204" width="80" height="70" rx="6" fill="#007d8c" opacity="0.12"/>
+            <!-- Content lines bottom -->
+            <rect x="196" y="296" width="320" height="10" rx="5" fill="#002d3c" opacity="0.1"/>
+            <rect x="196" y="316" width="240" height="8" rx="4" fill="#b4b4b9" opacity="0.3"/>
+            <rect x="196" y="344" width="540" height="60" rx="8" fill="#002d3c" opacity="0.05"/>
+            <rect x="196" y="420" width="180" height="36" rx="18" fill="#b4fa50" opacity="0.7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid 2x2 de features -->
+    <div class="af-grid">
+      {features.map((feat, i) => (
+        <div class="af-card" data-af-card data-delay={i * 150}>
+          <!-- Header: título à esquerda, ícone à direita -->
+          <div class="af-card-header">
+            <h3 class="af-card-title">{feat.title}</h3>
+            <div class="af-card-icon" set:html={feat.icon} />
+          </div>
+          <p class="af-card-desc">{feat.description}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* -- SECTION ---------------------------------------- */
+  .af-section {
+    background-color: #002d3c;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  /* -- HEADER ----------------------------------------- */
+  .af-header {
+    max-width: 52rem;
+    margin-inline: auto;
+    text-align: center;
+    margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .af-title {
+    color: #b4fa50;
+  }
+
+  .af-subtitle {
+    color: #f5f5f5;
+    line-height: 1.75;
+  }
+
+  /* -- IMAGE ------------------------------------------ */
+  .af-img-wrap {
+    max-width: 56rem;
+    margin-inline: auto;
+    margin-bottom: 4rem;
+  }
+
+  .af-img-inner {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 20px 50px -10px rgba(0, 0, 0, 0.4);
+
+    /* Estado inicial para animação */
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .af-img-inner.af-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .af-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Placeholder oculto por padrão — aparece só via onerror */
+  .af-img-placeholder {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+  }
+
+  .af-placeholder-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* -- FEATURES GRID ---------------------------------- */
+  .af-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 640px) {
+    .af-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* -- CARD — mesmo estilo da seção "Passo a passo" -- */
+  .af-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    /* Estado inicial para animação staggered */
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (min-width: 768px) {
+    .af-card {
+      padding: 2.5rem 2rem;
+    }
+  }
+
+  .af-card.af-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Header: título à esquerda, ícone à direita */
+  .af-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .af-card-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #b4fa50; /* secondary — lime */
+    flex-shrink: 0;
+  }
+
+  .af-card-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+  }
+
+  .af-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #e1ffa5; /* tertiary */
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+  }
+
+  .af-card-desc {
+    font-size: 1rem;
+    color: #f5f5f5; /* branco */
+    line-height: 1.65;
+  }
+
+  /* prefers-reduced-motion: desabilita animações */
+  @media (prefers-reduced-motion: reduce) {
+    .af-img-inner,
+    .af-card {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    // Respeita prefers-reduced-motion
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReduced) return;
+
+    // --- Imagem principal ---
+    const imgInner = document.querySelector<HTMLElement>(".af-img-inner");
+    if (imgInner) {
+      const imgObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              (entry.target as HTMLElement).classList.add("af-visible");
+              imgObs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+      imgObs.observe(imgInner);
+    }
+
+    // --- Cards staggered ---
+    const cards = document.querySelectorAll<HTMLElement>("[data-af-card]");
+    if (cards.length) {
+      const cardObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target as HTMLElement;
+              const delay = Number(el.dataset.delay ?? 0);
+              setTimeout(() => el.classList.add("af-visible"), delay);
+              cardObs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      cards.forEach((card) => cardObs.observe(card));
+    }
+  })();
+</script>

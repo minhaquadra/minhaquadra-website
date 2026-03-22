@@ -1,0 +1,65 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getCollectionCTM } from "@/lib/contentParser.astro";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import { supportedLanguages } from "@/lib/utils/languageParser.ts";
+import BlogLayout from "@/components/BlogLayout.astro";
+import extractSlug from "@/lib/utils/extractSlug";
+
+export async function getStaticPaths() {
+  const paths = await Promise.all(
+    supportedLanguages.map(async (lang) => {
+      const config = parseTomlToJson("./src/config/config.toml");
+      const { blogFolder }: { blogFolder: "blog" } = config.settings;
+      const { defaultLanguage, showDefaultLangInUrl } =
+        config.settings.multilingual;
+
+      const postIndex = await getEntryCTM(
+        blogFolder,
+        "-index",
+        lang.languageCode,
+      );
+
+      let posts = await getCollectionCTM(blogFolder, lang.languageCode);
+
+      // If draft true in index.md file frontmatter don't include any page related to this page collection in production
+      if (postIndex?.data.draft && import.meta.env.PROD) {
+        return [];
+      }
+
+      return posts.map((post) => ({
+        params: {
+          lang:
+            lang.languageCode === defaultLanguage && !showDefaultLangInUrl
+              ? undefined
+              : lang.languageCode,
+          single: extractSlug(post).split("/").pop(),
+        },
+        props: {
+          post,
+        },
+      }));
+    }),
+  );
+
+  return paths.flat();
+}
+
+const { post } = Astro.props;
+---
+
+<Base {...post.data} hasBodyDarkBackground={true}>
+  <BlogLayout
+    sidebar={{
+      enable: true,
+      sticky: true,
+      widgets: ["Categories", "RecentPosts", "Tags"],
+    }}
+    content={post}
+    contentList={{
+      breadcrumb: true,
+    }}
+  />
+  <div style="padding-bottom: 6rem;" />
+</Base>

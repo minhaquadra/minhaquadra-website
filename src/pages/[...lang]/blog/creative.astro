@@ -1,0 +1,147 @@
+---
+import Base from "@/layouts/Base.astro";
+import BlogLayout from "@/components/BlogLayout.astro";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import handleDraftPage from "@/lib/utils/handleDraftPage";
+import { generatePaths } from "@/lib/utils/languageParser.ts";
+
+export function getStaticPaths() {
+  return generatePaths();
+}
+
+const config = parseTomlToJson("./src/config/config.toml");
+const { blogFolder }: { blogFolder: "blog" } = config.settings;
+
+const postIndex = await getEntryCTM(blogFolder, "-index", Astro.currentLocale);
+
+// Remove drafts pages in production
+const response = handleDraftPage(postIndex?.data);
+if (response) return response;
+---
+
+<Base {...postIndex?.data} fitToScreen={false}>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────── -->
+  <section class="blog-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+        <h1 data-aos="reveal-anim-left">
+          <span class="text-display-5 md:text-display-4 leading-tight font-semibold blog-title-line1">Blog </span><span class="text-display-5 md:text-display-4 leading-tight font-semibold blog-title-line2">Minha Quadra.</span>
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Blog content ──────────────────────────────────────────────── -->
+  <div class="blog-content-bg">
+    <BlogLayout
+      pageType="list"
+      sidebar={{
+        enable: true,
+        sticky: true,
+      }}
+      contentList={{
+        options: {
+          layout: "creative",
+          columns: 1,
+          appearance: "dark",
+        },
+        pagination: { enable: true, currentPage: 1 },
+      }}
+      content={{ ...postIndex, ...postIndex?.data }}
+    />
+  </div>
+
+</Base>
+
+<style is:global>
+  /* ── Hero ─────────────────────────────────────────────────────────── */
+  .blog-hero {
+    background-color: #002d3c;
+    padding-top: 8rem;
+    padding-bottom: 2rem;
+    padding-left: max(2rem, 6vw);
+    padding-right: max(2rem, 6vw);
+    overflow-x: hidden;
+  }
+
+  .blog-title-line1 {
+    color: #f5f5f5;
+  }
+
+  .blog-title-line2 {
+    color: #b4fa50;
+  }
+
+  /* ── Blog content background ─────────────────────────────────────── */
+  .blog-content-bg {
+    background-color: #002d3c;
+    padding-bottom: 6rem;
+  }
+
+  /* Sobrescreve o padding-top global da section */
+  .blog-content-bg section {
+    padding-top: 2rem;
+  }
+
+  /* ── Sidebar dark theme ──────────────────────────────────────────── */
+  .blog-content-bg .sticky-sidebar {
+    color: #f5f5f5;
+  }
+
+  .blog-content-bg .sticky-sidebar h2 {
+    color: #f5f5f5;
+    border-color: rgba(245, 245, 245, 0.15);
+  }
+
+  .blog-content-bg .sticky-sidebar a {
+    color: #ffffff;
+  }
+
+  .blog-content-bg .sticky-sidebar a:hover {
+    color: #e1ffa5;
+  }
+
+  /* Search input */
+  .blog-content-bg .sticky-sidebar input[type="text"] {
+    background: transparent;
+    color: #f5f5f5;
+    border-color: rgba(245, 245, 245, 0.3);
+  }
+
+  .blog-content-bg .sticky-sidebar input[type="text"]::placeholder {
+    color: rgba(245, 245, 245, 0.4);
+    opacity: 1;
+  }
+
+  .blog-content-bg .sticky-sidebar button[type="submit"] {
+    color: #f5f5f5;
+  }
+
+  /* Tags */
+  .blog-content-bg .sticky-sidebar .flex.flex-wrap a {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f5f5;
+  }
+
+  .blog-content-bg .sticky-sidebar .flex.flex-wrap a:hover {
+    background: #b4fa50;
+    color: #002d3c;
+  }
+
+  /* Recent posts — horizontal card text */
+  .blog-content-bg .sticky-sidebar h3,
+  .blog-content-bg .sticky-sidebar h3 a {
+    color: #f5f5f5 !important;
+  }
+
+  .blog-content-bg .sticky-sidebar span {
+    color: rgba(245, 245, 245, 0.6);
+  }
+
+  /* Dividers */
+  .blog-content-bg .sticky-sidebar .border-b {
+    border-color: rgba(245, 245, 245, 0.2);
+  }
+</style>

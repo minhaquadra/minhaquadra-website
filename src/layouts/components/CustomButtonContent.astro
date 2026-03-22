@@ -1,0 +1,73 @@
+---
+import OptimizedImage from "./utilities/OptimizedImage.astro";
+
+const {
+  label,
+  variant,
+  title,
+  icon,
+  isCreativeHoverEffect,
+  isTextFlipHoverEffect,
+  isMagneticTextFlipHoverEffect,
+} = Astro.props;
+
+// Applcable only if button have the text-flip hover animation
+let dataContent;
+if (isTextFlipHoverEffect || isMagneticTextFlipHoverEffect) {
+  dataContent = variant !== "text" ? label : undefined;
+}
+
+// Check if the label contain "learn more" "read more" type of text that need to add support for accessibility
+let addAriaLabel = false;
+if (
+  label.toLowerCase().includes("learn more") ||
+  label.toLowerCase().includes("read more")
+) {
+  addAriaLabel = true;
+}
+---
+
+{
+  isTextFlipHoverEffect || isMagneticTextFlipHoverEffect ? (
+    <>
+      <span
+        class="text-flip-inner"
+        set:html={label}
+        data-content={dataContent}
+      />
+      {addAriaLabel && <span class="sr-only" set:html={title} />}
+    </>
+  ) : (
+    <>
+      <Fragment set:html={label} />
+      {addAriaLabel && <span class="sr-only" set:html={title} />}
+    </>
+  )
+}
+
+{
+  variant === "text" ? (
+    <span class="icons-wrapper ms-2 inline-flex min-h-2.5 min-w-2.5 items-center justify-center">
+      <span class="icon icon-before flex items-center justify-center">
+        <OptimizedImage
+          alt="icon"
+          inlineSvg={true}
+          class="h-6 w-6"
+          src={icon}
+        />
+      </span>
+      <span
+        class="icon icon-after flex items-center justify-center"
+        aria-hidden="true">
+        <OptimizedImage
+          alt="icon"
+          inlineSvg={true}
+          class="h-6 w-6"
+          src={icon}
+        />
+      </span>
+    </span>
+  ) : isCreativeHoverEffect ? (
+    <span class="hover-bg" />
+  ) : null
+}

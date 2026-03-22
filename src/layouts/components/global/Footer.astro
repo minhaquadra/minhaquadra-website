@@ -1,0 +1,66 @@
+---
+import { getLocaleUrlCTM } from "@/lib/utils/languageParser.ts";
+import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { markdownify } from "@/lib/utils/textConverter";
+import { splitProtectedText } from "@/lib/utils/splitProtectedText";
+import SocialComponent from "@/components/widgets/Social.astro";
+import social from "@/config/social.json";
+import { useTranslations } from "@/lib/utils/languageParser.ts";
+
+const config = parseTomlToJson("./src/config/config.toml");
+const t = await useTranslations(Astro.currentLocale as string);
+const { footerSpaceTop = true } = Astro.props;
+
+let { copyright, footerDescription } = config.settings;
+
+footerDescription = footerDescription || t("footer.description") || "";
+
+const copyrightText = copyright.text || t("footer.copyright") || "";
+const copyrightParts = splitProtectedText(copyrightText);
+---
+
+<footer class:list={["bg-theme-light", !footerSpaceTop && "mt-0"]}>
+  <div class="container py-6">
+    <nav aria-label="Footer">
+      <div
+        class="font-secondary text-dark flex flex-wrap justify-between gap-x-10 gap-y-6 border-y-2 border-black py-6 text-sm font-medium">
+        {
+          [t("footerPrimary"), t("footerSecondary")].map((group) => (
+            <ul class="flex flex-wrap gap-x-8 gap-y-2 uppercase md:flex-nowrap">
+              {group.map(({ name, url }: { name: string; url: string }) => (
+                <li>
+                  <a
+                    set:html={name}
+                    class="transition duration-300 hover:opacity-70"
+                    href={getLocaleUrlCTM(url, Astro.currentLocale)}
+                  />
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </nav>
+    <div
+      class="flex flex-wrap items-center justify-between gap-x-8 gap-y-6 pt-6">
+      <SocialComponent
+        size="lg"
+        layout="dark"
+        class="gap-5"
+        linkType="follow"
+        list={social.main.filter((s) => s.enable)}
+      />
+      {
+        config.settings.copyright?.enable && (
+          <ul class="has-list has-list-slash prose-a:text-inherit flex flex-wrap gap-y-2">
+            {copyrightParts.map((value) => (
+              <li class="prose-a:text-text-default/70 prose-a:hover:text-text-default">
+                <span set:html={markdownify(value)} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</footer>

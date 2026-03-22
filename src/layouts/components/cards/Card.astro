@@ -1,0 +1,100 @@
+---
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+import {
+  getLocaleUrlCTM,
+  useTranslations,
+} from "@/lib/utils/languageParser.ts";
+import CustomButton from "@/components/CustomButton.astro";
+import extractSlug from "@/lib/utils/extractSlug";
+
+const { content, options = {}, class: className } = Astro.props;
+const { icon, title, description, button, collection } = {
+  ...content,
+  ...content.data,
+};
+
+const t = await useTranslations(Astro.currentLocale as string);
+const slugLocale = getLocaleUrlCTM(
+  button?.url ? button.url : extractSlug(content),
+  Astro.currentLocale,
+  collection,
+);
+
+const isButtonEnabled = slugLocale || button?.enable;
+const isDark = options.appearance === "dark";
+const isRightIcon = options.iconPlacement === "right";
+const iconClass = "text-dark h-10 w-10 transition duration-300";
+---
+
+<div
+  class:list={[
+    isDark
+      ? "bg-theme-darker border-border-light text-light"
+      : "bg-theme-light",
+    className,
+  ]}>
+  <div class="flex min-h-full flex-col space-y-16 p-6 md:px-8 md:py-10">
+    {
+      icon && !isRightIcon && (
+        <OptimizedImage
+          alt={title ? `${title} icon` : "Card icon"}
+          src={icon}
+          inlineSvg
+          width={40}
+          height={40}
+          class:list={[iconClass, isDark && "text-light"]}
+        />
+      )
+    }
+
+    <div class="flex min-h-full flex-1 flex-col items-start space-y-8">
+      {
+        isRightIcon ? (
+          <div class="flex w-full flex-wrap-reverse justify-between gap-5 md:flex-row">
+            {title && <h3 class="text-h5 text-inherit" set:html={title} />}
+            {icon && (
+              <OptimizedImage
+                alt={title ? `${title} icon` : "Card icon"}
+                src={icon}
+                inlineSvg
+                width={40}
+                height={40}
+                class:list={[iconClass, isDark && "text-light"]}
+              />
+            )}
+          </div>
+        ) : (
+          title && <h3 class="text-h5 text-inherit" set:html={title} />
+        )
+      }
+
+      {
+        description && (
+          <p
+            class:list={[
+              "text-inherit",
+              isRightIcon && "md:pe-20",
+              isButtonEnabled && "mb-8",
+            ]}
+            set:html={description}
+          />
+        )
+      }
+
+      {
+        isButtonEnabled && (
+          <CustomButton
+            url={button?.url || slugLocale}
+            variant="text"
+            label={button?.label || t("common.viewDetails")}
+            class:list={[
+              "mt-auto text-sm uppercase",
+              isDark && "text-light border-border-light",
+            ]}
+            {...button}
+          />
+        )
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+---
+import type { Section } from "@/types";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import Marquee from "@/components/widgets/Marquee.astro";
+import overrideObjects from "@/lib/utils/overrideObjects.ts";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { marqueeConfig } from "@/content.config";
+import type { z } from "astro/zod";
+
+// Type for this section data
+interface featuresInterface extends Section {
+  list: string[];
+  marquee: z.infer<typeof marqueeConfig>;
+  listSeparatorImage: string;
+}
+interface Props {
+  content?: featuresInterface;
+  sectionSpaceTop?: boolean;
+}
+
+// Fetching the default content for the this section
+let defaultContent = (
+  await getEntryCTM("sections", "features", Astro.currentLocale)
+)?.data as featuresInterface;
+
+// Enables content customization (e.g., title, description) with a fallback to 'defaultContent' if not provided.
+// The 'content' prop should match the structure of 'defaultContent'.
+// Allows using this section with different content across multiple pages.
+// If 'content' is missing, 'defaultContent' will be used.
+let actualContent = overrideObjects(
+  { ...defaultContent },
+  Astro.props.content,
+) as featuresInterface;
+
+// Extracting required values from 'content' object
+let {
+  enable = true,
+  listSeparatorImage,
+  marquee,
+  list,
+} = actualContent as featuresInterface;
+
+const { sectionSpaceTop = true } = Astro.props;
+
+if (!enable) {
+  return null;
+}
+---
+
+<section class:list={[{ "pt-0": !sectionSpaceTop }]}>
+  <div
+    class="bg-accent-blue relative flex items-center overflow-hidden py-4 text-white">
+    <Marquee
+      marqueeElements={list.length}
+      marqueePauseOnHover={marquee.pauseOnHover}
+      marqueeReverse={marquee.reverse}
+      marqueeDuration={marquee.duration}
+      marqueeElementWidth={marquee.elementWidth}
+      marqueeElementWidthAuto={marquee.elementWidthAuto}
+      marqueeElementWidthResponsive={marquee.elementWidthInSmallDevices}>
+      {
+        list.map((item) => (
+          <div
+            class:list={[
+              "max-h-full min-w-(--marquee-element-width-responsive) px-4 text-center md:min-w-(--marquee-element-width)",
+            ]}>
+            <div class="flex items-center gap-4 md:gap-8">
+              {listSeparatorImage && (
+                <OptimizedImage
+                  class="ms-4 w-5 md:ms-8 md:w-10"
+                  src={listSeparatorImage}
+                  alt="icon"
+                />
+              )}
+              <div
+                class="font-secondary md:text-h2-sm text-h5-sm lg:text-h2 font-medium whitespace-nowrap text-white"
+                set:html={markdownify(item)}
+              />
+            </div>
+          </div>
+        ))
+      }
+      {
+        list.map((item) => (
+          <div
+            class:list={[
+              "max-h-full min-w-(--marquee-element-width-responsive) px-4 text-center md:min-w-(--marquee-element-width)",
+            ]}>
+            <div class="flex items-center gap-4 md:gap-8">
+              {listSeparatorImage && (
+                <OptimizedImage
+                  class="ms-4 w-5 md:ms-8 md:w-10"
+                  src={listSeparatorImage}
+                  alt="icon"
+                />
+              )}
+              <div
+                class="font-secondary md:text-h3 text-h5 lg:text-h2 font-medium whitespace-nowrap text-white"
+                set:html={markdownify(item)}
+              />
+            </div>
+          </div>
+        ))
+      }
+    </Marquee>
+  </div>
+</section>
