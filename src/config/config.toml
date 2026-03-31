@@ -2,8 +2,8 @@
 [site]
   title             = "Minha Quadra" # Shared title for SEO and OpenGraph
   description       = "Encontre e reserve quadras esportivas perto de você. Futebol, tênis, beach tennis e muito mais." # Shared description for SEO and OpenGraph
-  tagline           = "Onde o jogo acontece."
-  taglineSeparator = "" # default is " - " 
+  tagline           = "Minha Quadra"
+  taglineSeparator = " | "
   baseUrl          = "https://minhaquadra.com.br" # Base URL for the site and used in OpenGraph meta tags.
   logo              = "/images/logo-azul.png" # Path to the site's logo (fundo claro)
   logoAlternate    = "/images/logo-verde.png" # Path to the site's logo (fundo escuro)
@@ -28,15 +28,18 @@
   author   = "Minha Quadra"
   keywords = [
     "quadras esportivas",
-    "reserva de quadras",
+    "reservar quadra",
+    "alugar quadra esportiva",
     "beach tennis",
     "padel",
     "futebol society",
-    "folex astro theme", 
-    "astro portfolio theme", 
-    "astro portfolio template", 
-    "astro agency template", 
-    "astro agency theme"
+    "futsal",
+    "tênis",
+    "vôlei",
+    "basquete",
+    "pickleball",
+    "quadras perto de mim",
+    "Minha Quadra"
   ]
   robots   = "index, follow" # Instructs search engines on how to crawl and index the pages.
 
@@ -138,7 +141,7 @@
 # -----------------------------------------------------------------------------------------------------------------------------------
 [opengraph]
   image        = "/images/og-image.jpg" # Image used in OpenGraph previews
-  ogLocale    = "en_US" # Locale setting for OpenGraph
+  ogLocale    = "pt_BR" # Locale setting for OpenGraph
   ogType      = "website" # Type of content for OpenGraph protocol
   twitter      = "" # Twitter handle for Twitter Card meta tags
   twitterCard = "summary_large_image" # Type of Twitter Card to use in social sharing
