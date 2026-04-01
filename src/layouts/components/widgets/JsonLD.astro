@@ -24,10 +24,13 @@ let {
 title =
   !disableTagline && metaTitle ? metaTitle : title ? title : config.site.title;
 
-// Add tagline & separator to title
+// Add tagline & separator to title (only if not disabled)
 // prettier-ignore
 const alternateLangs =  config.settings.multilingual.enable ? supportedLanguages : []
-title += config.site.tagline ? taglineSeparator + config.site.tagline : "";
+if (!disableTagline && config.site.tagline) {
+  const sep = config.site.taglineSeparator || " | ";
+  title += sep + config.site.tagline;
+}
 description = metaDescription ? metaDescription : description;
 canonical = canonical ? canonical : Astro.url.href;
 lang = Astro.currentLocale;
