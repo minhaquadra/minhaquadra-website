@@ -66,7 +66,7 @@
   servicesFolder  = "services" # Folder where services are stored
   portfolioFolder = "portfolio" # Folder where portfolio/projects are stored
 
-  pagination    = 4 # Number of posts displayed on each page blog list page
+  pagination    = 8 # Number of posts displayed on each page blog list page
   stickyHeader = true # Enables scroll-aware sticky behavior (e.g., hide on scroll down), not applicable to fixed headers
   pageHeaderDefaultImage = "/images/page-header/default.png" # if you don't pass image in frontmatter of a page then this image will be used as header image
 
