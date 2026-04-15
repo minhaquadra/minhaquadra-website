@@ -29,12 +29,12 @@
     },
     {
       "source": "/regras-do-futebol-society-tudo-que-voce-precisa-saber/",
-      "destination": "/esportes/futebol-society/",
+      "destination": "/blog/regras-do-futebol-society/",
       "permanent": true
     },
     {
       "source": "/regras-do-futebol-society-tudo-que-voce-precisa-saber",
-      "destination": "/esportes/futebol-society/",
+      "destination": "/blog/regras-do-futebol-society/",
       "permanent": true
     },
     {
