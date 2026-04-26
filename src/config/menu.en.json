@@ -30,6 +30,16 @@
     },
     {
       "enable": true,
+      "name": "Cidades",
+      "url": "/cidades/",
+      "hasChildren": true,
+      "children": [
+        { "enable": true, "name": "Minas Gerais", "url": "/cidades/mg/" },
+        { "enable": true, "name": "Santa Catarina", "url": "/cidades/sc/" }
+      ]
+    },
+    {
+      "enable": true,
       "name": "Blog",
       "url": "/blog/creative/"
     },

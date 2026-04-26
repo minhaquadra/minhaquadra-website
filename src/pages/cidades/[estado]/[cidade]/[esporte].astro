@@ -1,0 +1,464 @@
+---
+import { getCollection } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import CustomButton from "@/layouts/components/CustomButton.astro";
+import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+
+const SITE_URL = "https://minhaquadra.com.br";
+const APP_URL = "https://app.minhaquadra.com.br/";
+
+export async function getStaticPaths() {
+  const estados = await getCollection("estados");
+  const cidades = await getCollection("cidades");
+  const esportesAll = await getCollection("esportes");
+
+  const paths: any[] = [];
+  for (const cidadeEntry of cidades) {
+    const estadoEntry = estados.find((e) => e.data.slug === cidadeEntry.data.estado);
+    for (const esp of cidadeEntry.data.esportes) {
+      const esporteData = esportesAll.find((s) => s.data.slug === esp.slug)?.data ?? null;
+      paths.push({
+        params: {
+          estado: cidadeEntry.data.estado,
+          cidade: cidadeEntry.data.slug,
+          esporte: esp.slug,
+        },
+        props: {
+          cidade: cidadeEntry.data,
+          estado: estadoEntry?.data ?? null,
+          esporte: esp,
+          esporteFull: esporteData,
+        },
+      });
+    }
+  }
+  return paths;
+}
+
+const { cidade, estado, esporte, esporteFull } = Astro.props;
+const estadoSlug = cidade.estado;
+const estadoNome = cidade.estadoNome;
+const estadoSigla = estado?.sigla ?? estadoSlug.toUpperCase();
+const cidadeTitle = cidade.title;
+const cidadeSlug = cidade.slug;
+const esporteSlug = esporte.slug;
+const esporteNome = esporte.nome;
+
+const pageUrl = `${SITE_URL}/cidades/${estadoSlug}/${cidadeSlug}/${esporteSlug}/`;
+const appLink = `${APP_URL}?esporte=${esporteSlug}&cidade=${cidadeSlug}`;
+const pillarUrl = `/esportes/${esporteSlug}/`;
+
+const metaTitle = `Quadras de ${esporteNome} em ${cidadeTitle}, ${estadoSigla} — Encontre e Reserve | Minha Quadra`;
+const metaDescription = `Encontre as melhores quadras de ${esporteNome} em ${cidadeTitle}. Compare preços, veja horários e reserve online pelo Minha Quadra.`;
+
+// Intro especial Pinhalzinho/beach-tennis (override para conteúdo único)
+const isPinhalzinhoBT =
+  cidadeSlug === "pinhalzinho" && esporteSlug === "beach-tennis";
+
+const introParas = isPinhalzinhoBT
+  ? [
+      "O beach tennis está em plena expansão no oeste catarinense, e Pinhalzinho é uma das cidades que vem abraçando o esporte. Com quadras de areia de qualidade, a cidade oferece ótimas opções para quem quer praticar beach tennis na região.",
+      `Se você está buscando onde jogar beach tennis em Pinhalzinho, o Minha Quadra te ajuda a encontrar as melhores quadras, comparar preços e reservar online.`,
+    ]
+  : [
+      `${esporteNome} é um dos esportes em crescimento em ${cidadeTitle}. ${esporte.resumo}`,
+      `Se você está procurando onde jogar ${esporteNome} em ${cidadeTitle}, o Minha Quadra te ajuda a encontrar as melhores quadras, comparar preços e reservar online em segundos.`,
+    ];
+
+// Faixa de preço do esporte
+const priceMap: Record<string, string> = {
+  "beach-tennis": "R$ 80 a R$ 150",
+  "tenis": "R$ 60 a R$ 120",
+  "padel": "R$ 80 a R$ 160",
+  "volei": "R$ 60 a R$ 120",
+  "futevolei": "R$ 50 a R$ 100",
+  "futsal": "R$ 80 a R$ 180",
+  "futebol-society": "R$ 100 a R$ 250",
+  "basquete": "R$ 50 a R$ 100",
+  "pickleball": "R$ 60 a R$ 120",
+  "volei-de-praia": "R$ 50 a R$ 100",
+};
+const priceRange = priceMap[esporteSlug] ?? "R$ 60 a R$ 150";
+
+// Equipment FAQ baseado no esporte (do dado do esporte se disponível)
+const equipmentText = esporteFull?.equipment
+  ? esporteFull.equipment
+  : `Para jogar ${esporteNome}, geralmente é necessário equipamento próprio (raquete, bola, calçado adequado). Muitas quadras parceiras do Minha Quadra oferecem opções de aluguel de equipamentos para iniciantes — confira na descrição de cada quadra.`;
+
+const faqList = [
+  {
+    question: `Onde jogar ${esporteNome} em ${cidadeTitle}?`,
+    answer: `Em ${cidadeTitle} você encontra quadras de ${esporteNome} pelo Minha Quadra. Acesse o app, ative sua localização e veja as opções disponíveis na sua região.`,
+  },
+  {
+    question: `Quanto custa alugar uma quadra de ${esporteNome} em ${cidadeTitle}?`,
+    answer: `O aluguel de quadras de ${esporteNome} no Brasil varia em média de ${priceRange} por hora, dependendo da região, horário e estrutura da quadra. No Minha Quadra você compara preços entre as opções disponíveis em ${cidadeTitle}.`,
+  },
+  {
+    question: `Preciso de equipamento próprio para jogar ${esporteNome}?`,
+    answer: equipmentText,
+  },
+];
+
+const faqItems = faqList.map((f) => ({
+  enable: true,
+  title: f.question,
+  content: f.answer,
+}));
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+    { "@type": "ListItem", position: 2, name: "Cidades", item: `${SITE_URL}/cidades/` },
+    { "@type": "ListItem", position: 3, name: estadoNome, item: `${SITE_URL}/cidades/${estadoSlug}/` },
+    { "@type": "ListItem", position: 4, name: cidadeTitle, item: `${SITE_URL}/cidades/${estadoSlug}/${cidadeSlug}/` },
+    { "@type": "ListItem", position: 5, name: esporteNome, item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqList.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+---
+
+<Base
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  canonical={pageUrl}
+  fitToScreen={false}
+  hasHeaderDarkBackground={true}
+  footerLayout="footer-3"
+  disableTagline={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="cd-bc" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="cd-bc__list" role="list">
+        <li role="listitem"><a href="/" class="cd-bc__link">Home</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><a href="/cidades/" class="cd-bc__link">Cidades</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><a href={`/cidades/${estadoSlug}/`} class="cd-bc__link">{estadoNome}</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><a href={`/cidades/${estadoSlug}/${cidadeSlug}/`} class="cd-bc__link">{cidadeTitle}</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><span class="cd-bc__current">{esporteNome}</span></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="cd-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+        <span class="cd-hero__eyebrow" data-aos="fade-up">{cidadeTitle}, {estadoSigla}</span>
+        <h1 class="mt-2">
+          <span class="cd-hero__line1 block" data-aos="reveal-anim-left">Quadras de {esporteNome}</span>
+          <span class="cd-hero__line2 block" data-aos="reveal-anim-right">em {cidadeTitle}.</span>
+        </h1>
+        <div class="mt-10 max-w-2xl flex flex-wrap gap-4 items-center" data-aos="fade-up" data-aos-delay="200">
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-accent cd-hero-btn"
+            label={`Encontrar quadras de ${esporteNome}`}
+            url={appLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="cd-hero-btn2"
+            label="Cadastrar minha quadra"
+            url="/parceiros/"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Texto introdutório -->
+  <section class="cd-intro">
+    <div class="container">
+      <div class="mx-auto max-w-4xl">
+        <div class="prose-styles content" data-aos="fade-up">
+          {introParas.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Em breve / Quadras parceiras -->
+  <section class="cd-partners">
+    <div class="container">
+      <div class="cd-partners__grid">
+        <div class="cd-partners__card" data-aos="fade-up">
+          <h2 class="cd-partners__card-title">Para jogadores</h2>
+          <p class="cd-partners__card-text">
+            Ainda estamos mapeando as melhores quadras de {esporteNome} em {cidadeTitle}. Enquanto isso, explore outras cidades e quadras parceiras pelo Minha Quadra.
+          </p>
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="cd-partners__btn"
+            label="Acessar o Minha Quadra"
+            url={appLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        </div>
+        <div class="cd-partners__card cd-partners__card--alt" data-aos="fade-up" data-aos-delay="100">
+          <h2 class="cd-partners__card-title">Para donos de quadra</h2>
+          <p class="cd-partners__card-text">
+            Tem uma quadra de {esporteNome} em {cidadeTitle}? Cadastre-se no Minha Quadra e comece a receber reservas online.
+          </p>
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="cd-partners__btn cd-partners__btn--alt"
+            label="Cadastrar minha quadra"
+            url="/parceiros/"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crosslink pillar -->
+  <section class="cd-pillar">
+    <div class="container">
+      <div class="cd-pillar__inner" data-aos="fade-up">
+        <div>
+          <span class="cd-pillar__eyebrow">Sobre o esporte</span>
+          <h2 class="cd-pillar__title">Saiba mais sobre {esporteNome}</h2>
+          <p class="cd-pillar__text">
+            Confira o guia completo do esporte: regras, equipamentos, benefícios e tudo o que você precisa para começar a jogar.
+          </p>
+        </div>
+        <a href={pillarUrl} class="cd-pillar__cta">
+          Ver guia de {esporteNome} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="cd-faq">
+    <div class="container">
+      <h2 class="cd-faq__title" data-aos="fade-up">
+        Perguntas frequentes sobre {esporteNome} em {cidadeTitle}
+      </h2>
+      <AccordionList content={faqItems} />
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  /* Breadcrumb */
+  .cd-bc {
+    background-color: #002d3c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 6rem;
+  }
+  .cd-bc .container { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+  .cd-bc__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+  .cd-bc__link { color: rgba(245, 245, 245, 0.55); text-decoration: none; transition: color 0.2s; }
+  .cd-bc__link:hover { color: #b4fa50; }
+  .cd-bc__sep { color: rgba(245, 245, 245, 0.25); user-select: none; }
+  .cd-bc__current { color: #b4fa50; font-weight: 500; }
+
+  /* Hero */
+  .cd-hero {
+    background-color: #002d3c;
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+    overflow-x: hidden;
+  }
+  .cd-hero__eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #b4fa50;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .cd-hero__line1 {
+    font-size: clamp(2.25rem, 5.5vw, 5rem);
+    font-weight: 600;
+    color: #f5f5f5;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .cd-hero__line2 {
+    font-size: clamp(2.25rem, 5.5vw, 5rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  a.cd-hero-btn.creative-hover-anim .hover-bg { background: #b4fa50; }
+  a.cd-hero-btn.creative-hover-anim:hover { color: #002d3c !important; }
+  a.cd-hero-btn2.btn {
+    background-color: #b4fa50 !important;
+    border-color: #b4fa50 !important;
+    color: #002d3c !important;
+    font-weight: 500;
+  }
+  a.cd-hero-btn2.creative-hover-anim .hover-bg { background: #e1ffa5; }
+  a.cd-hero-btn2.creative-hover-anim:hover { color: #002d3c !important; }
+
+  /* Intro */
+  .cd-intro {
+    background-color: #007d8c;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .cd-intro .content p {
+    color: #f5f5f5 !important;
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  /* Partners (em breve) */
+  .cd-partners {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 6rem;
+  }
+  .cd-partners__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .cd-partners__grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; } }
+
+  .cd-partners__card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .cd-partners__card--alt {
+    background-color: rgba(180, 250, 80, 0.08);
+    border-color: rgba(180, 250, 80, 0.35);
+  }
+  .cd-partners__card-title {
+    font-size: var(--text-h5);
+    font-weight: 600;
+    color: #e1ffa5;
+    line-height: 1.3;
+    margin: 0;
+  }
+  .cd-partners__card-text {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+  .cd-partners__btn { margin-top: auto; align-self: flex-start; }
+  a.cd-partners__btn.creative-hover-anim .hover-bg { background: #b4fa50; }
+  a.cd-partners__btn.creative-hover-anim:hover { color: #002d3c !important; }
+
+  a.cd-partners__btn--alt.btn {
+    background-color: #b4fa50 !important;
+    border-color: #b4fa50 !important;
+    color: #002d3c !important;
+    font-weight: 500;
+  }
+  a.cd-partners__btn--alt.creative-hover-anim .hover-bg { background: #e1ffa5; }
+  a.cd-partners__btn--alt.creative-hover-anim:hover { color: #002d3c !important; }
+
+  /* Pillar crosslink */
+  .cd-pillar {
+    background-color: #b4fa50;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .cd-pillar__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) {
+    .cd-pillar__inner { grid-template-columns: 1.5fr 1fr; gap: 3rem; }
+  }
+  .cd-pillar__eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #002d3c;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .cd-pillar__title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 600;
+    color: #002d3c;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .cd-pillar__text {
+    color: #002d3c;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  .cd-pillar__cta {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #002d3c;
+    color: #e1ffa5;
+    padding: 1rem 1.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .cd-pillar__cta:hover { background-color: #007d8c; }
+  .cd-pillar__cta span { transition: transform 0.2s; display: inline-block; }
+  .cd-pillar__cta:hover span { transform: translateX(4px); }
+  @media (min-width: 768px) { .cd-pillar__cta { justify-self: end; } }
+
+  /* FAQ */
+  .cd-faq {
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+  }
+  .cd-faq__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #002d3c;
+    text-align: center;
+    max-width: 50ch;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+  }
+  .cd-faq .hs-accordion-group,
+  .cd-faq .hs-accordion { border-color: rgba(0, 45, 60, 0.15) !important; }
+  .cd-faq .text-dark { color: #002d3c !important; }
+  .cd-faq button.hs-accordion-toggle { color: #002d3c !important; }
+  .cd-faq .hs-accordion-content,
+  .cd-faq .hs-accordion-content * { color: rgba(0, 45, 60, 0.8) !important; }
+</style>

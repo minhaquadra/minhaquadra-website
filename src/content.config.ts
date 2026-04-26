@@ -147,6 +147,45 @@ const quadrasCollection = defineCollection({
   }),
 });
 
+// Estados Collection (Cidades section)
+const estadosCollection = defineCollection({
+  loader: glob({ base: "./src/content/cidades/estados", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    sigla: z.string(),
+    description: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    cidades: z.array(z.string()).default([]),
+  }),
+});
+
+// Cidades Collection (Cidades section)
+const cidadesCollection = defineCollection({
+  loader: glob({ base: "./src/content/cidades/cidades", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    estado: z.string(),
+    estadoNome: z.string(),
+    description: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    esportes: z
+      .array(
+        z.object({
+          slug: z.string(),
+          nome: z.string(),
+          temBlog: z.boolean().default(false),
+          blogUrl: z.string().default(""),
+          resumo: z.string(),
+        }),
+      )
+      .default([]),
+  }),
+});
+
 // Esportes Collection
 const esportesCollection = defineCollection({
   loader: glob({ base: "./src/content/esportes", pattern: "**/*.{md,mdx}" }),
@@ -183,4 +222,6 @@ export const collections = {
   }),
   esportes: esportesCollection,
   quadras: quadrasCollection,
+  estados: estadosCollection,
+  cidades: cidadesCollection,
 };

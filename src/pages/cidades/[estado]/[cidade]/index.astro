@@ -1,0 +1,447 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import CustomButton from "@/layouts/components/CustomButton.astro";
+import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+
+const SITE_URL = "https://minhaquadra.com.br";
+const APP_URL = "https://app.minhaquadra.com.br/";
+
+export async function getStaticPaths() {
+  const estados = await getCollection("estados");
+  const cidades = await getCollection("cidades");
+
+  return cidades.map((cidadeEntry) => {
+    const estadoEntry = estados.find((e) => e.data.slug === cidadeEntry.data.estado);
+    return {
+      params: {
+        estado: cidadeEntry.data.estado,
+        cidade: cidadeEntry.data.slug,
+      },
+      props: {
+        cidadeEntry,
+        estado: estadoEntry?.data ?? null,
+      },
+    };
+  });
+}
+
+const { cidadeEntry, estado } = Astro.props;
+const cidade = cidadeEntry.data;
+const { Content } = await render(cidadeEntry);
+
+const { title, slug, estadoNome, metaTitle, metaDescription, esportes } = cidade;
+const estadoSlug = cidade.estado;
+const estadoSigla = estado?.sigla ?? estadoSlug.toUpperCase();
+
+const cidadeUrl = `${SITE_URL}/cidades/${estadoSlug}/${slug}/`;
+const appLinkCidade = `${APP_URL}?cidade=${slug}`;
+
+const hasEsportes = esportes.length > 0;
+const esportesNomes = esportes.map((e: any) => e.nome).join(", ");
+
+// FAQ
+const faqList = hasEsportes
+  ? [
+      {
+        question: `Onde encontrar quadras esportivas em ${title}?`,
+        answer: `No Minha Quadra você encontra as melhores quadras de ${title}. Acesse o app, selecione seu esporte e veja as opções disponíveis.`,
+      },
+      {
+        question: `Quais esportes estão disponíveis em ${title}?`,
+        answer: `Em ${title} você encontra quadras de ${esportesNomes} no Minha Quadra. Novos esportes e quadras parceiras são adicionados com frequência.`,
+      },
+      {
+        question: `Como reservar uma quadra em ${title}?`,
+        answer: `Acesse o Minha Quadra, escolha o esporte, selecione a quadra e faça sua reserva online em poucos cliques.`,
+      },
+    ]
+  : [
+      {
+        question: `Como encontrar quadras esportivas em ${title}?`,
+        answer: `Estamos mapeando as melhores quadras de ${title}. Cadastre-se no Minha Quadra para ser notificado assim que novas opções estiverem disponíveis na sua região.`,
+      },
+      {
+        question: `Como reservar uma quadra em ${title}?`,
+        answer: `Acesse o Minha Quadra, escolha o esporte, selecione a quadra e faça sua reserva online em poucos cliques.`,
+      },
+    ];
+
+const faqItems = faqList.map((f) => ({
+  enable: true,
+  title: f.question,
+  content: f.answer,
+}));
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+    { "@type": "ListItem", position: 2, name: "Cidades", item: `${SITE_URL}/cidades/` },
+    { "@type": "ListItem", position: 3, name: estadoNome, item: `${SITE_URL}/cidades/${estadoSlug}/` },
+    { "@type": "ListItem", position: 4, name: title, item: cidadeUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqList.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+---
+
+<Base
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  canonical={cidadeUrl}
+  fitToScreen={false}
+  hasHeaderDarkBackground={true}
+  footerLayout="footer-3"
+  disableTagline={true}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="cd-bc" aria-label="Breadcrumb">
+    <div class="container">
+      <ol class="cd-bc__list" role="list">
+        <li role="listitem"><a href="/" class="cd-bc__link">Home</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><a href="/cidades/" class="cd-bc__link">Cidades</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><a href={`/cidades/${estadoSlug}/`} class="cd-bc__link">{estadoNome}</a></li>
+        <li aria-hidden="true" class="cd-bc__sep">/</li>
+        <li role="listitem"><span class="cd-bc__current">{title}</span></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="cd-hero">
+    <div class="container">
+      <div class="mx-auto max-w-7xl">
+        <span class="cd-hero__eyebrow" data-aos="fade-up">{estadoSigla}</span>
+        <h1 class="mt-2">
+          <span class="cd-hero__line1 block" data-aos="reveal-anim-left">Quadras esportivas em</span>
+          <span class="cd-hero__line2 block" data-aos="reveal-anim-right">{title}.</span>
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- Texto introdutório (markdown body) -->
+  <section class="cd-intro">
+    <div class="container">
+      <div class="mx-auto max-w-4xl">
+        <div class="prose-styles content" data-aos="fade-up">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Esportes na cidade -->
+  <section class="cd-sports">
+    <div class="container">
+      {hasEsportes ? (
+        <>
+          <h2 class="cd-sports__title" data-aos="reveal-anim-left">
+            Esportes em {title}
+          </h2>
+          <div class="cd-sports__grid">
+            {esportes.map((esp: any, i: number) => (
+              <article class="cd-sport-card" data-aos="fade-up" data-aos-delay={i * 80}>
+                <header class="cd-sport-card__header">
+                  <h3 class="cd-sport-card__name">{esp.nome}</h3>
+                </header>
+                <p class="cd-sport-card__text">{esp.resumo}</p>
+                <div class="cd-sport-card__actions">
+                  <a
+                    href={`/cidades/${estadoSlug}/${slug}/${esp.slug}/`}
+                    class="cd-sport-card__link"
+                  >
+                    Ver quadras de {esp.nome} em {title} <span aria-hidden="true">→</span>
+                  </a>
+                  {esp.temBlog && esp.blogUrl && (
+                    <a href={esp.blogUrl} class="cd-sport-card__link cd-sport-card__link--secondary">
+                      Ver guia completo <span aria-hidden="true">→</span>
+                    </a>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="cd-empty-block" data-aos="fade-up">
+          <h2 class="cd-empty-block__title">
+            Em breve teremos quadras disponíveis em {title}
+          </h2>
+          <p class="cd-empty-block__text">
+            Estamos trabalhando para trazer as melhores quadras esportivas de {title} para o Minha Quadra. Quer ser notificado quando estiverem disponíveis?
+          </p>
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="cd-cta-btn"
+            label="Acessar o Minha Quadra"
+            url={APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA Mid -->
+  <section class="cd-cta-mid">
+    <div class="container">
+      <div class="grid gap-x-20 gap-y-10 lg:grid-cols-2 lg:place-items-center lg:gap-y-20">
+        <div class="max-w-3xl">
+          <h2 class="cd-cta-mid__title" data-aos="reveal-anim-left">
+            Encontre e reserve quadras em {title}
+          </h2>
+        </div>
+        <div class="max-w-lg space-y-10">
+          <p class="cd-cta-mid__desc" data-aos="fade-up" data-aos-delay="100">
+            Compare opções, veja horários disponíveis e reserve sua quadra online em segundos.
+          </p>
+          <div data-aos="fade-up" data-aos-delay="200">
+            <CustomButton
+              hoverEffect="creative-fill"
+              class="cd-cta-btn"
+              label={`Explorar quadras em ${title}`}
+              url={appLinkCidade}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="cd-faq">
+    <div class="container">
+      <h2 class="cd-faq__title" data-aos="fade-up">
+        Perguntas frequentes sobre quadras em {title}
+      </h2>
+      <AccordionList content={faqItems} />
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  /* Breadcrumb */
+  .cd-bc {
+    background-color: #002d3c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 6rem;
+  }
+  .cd-bc .container { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+  .cd-bc__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+  .cd-bc__link { color: rgba(245, 245, 245, 0.55); text-decoration: none; transition: color 0.2s; }
+  .cd-bc__link:hover { color: #b4fa50; }
+  .cd-bc__sep { color: rgba(245, 245, 245, 0.25); user-select: none; }
+  .cd-bc__current { color: #b4fa50; font-weight: 500; }
+
+  /* Hero */
+  .cd-hero {
+    background-color: #002d3c;
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+    overflow-x: hidden;
+  }
+  .cd-hero__eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #b4fa50;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .cd-hero__line1 {
+    font-size: clamp(2.25rem, 5.5vw, 5rem);
+    font-weight: 600;
+    color: #f5f5f5;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .cd-hero__line2 {
+    font-size: clamp(2.25rem, 5.5vw, 5rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  /* Intro */
+  .cd-intro {
+    background-color: #007d8c;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  .cd-intro .content p {
+    color: #f5f5f5 !important;
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+  .cd-intro .content h2,
+  .cd-intro .content h3 {
+    color: #e1ffa5 !important;
+  }
+
+  /* Esportes na cidade */
+  .cd-sports {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 6rem;
+  }
+  .cd-sports__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #b4fa50;
+    margin-bottom: 3rem;
+  }
+  .cd-sports__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .cd-sports__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1200px) { .cd-sports__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .cd-sport-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.1);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .cd-sport-card__name {
+    font-size: var(--text-h5);
+    font-weight: 600;
+    color: #e1ffa5;
+    line-height: 1.3;
+    margin: 0;
+  }
+  .cd-sport-card__text {
+    font-size: 1rem;
+    color: rgba(245, 245, 245, 0.85);
+    line-height: 1.65;
+    margin: 0;
+  }
+  .cd-sport-card__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  .cd-sport-card__link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #b4fa50;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .cd-sport-card__link span {
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .cd-sport-card__link:hover { color: #e1ffa5; }
+  .cd-sport-card__link:hover span { transform: translateX(4px); }
+  .cd-sport-card__link--secondary {
+    color: rgba(245, 245, 245, 0.7);
+  }
+  .cd-sport-card__link--secondary:hover { color: #b4fa50; }
+
+  .cd-empty-block {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(180, 250, 80, 0.3);
+    padding: 3rem 2rem;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .cd-empty-block__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: #b4fa50;
+    margin-bottom: 1.25rem;
+  }
+  .cd-empty-block__text {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  /* CTA Mid */
+  .cd-cta-mid {
+    background-color: #b4fa50;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .cd-cta-mid__title {
+    font-size: clamp(2.25rem, 5vw, 5rem);
+    font-weight: 600;
+    color: #002d3c;
+    line-height: 1.1;
+  }
+  .cd-cta-mid__desc {
+    font-size: 1.125rem;
+    color: #002d3c;
+    line-height: 1.75;
+  }
+  a.cd-cta-btn.btn {
+    background-color: #002d3c !important;
+    border-color: #002d3c !important;
+    color: #e1ffa5 !important;
+    font-weight: 500;
+  }
+  a.cd-cta-btn.creative-hover-anim .hover-bg { background: #007d8c; }
+  a.cd-cta-btn.creative-hover-anim:hover {
+    color: #e1ffa5 !important;
+    border-color: #007d8c !important;
+  }
+
+  /* FAQ */
+  .cd-faq {
+    background-color: #f5f5f5;
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+  }
+  .cd-faq__title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #002d3c;
+    text-align: center;
+    max-width: 40ch;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+  }
+  .cd-faq .hs-accordion-group,
+  .cd-faq .hs-accordion { border-color: rgba(0, 45, 60, 0.15) !important; }
+  .cd-faq .text-dark { color: #002d3c !important; }
+  .cd-faq button.hs-accordion-toggle { color: #002d3c !important; }
+  .cd-faq .hs-accordion-content,
+  .cd-faq .hs-accordion-content * { color: rgba(0, 45, 60, 0.8) !important; }
+</style>
