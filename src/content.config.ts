@@ -147,6 +147,68 @@ const quadrasCollection = defineCollection({
   }),
 });
 
+// Estados Collection (Cidades section)
+const estadosCollection = defineCollection({
+  loader: glob({ base: "./src/content/cidades/estados", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    sigla: z.string(),
+    description: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    cidades: z.array(z.string()).default([]),
+  }),
+});
+
+// Cidades Collection (Cidades section)
+const cidadesCollection = defineCollection({
+  loader: glob({ base: "./src/content/cidades/cidades", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    estado: z.string(),
+    estadoNome: z.string(),
+    description: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    esportes: z
+      .array(
+        z.object({
+          slug: z.string(),
+          nome: z.string(),
+          temBlog: z.boolean().default(false),
+          blogUrl: z.string().default(""),
+          resumo: z.string(),
+          tituloQuadras: z.string().optional(),
+          intro: z.array(z.string()).optional(),
+          faq: z
+            .array(
+              z.object({
+                question: z.string(),
+                answer: z.string(),
+              }),
+            )
+            .optional(),
+          quadras: z
+            .array(
+              z.object({
+                nome: z.string(),
+                endereco: z.string(),
+                descricao: z.string(),
+                preco: z.string().optional(),
+                parceira: z.boolean().default(false),
+                appLink: z.string().optional(),
+                imagem: z.string().optional(),
+              }),
+            )
+            .default([]),
+        }),
+      )
+      .default([]),
+  }),
+});
+
 // Esportes Collection
 const esportesCollection = defineCollection({
   loader: glob({ base: "./src/content/esportes", pattern: "**/*.{md,mdx}" }),
@@ -183,4 +245,6 @@ export const collections = {
   }),
   esportes: esportesCollection,
   quadras: quadrasCollection,
+  estados: estadosCollection,
+  cidades: cidadesCollection,
 };
