@@ -21,20 +21,36 @@ const { pathname } = Astro.url;
         : "",
   ]}
   role="menuitem">
-  <span
-    class:list={[
-      "hs-dropdown-toggle nav-toggle",
-      {
-        active:
-          menu.children?.map(({ url }) => url).includes(pathname) ||
-          menu.children?.map(({ url }) => `${url}/`).includes(pathname),
-      },
-      recursive ? "nav-dropdown-link" : "nav-link",
-    ]}>
-    {menu.name}
+  {recursive && menu.url ? (
+    <a
+      href={getLocaleUrlCTM(menu.url, Astro.currentLocale)}
+      class:list={[
+        "hs-dropdown-toggle nav-toggle nav-dropdown-link",
+        {
+          active:
+            menu.children?.map(({ url }) => url).includes(pathname) ||
+            menu.children?.map(({ url }) => `${url}/`).includes(pathname),
+        },
+      ]}>
+      {menu.name}
+      <ReactIcon class="nav-toggle-icon nav-toggle-icon--right" icon="IoIosArrowForward" />
+    </a>
+  ) : (
+    <span
+      class:list={[
+        "hs-dropdown-toggle nav-toggle",
+        {
+          active:
+            menu.children?.map(({ url }) => url).includes(pathname) ||
+            menu.children?.map(({ url }) => `${url}/`).includes(pathname),
+        },
+        recursive ? "nav-dropdown-link" : "nav-link",
+      ]}>
+      {menu.name}
 
-    <ReactIcon class="nav-toggle-icon" icon="IoIosArrowDown" />
-  </span>
+      <ReactIcon class="nav-toggle-icon" icon="IoIosArrowDown" />
+    </span>
+  )}
   {
     !menu.hasMegaMenu && menu.hasChildren && (
       <ul

@@ -214,6 +214,80 @@
 .nav-cta-btn.creative-hover-anim:hover {
   color: #002d3c !important;
 }
+/* Two-line label support — keeps same visual size while stacking lines */
+.nav-cta-btn {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.1;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+@media (min-width: 1280px) {
+  .nav-cta-btn {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+}
+.nav-cta-btn br { line-height: 0; }
+
+/* Right-facing chevron for nested dropdown parents — keep it pointing right when open */
+.nav-toggle-icon--right {
+  margin-inline-start: auto;
+  transform: none !important;
+}
+.nav-dropdown-item > .nav-toggle.hs-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Nested submenu — pure-CSS hover behavior on desktop.
+   Hovering a state (.nav-dropdown-item with children) reveals
+   its city submenu to the right. Click on the state still
+   navigates (preserved by the <a href> rendering).
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .nav-dropdown-list .nav-dropdown.nav-dropdown-item {
+    position: relative;
+  }
+
+  .nav-dropdown-list .nav-dropdown.nav-dropdown-item > .nav-dropdown-list {
+    display: none !important;
+    position: absolute;
+    inset: 0 auto auto 100%;
+    margin: 0 0 0 0.25rem !important;
+    transform: none !important;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.18s ease 0.1s, visibility 0s linear 0.28s;
+    z-index: 60;
+    min-width: 14rem;
+  }
+
+  .nav-dropdown-list .nav-dropdown.nav-dropdown-item:hover > .nav-dropdown-list,
+  .nav-dropdown-list .nav-dropdown.nav-dropdown-item:focus-within > .nav-dropdown-list {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition: opacity 0.18s ease 0s, visibility 0s linear 0s;
+  }
+
+  /* Invisible hover-buffer so moving the mouse from the state
+     to the city submenu doesn't lose hover. */
+  .nav-dropdown-list .nav-dropdown.nav-dropdown-item:hover > .nav-dropdown-list::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -0.5rem;
+    width: 0.5rem;
+    height: 100%;
+    background: transparent;
+  }
+}
 
 /* Home dropdown — alternate blue background, white text, tertiary green hover */
 .nav-dropdown-home {
