@@ -214,6 +214,33 @@
 .nav-cta-btn.creative-hover-anim:hover {
   color: #002d3c !important;
 }
+/* Two-line label support — keeps same visual size while stacking lines */
+.nav-cta-btn {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.1;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+@media (min-width: 1280px) {
+  .nav-cta-btn {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+}
+.nav-cta-btn br { line-height: 0; }
+
+/* Right-facing chevron for nested dropdown parents — keep it pointing right when open */
+.nav-toggle-icon--right {
+  margin-inline-start: auto;
+  transform: none !important;
+}
+.nav-dropdown-item > .nav-toggle.hs-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
 
 /* Home dropdown — alternate blue background, white text, tertiary green hover */
 .nav-dropdown-home {

@@ -34,8 +34,24 @@
       "url": "/cidades/",
       "hasChildren": true,
       "children": [
-        { "enable": true, "name": "Minas Gerais", "url": "/cidades/mg/" },
-        { "enable": true, "name": "Santa Catarina", "url": "/cidades/sc/" }
+        {
+          "enable": true,
+          "name": "Minas Gerais",
+          "url": "/cidades/mg/",
+          "hasChildren": true,
+          "children": [
+            { "enable": true, "name": "Belo Horizonte", "url": "/cidades/mg/belo-horizonte/" }
+          ]
+        },
+        {
+          "enable": true,
+          "name": "Santa Catarina",
+          "url": "/cidades/sc/",
+          "hasChildren": true,
+          "children": [
+            { "enable": true, "name": "Pinhalzinho", "url": "/cidades/sc/pinhalzinho/" }
+          ]
+        }
       ]
     },
     {
@@ -71,6 +87,6 @@
     ]
   },
   "navigation": {
-    "buttonLabel": "MINHA QUADRA"
+    "buttonLabel": "ENCONTRE<br>SUA QUADRA"
   }
 }
