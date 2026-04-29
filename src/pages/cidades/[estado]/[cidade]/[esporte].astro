@@ -560,13 +560,17 @@ const webPageSchema = {
     text-transform: uppercase;
   }
 
-  /* TL;DR — parágrafo subtle integrado ao final da intro */
+  /* TL;DR — parágrafo integrado, mesmo estilo do body com leve italic+opacity */
   .cd-tldr-text {
-    margin-top: 1.25rem;
-    color: rgba(245, 245, 245, 0.75);
-    font-size: 0.95rem;
-    line-height: 1.7;
+    margin-top: 1.5rem;
+    color: #f5f5f5;
+    font-size: 1.125rem;
+    line-height: 1.75;
     font-style: italic;
+    opacity: 0.85;
+  }
+  @media (min-width: 768px) {
+    .cd-tldr-text { font-size: 1.25rem; }
   }
 
   /* Sobre o Minha Quadra (GEO context block) */
