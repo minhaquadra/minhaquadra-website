@@ -87,21 +87,19 @@ quadras.forEach((q: any) => {
 const bairrosCount = bairros.size;
 const top3 = quadras.slice(0, 3).map((q: any) => q.nome);
 
-// ─── GEO: TL;DR text ────────────────────────────────────────
+// ─── GEO: TL;DR text (parágrafo subtle, integrado ao fluxo) ──
 let tldrText = "";
 if (hasQuadras) {
-  const partsParts: string[] = [];
-  partsParts.push(`${cidadeTitle}, ${estadoSigla} tem ${quadras.length} ${quadras.length === 1 ? "quadra" : "quadras"} de ${esporteNome.toLowerCase()} listadas no Minha Quadra`);
+  const parts: string[] = [];
+  parts.push(`${cidadeTitle} tem ${quadras.length} ${quadras.length === 1 ? "quadra" : "quadras"} de ${esporteNome.toLowerCase()} ${quadras.length === 1 ? "listada" : "listadas"} no Minha Quadra`);
   if (precoMin !== null && precoMax !== null) {
-    if (precoMin === precoMax) partsParts.push(`com preço a partir de R$${precoMin}/hora`);
-    else partsParts.push(`com preços de R$${precoMin} a R$${precoMax} por hora`);
+    if (precoMin === precoMax) parts.push(`, com preço a partir de R$${precoMin} por hora`);
+    else parts.push(`, com preços de R$${precoMin} a R$${precoMax} por hora`);
   }
-  let intro = partsParts.join(" ") + ".";
-  if (top3.length) {
-    const last = top3.length > 1 ? top3.slice(0, -1).join(", ") + ` e ${top3[top3.length - 1]}` : top3[0];
-    intro += ` ${top3.length === 1 ? "Destaque para" : "Destaques:"} ${last}.`;
-  }
-  tldrText = intro;
+  const hasPrice = precoMin !== null;
+  tldrText =
+    parts.join("") +
+    `. Confira abaixo as melhores quadras da cidade, com endereço${hasPrice ? ", preço" : ""} e link para reserva online.`;
 } else {
   tldrText = `Estamos mapeando as melhores quadras de ${esporteNome.toLowerCase()} em ${cidadeTitle}. Cadastre sua quadra no Minha Quadra para começar a receber reservas online.`;
 }
@@ -341,54 +339,14 @@ const webPageSchema = {
     </div>
   </section>
 
-  <!-- TL;DR (resposta direta para IA / featured snippets) -->
-  <section class="cd-tldr-section">
-    <div class="container">
-      <div class="mx-auto max-w-4xl">
-        <div class="cd-tldr" data-aos="fade-up">
-          <p><strong>Resumo rápido:</strong> {tldrText} {hasQuadras && (<>Reserve online pelo <a href={appLink} target="_blank" rel="noopener noreferrer">Minha Quadra</a>.</>)}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {hasQuadras && (
-    <!-- Stats / Dados rápidos -->
-    <section class="cd-stats-section">
-      <div class="container">
-        <div class="mx-auto max-w-4xl">
-          <div class="cd-stats" data-aos="fade-up">
-            <div class="cd-stat">
-              <span class="cd-stat-number">{quadras.length}</span>
-              <span class="cd-stat-label">{quadras.length === 1 ? "quadra disponível" : "quadras disponíveis"}</span>
-            </div>
-            {precoMin !== null && precoMax !== null && (
-              <div class="cd-stat">
-                <span class="cd-stat-number">
-                  {precoMin === precoMax ? `R$${precoMin}` : `R$${precoMin} – R$${precoMax}`}
-                </span>
-                <span class="cd-stat-label">por hora</span>
-              </div>
-            )}
-            {bairrosCount > 0 && (
-              <div class="cd-stat">
-                <span class="cd-stat-number">{bairrosCount}</span>
-                <span class="cd-stat-label">{bairrosCount === 1 ? "bairro com quadras" : "bairros com quadras"}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- Texto introdutório -->
+  <!-- Texto introdutório + TL;DR sutil (GEO: integrado ao fluxo) -->
   <section class="cd-intro">
     <div class="container">
       <div class="mx-auto max-w-4xl">
         <div class="prose-styles content" data-aos="fade-up">
           {introParas.map((p) => <p>{p}</p>)}
         </div>
+        <p class="cd-tldr-text" data-aos="fade-up" data-aos-delay="80">{tldrText}</p>
       </div>
     </div>
   </section>
@@ -591,68 +549,24 @@ const webPageSchema = {
   a.cd-hero-btn2.creative-hover-anim .hover-bg { background: #e1ffa5; }
   a.cd-hero-btn2.creative-hover-anim:hover { color: #002d3c !important; }
 
-  /* Updated date (acima do H1) */
+  /* Updated date — discreta, acima do H1 */
   .cd-updated {
     display: block;
-    margin-top: 0.75rem;
-    font-size: 0.8rem;
-    color: rgba(245, 245, 245, 0.55);
-    letter-spacing: 0.04em;
-  }
-
-  /* TL;DR (resposta direta para IA) */
-  .cd-tldr-section {
-    background-color: #002d3c;
-    padding-top: 0.5rem;
-    padding-bottom: 4rem;
-  }
-  .cd-tldr {
-    background-color: rgba(180, 250, 80, 0.06);
-    border-left: 4px solid #b4fa50;
-    border-radius: 0 0.5rem 0.5rem 0;
-    padding: 1.5rem 1.75rem;
-  }
-  .cd-tldr p {
-    color: #f5f5f5;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    margin: 0;
-  }
-  .cd-tldr p strong { color: #b4fa50; font-weight: 700; }
-  .cd-tldr a { color: #b4fa50; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-  .cd-tldr a:hover { color: #e1ffa5; }
-
-  /* Stats / Dados rápidos */
-  .cd-stats-section {
-    background-color: #002d3c;
-    padding-bottom: 4rem;
-  }
-  .cd-stats {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  @media (min-width: 640px) { .cd-stats { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
-  .cd-stat {
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(225, 255, 165, 0.1);
-    padding: 1.5rem 1.25rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  .cd-stat-number {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    font-weight: 700;
-    color: #b4fa50;
-    line-height: 1.1;
-  }
-  .cd-stat-label {
-    font-size: 0.875rem;
-    color: rgba(245, 245, 245, 0.7);
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.7rem;
+    color: rgba(245, 245, 245, 0.4);
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+  }
+
+  /* TL;DR — parágrafo subtle integrado ao final da intro */
+  .cd-tldr-text {
+    margin-top: 1.25rem;
+    color: rgba(245, 245, 245, 0.75);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    font-style: italic;
   }
 
   /* Sobre o Minha Quadra (GEO context block) */
