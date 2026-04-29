@@ -65,6 +65,7 @@ const blogCollection = defineCollection({
     z.object({
       author: z.string().optional(),
       readingTime: z.string().optional(),
+      lastUpdated: z.coerce.date().optional(),
       relatedSports: z.array(z.string()).default([]).optional(),
       options: z
         .object({

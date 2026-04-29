@@ -28,6 +28,31 @@ const {
 const APP_URL = `https://app.minhaquadra.com.br/?esporte=${slug}`;
 const SITE_URL = "https://minhaquadra.com.br";
 
+// GEO: Cidades onde este esporte tem páginas locais (descoberto dinamicamente)
+const allCidades = await getCollection("cidades");
+const allEstados = await getCollection("estados");
+const cidadesDoEsporte = allCidades
+  .filter((c) => c.data.esportes.some((e: any) => e.slug === slug))
+  .map((c) => {
+    const estadoEntry = allEstados.find((e) => e.data.slug === c.data.estado);
+    return {
+      cidadeTitle: c.data.title,
+      cidadeSlug: c.data.slug,
+      estadoSlug: c.data.estado,
+      estadoSigla: estadoEntry?.data.sigla ?? c.data.estado.toUpperCase(),
+    };
+  })
+  .sort((a, b) => a.cidadeTitle.localeCompare(b.cidadeTitle, "pt-BR"));
+
+// GEO: Last updated date (build date as fallback)
+const lastUpdatedDate = new Date();
+const lastUpdatedISO = lastUpdatedDate.toISOString();
+const lastUpdatedFmt = new Intl.DateTimeFormat("pt-BR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(lastUpdatedDate);
+
 // Esportes relacionados
 const allSports = await getCollection("esportes");
 const relatedSportsData = allSports
@@ -106,6 +131,7 @@ const webPageSchema = {
   url: `${SITE_URL}/esportes/${slug}/`,
   inLanguage: "pt-BR",
   about: title,
+  dateModified: lastUpdatedISO,
   publisher: {
     "@type": "Organization",
     name: "Minha Quadra",
@@ -113,6 +139,17 @@ const webPageSchema = {
     logo: `${SITE_URL}/images/logo-verde.png`,
   },
 };
+
+// GEO: TL;DR — resposta direta usando heroSubtitle do esporte e cidades disponíveis
+const tldrCidadesText =
+  cidadesDoEsporte.length > 0
+    ? ` Explore quadras em ${cidadesDoEsporte
+        .map(
+          (c) =>
+            `<a href="/cidades/${c.estadoSlug}/${c.cidadeSlug}/${slug}/">${c.cidadeTitle}</a>`,
+        )
+        .join(", ")}.`
+    : "";
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -173,6 +210,7 @@ const faqSchema = {
 
     <!-- Bloco de texto abaixo da imagem -->
     <div class="container es-hero__body">
+      <time class="es-updated" datetime={lastUpdatedISO}>Atualizado em {lastUpdatedFmt}</time>
       <h1>
         <span
           class="es-hero__line1 block"
@@ -203,6 +241,19 @@ const faqSchema = {
             label="Cadastrar minha quadra"
             url="/parceiros/"
           />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TL;DR (GEO: resposta direta para IA) ───────────────────── -->
+  <section class="es-tldr-section">
+    <div class="container">
+      <div class="mx-auto max-w-4xl">
+        <div class="es-tldr" data-aos="fade-up">
+          <p>
+            <strong>Resumo:</strong> {heroSubtitle} No Minha Quadra, você encontra quadras de {title.toLowerCase()} em diversas cidades do Brasil, compara preços e reserva online.<Fragment set:html={tldrCidadesText} />
+          </p>
         </div>
       </div>
     </div>
@@ -400,6 +451,34 @@ const faqSchema = {
       });
     });
   </script>
+
+  {cidadesDoEsporte.length > 0 && (
+    <!-- ── Cidades onde jogar (GEO: links pra páginas locais) ─────── -->
+    <section class="es-cities">
+      <div class="container">
+        <h2 class="es-cities__title" data-aos="reveal-anim-left">
+          Onde jogar {title} no Brasil?
+        </h2>
+        <p class="es-cities__lead" data-aos="fade-up" data-aos-delay="80">
+          Encontre quadras de {title} nas cidades onde o Minha Quadra está presente:
+        </p>
+        <ul class="es-cities__list" data-aos="fade-up" data-aos-delay="120">
+          {cidadesDoEsporte.map((c) => (
+            <li>
+              <a href={`/cidades/${c.estadoSlug}/${c.cidadeSlug}/${slug}/`}>
+                Quadras de {title} em {c.cidadeTitle}, {c.estadoSigla} <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="es-cities__cta" data-aos="fade-up" data-aos-delay="160">
+          👉 <a href={APP_URL} target="_blank" rel="noopener noreferrer">
+            Buscar quadras de {title} perto de mim
+          </a>
+        </p>
+      </div>
+    </section>
+  )}
 
   <!-- ── SEÇÃO 8 — FAQ ─────────────────────────────────────────── -->
   <section class="es-faq">
@@ -727,6 +806,103 @@ const faqSchema = {
   }
   .es-explore__chip span { color: #b4fa50; transition: transform 0.2s; }
   .es-explore__chip:hover span { transform: translateX(3px); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     GEO — Updated date (acima do H1 no hero)
+  ═══════════════════════════════════════════════════════════════ */
+  .es-updated {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    color: rgba(245, 245, 245, 0.55);
+    letter-spacing: 0.04em;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     GEO — TL;DR section (resposta direta para IA)
+  ═══════════════════════════════════════════════════════════════ */
+  .es-tldr-section {
+    background-color: #002d3c;
+    padding-top: 0;
+    padding-bottom: 4rem;
+  }
+  .es-tldr {
+    background-color: rgba(180, 250, 80, 0.06);
+    border-left: 4px solid #b4fa50;
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 1.5rem 1.75rem;
+  }
+  .es-tldr p {
+    color: #f5f5f5;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+  .es-tldr p strong { color: #b4fa50; font-weight: 700; }
+  .es-tldr a { color: #b4fa50; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .es-tldr a:hover { color: #e1ffa5; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     GEO — Cities section (links pra páginas locais)
+  ═══════════════════════════════════════════════════════════════ */
+  .es-cities {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 6rem;
+    border-top: 1px solid rgba(180, 250, 80, 0.1);
+  }
+  .es-cities__title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    max-width: 32ch;
+  }
+  .es-cities__lead {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .es-cities__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .es-cities__list li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e1ffa5;
+    font-size: 1rem;
+    text-decoration: none;
+    padding: 0.85rem 1.25rem;
+    border: 1px solid rgba(225, 255, 165, 0.15);
+    background-color: rgba(255, 255, 255, 0.04);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .es-cities__list li a:hover {
+    background-color: rgba(180, 250, 80, 0.08);
+    border-color: rgba(180, 250, 80, 0.45);
+    color: #b4fa50;
+  }
+  .es-cities__list li a span { color: #b4fa50; transition: transform 0.2s; }
+  .es-cities__list li a:hover span { transform: translateX(3px); }
+  .es-cities__cta {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 1rem;
+  }
+  .es-cities__cta a {
+    color: #b4fa50;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .es-cities__cta a:hover { color: #e1ffa5; }
 
   /* ═══════════════════════════════════════════════════════════════
      SEÇÃO 8 — FAQ

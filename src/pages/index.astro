@@ -98,6 +98,55 @@ const sportsRight = [
 const sports = [...sportsLeft, ...sportsRight];
 
 const APP_URL = "https://app.minhaquadra.com.br/";
+const SITE_URL = "https://minhaquadra.com.br";
+
+// GEO: Organization schema (rich)
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Minha Quadra",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo-verde.png`,
+  description:
+    "Marketplace de quadras esportivas do Brasil. Encontre e reserve quadras de beach tennis, futebol society, tênis, futevôlei, padel e mais esportes online.",
+  sameAs: ["https://www.instagram.com/minhaquadra_/"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    telephone: "+55-31-98254-6222",
+    url: APP_URL,
+    availableLanguage: "Portuguese",
+  },
+  areaServed: { "@type": "Country", name: "Brazil" },
+  knowsAbout: [
+    "Beach Tennis",
+    "Futebol Society",
+    "Tênis",
+    "Futevôlei",
+    "Padel",
+    "Futsal",
+    "Vôlei",
+    "Vôlei de Praia",
+    "Basquete",
+    "Pickleball",
+  ],
+};
+
+// GEO: WebSite schema com SearchAction + descrição
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Minha Quadra",
+  url: SITE_URL,
+  description:
+    "Encontre e reserve quadras esportivas no Brasil. Beach tennis, futebol society, tênis, futevôlei e mais.",
+  inLanguage: "pt-BR",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${APP_URL}?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
 
 const faqs = [
   {
@@ -126,6 +175,54 @@ const faqs = [
       "Sim. Além de alugar quadras para jogar com amigos, muitas quadras parceiras oferecem aulas com professores de beach tennis, padel, tênis, futevôlei e outros esportes. Você encontra aulas para iniciantes e avançados diretamente na plataforma.",
   },
 ];
+
+// GEO: FAQPage schema for the home FAQ
+const faqPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "O Minha Quadra é uma quadra?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Não, o Minha Quadra não é uma quadra. Na verdade, o Minha Quadra é uma plataforma que possui várias quadras parceiras. Você pode acessar o nosso Marketplace e encontrar a melhor opção para você.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Quais esportes tem no Minha Quadra?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No Minha Quadra você encontra quadras para Padel, Futevôlei, Tênis, Futebol Society, Vôlei de Praia, Pickleball, Beach Tennis, Basquete, Futsal e Vôlei. Nossa rede de parceiros está sempre crescendo, então fique de olho nas novidades!",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Como funciona o pagamento da reserva?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "O pagamento é feito de forma totalmente online, direto pelo aplicativo ou site do Minha Quadra. Aceitamos os principais cartões de crédito, débito e Pix. Após a confirmação do pagamento, você recebe o comprovante da reserva e é só aparecer na hora marcada!",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Como encontrar quadras esportivas perto de mim?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No Minha Quadra, basta ativar sua localização ou digitar sua cidade. A plataforma mostra todas as quadras disponíveis para alugar na sua região, com filtros por esporte, preço, distância e horário. Temos quadras cobertas e ao ar livre.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Posso encontrar aulas de esportes pelo Minha Quadra?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Sim. Além de alugar quadras para jogar com amigos, muitas quadras parceiras oferecem aulas com professores de beach tennis, padel, tênis, futevôlei e outros esportes. Você encontra aulas para iniciantes e avançados diretamente na plataforma.",
+      },
+    },
+  ],
+};
 
 const steps = [
   {
@@ -157,13 +254,13 @@ const steps = [
 
 <Base
   metaTitle="Minha Quadra — Onde o jogo acontece."
-  metaDescription="Encontre e alugue quadras de beach tennis, padel, society, futsal, tênis e vôlei perto de você. Compare preços e reserve online pelo Minha Quadra."
+  metaDescription="Minha Quadra é o marketplace de quadras esportivas do Brasil. Encontre quadras de beach tennis, society, tênis, futevôlei e mais em BH, Pinhalzinho e outras cidades. Compare preços e reserve online."
   disableTagline={true}
 >
-  <!-- Organization schema -->
-  <script type="application/ld+json" is:inline>{"@context":"https://schema.org","@type":"Organization","name":"Minha Quadra","url":"https://minhaquadra.com.br","logo":"https://minhaquadra.com.br/images/logo-verde.png","description":"Plataforma para encontrar e alugar quadras esportivas online.","sameAs":["https://instagram.com/minhaquadra_"],"contactPoint":{"@type":"ContactPoint","telephone":"+55-31-98254-6222","contactType":"customer service","availableLanguage":"Portuguese"}}</script>
-  <!-- WebSite schema -->
-  <script type="application/ld+json" is:inline>{"@context":"https://schema.org","@type":"WebSite","name":"Minha Quadra","url":"https://minhaquadra.com.br","potentialAction":{"@type":"SearchAction","target":"https://app.minhaquadra.com.br/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+  <!-- JSON-LD: Organization, WebSite, FAQPage -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(organizationSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqPageSchema)} />
 
   <!-- ── Hero ──────────────────────────────────────────────────────── -->
   <section class="mq-hero">
@@ -230,6 +327,21 @@ const steps = [
       }}
     />
   </div>
+
+  <!-- ── Identity Section (GEO: respond directly to "What is Minha Quadra?") ── -->
+  <section class="mq-identity">
+    <div class="container">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="mq-identity-title" data-aos="reveal-anim-left">O que é o Minha Quadra?</h2>
+        <p class="mq-identity-text" data-aos="fade-up" data-aos-delay="100">
+          O Minha Quadra é o marketplace de quadras esportivas do Brasil. Nossa plataforma conecta jogadores a quadras de <strong>beach tennis, futebol society, tênis, futevôlei, padel, futsal, vôlei, basquete e pickleball</strong> em diversas cidades brasileiras. Pelo Minha Quadra, você compara preços, vê horários disponíveis em tempo real e reserva online em poucos cliques — sem precisar ligar.
+        </p>
+        <p class="mq-identity-text" data-aos="fade-up" data-aos-delay="200">
+          Para donos de quadra, o Minha Quadra é a plataforma ideal para divulgar seu espaço, receber reservas online e atrair novos clientes. <a href="/parceiros/">Cadastre sua quadra</a>.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <!-- ── Sports Masonry Section ─────────────────────────────────────── -->
   <section class="mq-sports">
@@ -462,6 +574,34 @@ const steps = [
   :global(a.mq-btn.creative-hover-anim:hover) {
     color: #002d3c !important;
   }
+
+  /* -- IDENTITY SECTION (GEO) ---------------- */
+  .mq-identity {
+    background-color: #002d3c;
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+  .mq-identity-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.15;
+    margin-bottom: 1.75rem;
+  }
+  .mq-identity-text {
+    color: #f5f5f5;
+    font-size: 1.125rem;
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+  .mq-identity-text strong { color: #e1ffa5; font-weight: 600; }
+  .mq-identity-text a {
+    color: #b4fa50;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+  }
+  .mq-identity-text a:hover { color: #e1ffa5; }
 
   /* -- SPORTS SECTION ----------------------- */
   .mq-sports {
