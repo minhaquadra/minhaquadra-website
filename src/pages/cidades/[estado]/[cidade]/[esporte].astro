@@ -140,6 +140,15 @@ if (hasQuadras) {
   metaDescription = `Encontre quadras de ${esporteNome.toLowerCase()} em ${cidadeTitle}. Compare preços, veja horários e reserve online pelo Minha Quadra.`;
 }
 
+// Meta keywords específicas por página (esporte + cidade)
+const esporteLower = esporteNome.toLowerCase();
+const metaKeywords = [
+  `quadras ${esporteLower} ${cidadeTitle.toLowerCase()}`,
+  `onde jogar ${esporteLower} ${cidadeTitle}`,
+  `alugar quadra ${esporteLower} ${cidadeTitle}`,
+  "Minha Quadra",
+];
+
 // Intro: usa override do frontmatter se disponível, senão fallback genérico
 const introParas =
   esporte.intro && esporte.intro.length > 0
@@ -276,6 +285,7 @@ const webPageSchema = {
 <Base
   metaTitle={metaTitle}
   metaDescription={metaDescription}
+  keywords={metaKeywords}
   canonical={pageUrl}
   fitToScreen={false}
   hasHeaderDarkBackground={true}
@@ -464,7 +474,7 @@ const webPageSchema = {
       <div class="mx-auto max-w-4xl">
         <h2 class="cd-about__title">Sobre o Minha Quadra</h2>
         <p class="cd-about__text">
-          O Minha Quadra é o marketplace esportivo que conecta jogadores a quadras em todo o Brasil. Encontre quadras de beach tennis, futebol society, tênis, futevôlei, padel e mais esportes. Compare preços, veja horários disponíveis e reserve online em segundos — sem precisar ligar. Já são mais de {aggregates.totalPartnerCourts} {aggregates.totalPartnerCourts === 1 ? "quadra parceira" : "quadras parceiras"} em {aggregates.totalCities} {aggregates.totalCities === 1 ? "cidade brasileira" : "cidades brasileiras"} mapeadas no Minha Quadra.
+          O Minha Quadra é o marketplace esportivo que conecta jogadores a quadras em todo o Brasil. Encontre quadras de beach tennis, futebol society, tênis, futevôlei, padel e mais esportes. Compare preços, veja horários disponíveis e reserve online em segundos — sem precisar ligar. Já são mais de 60 quadras parceiras em 3 cidades brasileiras mapeadas no Minha Quadra.
         </p>
         <p class="cd-about__cta">
           👉 <a href={APP_URL} target="_blank" rel="noopener noreferrer">Encontre sua quadra agora</a>
