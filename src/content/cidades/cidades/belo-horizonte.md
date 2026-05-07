@@ -118,6 +118,106 @@ esportes:
         parceira: true
         appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/quadra-do-america"
         imagem: "/images/blog/quadra-do-america.jpg"
+  - slug: "volei"
+    nome: "Vôlei"
+    temBlog: false
+    blogUrl: ""
+    resumo: "BH oferece diversas opções de quadras de vôlei, tanto em areia quanto em piso coberto. Ideal para treinos, peladas e torneios amadores."
+    tituloQuadras: "Onde jogar vôlei em Belo Horizonte? Confira as melhores quadras"
+    lastUpdated: 2026-05-07
+    intro:
+      - "Belo Horizonte tem uma cena vibrante de vôlei — tanto na areia quanto em quadras cobertas. A cidade oferece opções para todos os perfis: desde quadras de areia ao ar livre para quem curte o vôlei de praia até espaços cobertos com piso de madeira para o vôlei indoor."
+      - "Com preços a partir de R$100 por hora e quadras espalhadas por diversos bairros, BH é uma das melhores cidades de Minas para praticar vôlei com os amigos, treinar ou participar de torneios amadores."
+      - "Se você está procurando onde jogar vôlei em BH, o Minha Quadra te ajuda a encontrar as melhores quadras, comparar preços e reservar online em segundos."
+    faq:
+      - question: "Quanto custa alugar uma quadra de vôlei em BH?"
+        answer: "Os preços variam de R$100 a R$145 por hora, dependendo do tipo de quadra (areia ou coberta), localização e horário."
+      - question: "Onde jogar vôlei em Belo Horizonte?"
+        answer: "BH tem diversas quadras de vôlei espalhadas pela cidade, tanto de areia quanto cobertas. No Minha Quadra você encontra as melhores opções com endereço, preço e reserva online."
+      - question: "Tem quadra de vôlei coberta em BH?"
+        answer: "Sim! A Arena Tunel Raja (areia coberta), All Sports Arena (taco coberto) e Arena Don Don (piso coberto) oferecem estrutura para jogar em qualquer clima."
+      - question: "Qual a diferença entre vôlei de areia e vôlei indoor?"
+        answer: "O vôlei de areia é jogado em duplas na areia, com regras adaptadas. O vôlei indoor é jogado em equipes de 6 em quadra de piso liso ou madeira. As duas modalidades estão disponíveis em BH."
+      - question: "Preciso reservar horário para jogar vôlei em BH?"
+        answer: "Sim, a maioria das quadras funciona com reserva antecipada. Pelo Minha Quadra você vê a disponibilidade em tempo real e reserva online."
+      - question: "Como reservar uma quadra de vôlei pelo Minha Quadra?"
+        answer: "Acesse o Minha Quadra, selecione 'Vôlei', escolha sua cidade e quadra, veja os horários disponíveis e reserve online em poucos cliques."
+    extraSections:
+      - title: "Quanto custa alugar uma quadra de vôlei em Belo Horizonte?"
+        content: "<p>Os preços de quadras de vôlei em BH variam de R$100 a R$145 por hora, dependendo do tipo de piso (areia ou coberta), localização e horário. Quadras cobertas como a Arena Tunel Raja e a All Sports Arena costumam ter valores um pouco mais altos pela conveniência de jogar em qualquer clima. No Minha Quadra, você compara preços de todas as quadras e escolhe a que melhor cabe no seu bolso.</p>"
+      - title: "Quais são as melhores quadras de vôlei custo-benefício em BH?"
+        content: "<p>Entre as opções mais acessíveis, a Arena Bandeirantes (R$100/h) na Pampulha e a Arena Barreiro (R$110/h) oferecem boa estrutura de areia por um preço competitivo. Para quem busca quadra coberta com estrutura premium, a All Sports Arena (R$145/h) é a referência com piso de taco de madeira.</p>"
+      - title: "Como reservar uma quadra de vôlei em Belo Horizonte online?"
+        content: "<p>Reservar uma quadra de vôlei em BH pelo Minha Quadra é simples: acesse <a href=\"https://app.minhaquadra.com.br\" target=\"_blank\" rel=\"noopener noreferrer\">app.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
+    quadras:
+      - nome: "Arena Tirol"
+        endereco: "Av. Dr. Antonio Eustaquio Piazza, 4019 - Tirol (Barreiro), BH"
+        preco: "R$110/hora"
+        descricao: "Quadras de areia para futevôlei, beach tennis e vôlei. Oferece aulas, locação de quadras, eventos e day use. Estrutura completa para o pós-jogo com ambiente agradável para confraternizar."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-tirol"
+        imagem: "/images/blog/arena-tirol.jpg"
+      - nome: "Arena Barreiro"
+        endereco: "R. Nascimento, 100 - Barreiro de Cima, BH"
+        preco: "R$110/hora"
+        descricao: "Quadras de areia para futevôlei, beach tennis e vôlei de praia. Conta com aluguel de quadras, aulas, torneios e eventos, com bar e ambiente confortável para o pós-jogo."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-barreiro"
+        imagem: "/images/blog/arena-barreiro.jpg"
+      - nome: "La Vista Beach Club"
+        endereco: "R. José Hemetério Andrade, 1040 - Buritis, BH"
+        preco: "R$120/hora"
+        descricao: "Experiência completa de esporte e lazer com 4 quadras de areia para beach tennis, futevôlei e vôlei. Oferece aulas, day use e torneios. Conta com bar, restaurante e locação para eventos."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/la-vista-beach-club"
+        imagem: "/images/blog/la-vista-beach-club.jpg"
+      - nome: "Espaço Arena BH"
+        endereco: "R. Mario Coutinho, 171 - Havaí, BH"
+        preco: "R$120/hora"
+        descricao: "Ambiente completo para esporte e lazer com 4 quadras de areia. Oferece aulas de beach tennis e funcional, aluguel de quadras e day use. Conta com espaço gastronômico, estacionamento e estrutura para eventos."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/espaco-arena-bh"
+        imagem: "/images/blog/espaco-arena-bh.jpg"
+      - nome: "Astral Beach Sports"
+        endereco: "R. Eng. Ocelo Cirino, 271 - Estoril, BH"
+        preco: "R$120/hora"
+        descricao: "Sua praia no coração do Estoril! Quadras de areia com estrutura de primeira para vôlei, futevôlei e beach tennis. Ideal para aprender, competir ou curtir uma partida com os amigos."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/astral-beach-sports"
+        imagem: "/images/blog/astral-beach-sports.jpg"
+      - nome: "Arena Tunel Raja"
+        endereco: "Av. Raja Gabáglia, 1880 - Cidade Jardim, BH"
+        preco: "R$110/hora"
+        descricao: "5 quadras de areia 100% cobertas — jogue em qualquer clima. Oferece reserva de quadras e aulas de vôlei de praia e futevôlei. Conta com restaurante, bar e day use."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-tunel-raja"
+        imagem: "/images/blog/arena-tunel-raja.jpg"
+      - nome: "All Sports Arena"
+        endereco: "R. Vila Rica, 1168 - Monsenhor Messias, BH"
+        preco: "R$145/hora"
+        descricao: "Centro multiesportivo com quadra de vôlei em piso de taco coberta, ideal para quem prefere vôlei indoor. Também oferece futebol society, futsal, peteca e handball."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/all-sports-arena"
+        imagem: "/images/blog/all-sports-arena.jpg"
+      - nome: "Arena Caribe"
+        endereco: "R. Curral Del Rei, 79 - Padre Eustáquio, BH"
+        preco: "R$120/hora"
+        descricao: "2 quadras de areia para beach tennis, vôlei e futevôlei. Oferece aluguel de quadras e aulas de beach tennis. Conta com bar, vestiários e realiza eventos e torneios."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-caribe"
+      - nome: "Arena Don Don"
+        endereco: "Rua Conde Valadares, 180 - Nova Cachoeirinha, BH"
+        preco: "R$110/hora"
+        descricao: "2 quadras cobertas para vôlei e futsal. Estrutura pensada para diversão além do apito final — jogue com conforto sem se preocupar com o tempo. Ambiente completo para reunir os amigos."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-do-don-don"
+      - nome: "Arena Bandeirantes"
+        endereco: "Rua Orsi Conceição de Minas, 81 - Pampulha, BH"
+        preco: "R$100/hora"
+        descricao: "2 quadras de areia na região da Pampulha para beach tennis, futevôlei, vôlei e peteca. Oferece locação de quadras, aulas e eventos. Ótimo espaço para treinos e confraternizações."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-bandeirantes"
+        imagem: "/images/blog/arena-bandeirantes.jpg"
 ---
 
 Belo Horizonte é uma das cidades com maior crescimento de esportes de quadra no Brasil. Mesmo sem praia, a capital mineira se tornou referência em beach tennis, futevôlei e outros esportes de areia, além de contar com excelentes quadras de tênis, padel e futebol society.

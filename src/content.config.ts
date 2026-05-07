@@ -194,6 +194,14 @@ const cidadesCollection = defineCollection({
               }),
             )
             .optional(),
+          extraSections: z
+            .array(
+              z.object({
+                title: z.string(),
+                content: z.string(),
+              }),
+            )
+            .optional(),
           quadras: z
             .array(
               z.object({

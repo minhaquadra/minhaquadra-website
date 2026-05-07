@@ -450,6 +450,22 @@ const webPageSchema = {
     </section>
   )}
 
+  {esporte.extraSections && esporte.extraSections.length > 0 && (
+    <!-- Seções extras (Q&A em prosa, complementares ao FAQ) -->
+    <section class="cd-extras">
+      <div class="container">
+        <div class="mx-auto max-w-4xl cd-extras__list">
+          {esporte.extraSections.map((s: any) => (
+            <article class="cd-extras__item" data-aos="fade-up">
+              <h2 class="cd-extras__title" set:html={s.title} />
+              <div class="cd-extras__content prose-styles" set:html={s.content} />
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- Crosslink pillar -->
   <section class="cd-pillar">
     <div class="container">
@@ -800,6 +816,39 @@ const webPageSchema = {
     color: #002d3c !important;
     font-weight: 500;
   }
+
+  /* Extras (Q&A in-prose) */
+  .cd-extras {
+    background-color: #002d3c;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cd-extras__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .cd-extras__title {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+  .cd-extras__content,
+  .cd-extras__content p {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    margin: 0;
+  }
+  .cd-extras__content a {
+    color: #b4fa50;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .cd-extras__content a:hover { color: #e1ffa5; }
 
   /* Pillar crosslink */
   .cd-pillar {
