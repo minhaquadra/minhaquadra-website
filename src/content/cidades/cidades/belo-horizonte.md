@@ -198,19 +198,21 @@ esportes:
         descricao: "Centro multiesportivo com quadra de vôlei em piso de taco coberta, ideal para quem prefere vôlei indoor. Também oferece futebol society, futsal, peteca e handball."
         parceira: true
         appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/all-sports-arena"
-        imagem: "/images/blog/all-sports-arena.jpg"
+        imagem: "/images/blog/all-sports-arena-volei.jpg"
       - nome: "Arena Caribe"
         endereco: "R. Curral Del Rei, 79 - Padre Eustáquio, BH"
         preco: "R$120/hora"
         descricao: "2 quadras de areia para beach tennis, vôlei e futevôlei. Oferece aluguel de quadras e aulas de beach tennis. Conta com bar, vestiários e realiza eventos e torneios."
         parceira: true
         appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-caribe"
+        imagem: "/images/blog/arena-caribe.jpg"
       - nome: "Arena Don Don"
         endereco: "Rua Conde Valadares, 180 - Nova Cachoeirinha, BH"
         preco: "R$110/hora"
         descricao: "2 quadras cobertas para vôlei e futsal. Estrutura pensada para diversão além do apito final — jogue com conforto sem se preocupar com o tempo. Ambiente completo para reunir os amigos."
         parceira: true
         appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-do-don-don"
+        imagem: "/images/blog/arena-don-don.png"
       - nome: "Arena Bandeirantes"
         endereco: "Rua Orsi Conceição de Minas, 81 - Pampulha, BH"
         preco: "R$100/hora"
