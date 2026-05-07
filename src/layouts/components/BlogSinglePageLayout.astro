@@ -20,7 +20,7 @@ interface Props {
 
 const { content, class: className } = Astro.props;
 const {
-  data: { title, date, image, author, categories, tags, lastUpdated },
+  data: { title, date, image, author, categories, tags, lastUpdated, summary },
 } = content;
 
 const config = parseTomlToJson("./src/config/config.toml");
@@ -187,6 +187,16 @@ const breadcrumbSchema = {
     border-color: rgba(245, 245, 245, 0.2);
   }
 
+  /* ── Blog summary (subtle TL;DR; herda estilo do body) ── */
+  .single-page-content .blog-summary {
+    color: rgba(255, 255, 255, 0.85);
+    font-style: italic;
+    opacity: 0.85;
+    line-height: 1.75;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   /* ── Blog post prose content ── */
   .single-page-content .content h2,
   .single-page-content .content h3,
@@ -295,6 +305,7 @@ const breadcrumbSchema = {
       }
     </ul>
     {title && <h1 class="text-h2-sm md:text-h2" style="color: #b4fa50;" set:html={title} />}
+    {summary && <p class="blog-summary">{summary}</p>}
     {tocEnabled && tocHeadings && <TOC toc={tocHeadings} marker={false} />}
     {
       Content && (

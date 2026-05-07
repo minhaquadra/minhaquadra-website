@@ -57,7 +57,7 @@
     {
       "enable": true,
       "name": "Blog",
-      "url": "/blog/creative/"
+      "url": "/blog/"
     },
     {
       "enable": true,
@@ -79,7 +79,7 @@
   "footerSecondary": {
     "title": "Links",
     "menus": [
-      { "enable": true, "name": "Blog", "url": "/blog/creative/" },
+      { "enable": true, "name": "Blog", "url": "/blog/" },
       { "enable": true, "name": "Parceiros", "url": "/parceiros/" },
       { "enable": true, "name": "Políticas", "url": "/politicas/" },
       { "enable": true, "name": "Termos de Uso", "url": "/termos-de-uso/" },
