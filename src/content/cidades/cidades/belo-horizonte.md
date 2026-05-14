@@ -220,6 +220,66 @@ esportes:
         parceira: true
         appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/arena-bandeirantes"
         imagem: "/images/blog/arena-bandeirantes.jpg"
+  - slug: "futsal"
+    nome: "Futsal"
+    temBlog: false
+    blogUrl: ""
+    resumo: "BH tem ótimas quadras de futsal cobertas, com piso de taco e estrutura completa. Ideal para peladas, treinos, escolinhas e campeonatos amadores."
+    tituloQuadras: "Onde jogar futsal em Belo Horizonte? Confira as melhores quadras"
+    lastUpdated: 2026-05-14
+    intro:
+      - "O futsal é um dos esportes mais praticados em Belo Horizonte. Com quadras cobertas espalhadas por diversos bairros, a cidade oferece opções para todos os perfis — desde peladas entre amigos até escolinhas com metodologia profissional e campeonatos amadores."
+      - "A maioria das quadras de futsal em BH conta com piso de taco (madeira), iluminação completa e estrutura para o pós-jogo com bar e churrasqueira. Os preços ficam em torno de R$110 por hora."
+      - "Se você está procurando onde jogar futsal em BH, o Minha Quadra te ajuda a encontrar as melhores quadras, comparar preços e reservar online em segundos."
+    faq:
+      - question: "Quanto custa alugar uma quadra de futsal em BH?"
+        answer: "O preço médio é de R$110 por hora. A maioria das quadras são cobertas com piso de taco, ideais para jogar em qualquer clima."
+      - question: "Onde jogar futsal em Belo Horizonte?"
+        answer: "BH tem diversas quadras de futsal espalhadas pela cidade. No Minha Quadra você encontra as melhores opções com endereço, preço e reserva online."
+      - question: "Tem quadra de futsal coberta em BH?"
+        answer: "Sim! Todas as quadras listadas no Minha Quadra em BH são 100% cobertas, permitindo jogar com conforto em qualquer clima."
+      - question: "Tem escolinha de futsal em BH?"
+        answer: "Sim. O Centro Esportivo Vila Rica oferece escolinha com metodologia Falcão e a Academia Galo Barreiro segue a metodologia oficial do Atlético Mineiro."
+      - question: "Qual o tamanho de uma quadra de futsal oficial?"
+        answer: "Uma quadra de futsal oficial tem 25m x 15m. O Centro Esportivo Vila Rica em BH oferece quadra nessas dimensões."
+      - question: "Como reservar uma quadra de futsal pelo Minha Quadra?"
+        answer: "Acesse o Minha Quadra, selecione 'Futsal', escolha sua cidade e quadra, veja os horários disponíveis e reserve online em poucos cliques."
+    extraSections:
+      - title: "Quanto custa alugar uma quadra de futsal em Belo Horizonte?"
+        content: "<p>O preço médio de quadras de futsal em BH é de R$110 por hora. A maioria das quadras oferece piso de taco coberto, o que garante qualidade e conforto para jogar em qualquer clima. No Minha Quadra, você compara preços e reserva online sem precisar ligar.</p>"
+      - title: "Quais são as melhores quadras de futsal para escolinhas em BH?"
+        content: "<p>Para quem busca escolinhas de futsal em BH, duas opções se destacam: o Centro Esportivo Vila Rica oferece escolinha com metodologia Falcão, referência no desenvolvimento técnico. Já a Academia Galo Barreiro segue a metodologia oficial do Atlético Mineiro, com treinadores qualificados e foco na evolução de crianças e jovens.</p>"
+      - title: "Como reservar uma quadra de futsal em Belo Horizonte online?"
+        content: "<p>Reservar uma quadra de futsal em BH pelo Minha Quadra é simples: acesse <a href=\"https://app.minhaquadra.com.br\" target=\"_blank\" rel=\"noopener noreferrer\">app.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
+    quadras:
+      - nome: "All Sports Arena"
+        endereco: "R. Vila Rica, 1168 - Monsenhor Messias, BH"
+        preco: "R$110/hora"
+        descricao: "Centro multiesportivo completo com quadra de futsal em piso de taco coberta. Também oferece vôlei, futebol society, peteca e handball. Estrutura versátil para quem busca variedade de esportes em um só lugar."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/all-sports-arena"
+        imagem: "/images/cidades/mg/belo-horizonte/futsal/all-sports-futsal.png"
+      - nome: "Centro Esportivo Vila Rica"
+        endereco: "R. Vila Rica, 1114 - Padre Eustáquio, BH"
+        preco: "R$110/hora"
+        descricao: "Quadra 100% coberta em tamanho oficial de futsal (25m x 15m), perfeita para jogos e treinos no padrão certo. Oferece escolinha de futsal com metodologia Falcão. Conta com bar e cerveja gelada para o terceiro tempo."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/centro-espotivo-vila-rica"
+        imagem: "/images/cidades/mg/belo-horizonte/futsal/villa-rica-futsal.jpg"
+      - nome: "Quadra Ceno"
+        endereco: "R. Agilio Cruz de Souza, 566 - Serrano, BH"
+        preco: "R$110/hora"
+        descricao: "Ótima quadra de futsal com piso de taco, 100% coberta. Estrutura completa com bar para o pós-jogo, criando o ambiente ideal para reunir os amigos. Espaço prático e acessível no bairro Serrano."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/quadra-ceno"
+        imagem: "/images/cidades/mg/belo-horizonte/futsal/ceno-futsal.jpg"
+      - nome: "Academia Galo Barreiro - Futsal"
+        endereco: "Rua Euclydes Bernardes Pessoa, 135 - Conj. Ademar Maldonado, BH"
+        preco: "R$110/hora"
+        descricao: "Quadra de futsal 100% coberta com estrutura de conforto para treinos e jogos em qualquer clima. Ideal para crianças e adultos, com escolinha seguindo a metodologia oficial do Atlético Mineiro, treinadores qualificados e foco no desenvolvimento técnico e disciplinar."
+        parceira: true
+        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/academia-galo-barreiro-futsal"
+        imagem: "/images/cidades/mg/belo-horizonte/futsal/galo-barreiro-futsal.jpg"
 ---
 
 Belo Horizonte é uma das cidades com maior crescimento de esportes de quadra no Brasil. Mesmo sem praia, a capital mineira se tornou referência em beach tennis, futevôlei e outros esportes de areia, além de contar com excelentes quadras de tênis, padel e futebol society.
