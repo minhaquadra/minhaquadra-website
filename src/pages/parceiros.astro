@@ -955,33 +955,40 @@ const steps = [
     padding-bottom: 0 !important;
   }
 
-  /* UL: flex row, sem outline/grid, espaçamento uniforme */
+  /* UL (container das 6 logos): flex limpo, sem bordas */
   .pn-testi-logos :global(ul) {
     display: flex !important;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
-    gap: 1.5rem;
+    gap: 30px;
+    padding: 20px 0;
     outline: none !important;
+    border: none !important;
     grid-template-columns: none !important;
+    background: transparent !important;
   }
 
-  /* LI: sem borda, altura natural, padding pra respirar */
+  /* LI: sem borda, sem fundo, sem altura fixa */
   .pn-testi-logos :global(li) {
     border: none !important;
     outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
     height: auto !important;
     width: auto !important;
-    padding: 10px;
+    padding: 0 !important;
     flex: 0 1 auto;
-    background-color: transparent !important;
   }
 
-  /* Container interno: sem overflow, sem altura fixa */
+  /* Container interno (.relative): sem overflow, sem padding, sem altura fixa */
   .pn-testi-logos :global(li > .relative) {
     overflow: visible !important;
     height: auto !important;
+    width: auto !important;
     padding: 0 !important;
+    background: transparent !important;
   }
 
   /* Esconde a segunda cópia da imagem (hover-swap não é mais usado) */
@@ -989,14 +996,18 @@ const steps = [
     display: none !important;
   }
 
-  /* Imagens: max-height, contain, cores originais */
+  /* Imagens: contain, sem distorção, cores originais */
   .pn-testi-logos :global(img) {
-    max-height: 70px;
+    max-height: 80px;
+    max-width: 180px;
     height: auto !important;
     width: auto !important;
     object-fit: contain;
+    display: block;
+    margin: 0 auto;
     transform: none !important;
     transition: none !important;
+    background: transparent !important;
   }
 
   .pn-testimonials-wrap :global(section) {
