@@ -75,6 +75,26 @@ const testimonials = [
 const faqsParceiros = [
   {
     enable: true,
+    title: "Quanto custa um sistema de reserva para quadra esportiva?",
+    content: "No Minha Quadra, o Plano Variável cobra 20% por reserva (sem mensalidade) e o Plano Fixo custa R$149,90/mês. Os dois incluem agenda digital, pagamento online com Pix e cartão, e suporte dedicado. Não há taxa de adesão nem contrato de fidelidade.",
+  },
+  {
+    enable: true,
+    title: "Como divulgar minha quadra esportiva e atrair mais clientes?",
+    content: "Ao cadastrar sua quadra no Minha Quadra, ela aparece no nosso site, no app e nas buscas do Google. Investimos em SEO e marketing digital para que jogadores encontrem quadras na sua cidade. Quanto mais completo seu perfil (fotos, preços, descrição), maior a visibilidade.",
+  },
+  {
+    enable: true,
+    title: "O Minha Quadra funciona para todos os esportes?",
+    content: "Sim. A plataforma suporta 10 modalidades: beach tennis, futebol society, futsal, tênis, vôlei, vôlei de praia, futevôlei, padel, basquete e pickleball. Você pode cadastrar quadras de diferentes esportes no mesmo estabelecimento.",
+  },
+  {
+    enable: true,
+    title: "Preciso de algum equipamento ou software especial?",
+    content: "Não. O Minha Quadra é 100% online — funciona no navegador do computador ou celular. Não precisa instalar nada. Basta criar sua conta, cadastrar suas quadras e configurar sua agenda. Em poucos minutos sua quadra já está no ar recebendo reservas.",
+  },
+  {
+    enable: true,
     title: "Posso trocar de plano depois?",
     content: "Sim, você pode trocar seu plano a qualquer momento. Muitos clientes começam com o Plano Variável e trocam para o Plano Fixo assim que começam a realizar várias reservas pelo Minha Quadra.",
   },
@@ -130,6 +150,38 @@ const steps = [
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "Quanto custa um sistema de reserva para quadra esportiva?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No Minha Quadra, o Plano Variável cobra 20% por reserva (sem mensalidade) e o Plano Fixo custa R$149,90/mês. Os dois incluem agenda digital, pagamento online com Pix e cartão, e suporte dedicado. Não há taxa de adesão nem contrato de fidelidade."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como divulgar minha quadra esportiva e atrair mais clientes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ao cadastrar sua quadra no Minha Quadra, ela aparece no nosso site, no app e nas buscas do Google. Investimos em SEO e marketing digital para que jogadores encontrem quadras na sua cidade. Quanto mais completo seu perfil (fotos, preços, descrição), maior a visibilidade."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O Minha Quadra funciona para todos os esportes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. A plataforma suporta 10 modalidades: beach tennis, futebol society, futsal, tênis, vôlei, vôlei de praia, futevôlei, padel, basquete e pickleball. Você pode cadastrar quadras de diferentes esportes no mesmo estabelecimento."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Preciso de algum equipamento ou software especial?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. O Minha Quadra é 100% online — funciona no navegador do computador ou celular. Não precisa instalar nada. Basta criar sua conta, cadastrar suas quadras e configurar sua agenda. Em poucos minutos sua quadra já está no ar recebendo reservas."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "Posso trocar de plano depois?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -164,9 +216,85 @@ const steps = [
 }
 </script>
 
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Minha Quadra",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "url": "https://app.minhaquadra.com.br",
+  "description": "Marketplace e sistema de reserva online para quadras esportivas no Brasil.",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Plano Variável",
+      "price": "0",
+      "priceCurrency": "BRL",
+      "description": "20% sobre reservas realizadas pela plataforma. Sem mensalidade."
+    },
+    {
+      "@type": "Offer",
+      "name": "Plano Fixo",
+      "price": "149.90",
+      "priceCurrency": "BRL",
+      "billingDuration": "P1M",
+      "description": "R$149,90/mês com destaque na plataforma e suporte especial."
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "3",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "author": {"@type": "Person", "name": "João"},
+      "reviewBody": "O maior diferencial para mim foi o pagamento online. O calote de cliente que reserva e não aparece simplesmente acabou.",
+      "reviewRating": {"@type": "Rating", "ratingValue": "5"}
+    },
+    {
+      "@type": "Review",
+      "author": {"@type": "Person", "name": "Loren"},
+      "reviewBody": "A plataforma é completa e muito fácil de usar. O Minha Quadra elevou o nível do meu negócio.",
+      "reviewRating": {"@type": "Rating", "ratingValue": "5"}
+    },
+    {
+      "@type": "Review",
+      "author": {"@type": "Person", "name": "André Lobato"},
+      "reviewBody": "Nossa taxa de ocupação aumentou depois que entramos no Minha Quadra. É uma ferramenta de marketing que realmente coloca reservas na agenda.",
+      "reviewRating": {"@type": "Rating", "ratingValue": "5"}
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.minhaquadra.com.br/"},
+    {"@type": "ListItem", "position": 2, "name": "Parceiros", "item": "https://www.minhaquadra.com.br/parceiros/"}
+  ]
+}
+</script>
+
 <Base
-  metaTitle="Para Donos de Quadra — Minha Quadra Parceiros"
-  metaDescription="Cadastre sua quadra no Minha Quadra. Mais visibilidade, mais reservas e gestão 100% digital. Sistema de agenda online, pagamento integrado e suporte dedicado."
+  metaTitle="Anuncie sua Quadra Esportiva — Sistema de Reserva Online | Minha Quadra"
+  metaDescription="Cadastre sua quadra no Minha Quadra e aumente suas reservas. Mais de 60 quadras parceiras em 3 cidades. Agenda digital, pagamento online com Pix e cartão, e clientes reais. Planos a partir de 20% por reserva."
+  keywords={[
+    "anunciar quadra esportiva",
+    "sistema de reserva para quadras",
+    "divulgar quadra",
+    "plataforma gestão quadra",
+    "app reserva quadra esportiva",
+    "como atrair clientes quadra",
+    "Minha Quadra parceiros",
+  ]}
   disableTagline={true}
 >
 
@@ -174,6 +302,8 @@ const steps = [
   <section class="pn-hero">
     <div class="container">
       <div class="mx-auto max-w-7xl">
+
+        <time class="pn-updated" datetime="2026-05-15">Atualizado em 15 de maio de 2026</time>
 
         <h1>
           <!-- Linha 1: left -->
@@ -193,6 +323,10 @@ const steps = [
           </div>
         </h1>
 
+        <h2 class="pn-subtitle-seo" data-aos="fade-up" data-aos-delay="200">
+          Sistema de reserva online e divulgação para quadras esportivas
+        </h2>
+
         <!-- Subtitle + CTA -->
         <div class="mt-12 max-w-2xl space-y-8" data-aos="reveal-anim-right" data-aos-delay="300">
           <p class="pn-subtitle">
@@ -207,6 +341,26 @@ const steps = [
             rel="noopener noreferrer"
           />
         </div>
+
+        <!-- Authority stats -->
+        <section class="pn-stats" aria-label="Minha Quadra em números" data-aos="fade-up" data-aos-delay="400">
+          <div class="pn-stat">
+            <span class="pn-stat-number">60+</span>
+            <span class="pn-stat-label">Quadras parceiras</span>
+          </div>
+          <div class="pn-stat">
+            <span class="pn-stat-number">3</span>
+            <span class="pn-stat-label">Cidades no Brasil</span>
+          </div>
+          <div class="pn-stat">
+            <span class="pn-stat-number">10</span>
+            <span class="pn-stat-label">Modalidades esportivas</span>
+          </div>
+          <div class="pn-stat">
+            <span class="pn-stat-number">100%</span>
+            <span class="pn-stat-label">Digital e online</span>
+          </div>
+        </section>
 
       </div>
     </div>
@@ -249,6 +403,9 @@ const steps = [
         </h2>
       </div>
       <div class="space-y-10 max-w-lg" data-aos="fade-up" data-aos-delay="100">
+        <p class="text-lg pn-intro-text">
+          O mercado de quadras esportivas no Brasil está em transformação. Com o crescimento de esportes como beach tennis, padel e futevôlei, a demanda por quadras aumentou — mas muitos donos de quadra ainda dependem de WhatsApp e ligações para gerenciar reservas. O Minha Quadra resolve isso.
+        </p>
         <p class="text-lg pn-intro-text">
           Por meio da tecnologia, nós juntamos quem quer jogar com o espaço para jogar. Somos uma plataforma de Marketing que divulga suas quadras e facilita todo o processo de reserva dos espaços.
         </p>
@@ -361,6 +518,35 @@ const steps = [
             />
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Por que anunciar — Benefícios (Q&A para SEO/GEO) ─────────── -->
+  <section class="pn-beneficios">
+    <div class="container">
+      <h2 class="pn-beneficios-title" data-aos="fade-up">
+        Por que anunciar sua quadra no Minha Quadra?
+      </h2>
+      <div class="pn-beneficios-grid">
+        <article class="pn-beneficio" data-aos="fade-up">
+          <h3 class="pn-beneficio-title">Como o Minha Quadra ajuda a atrair novos clientes?</h3>
+          <p class="pn-beneficio-text">
+            O Minha Quadra investe em marketing digital (SEO, redes sociais e parcerias) para trazer jogadores que buscam quadras na sua cidade. Quando alguém pesquisa "quadra de beach tennis em BH" no Google ou pergunta numa IA, sua quadra aparece como opção com link direto para reserva. Você não precisa fazer nada — nós cuidamos da divulgação.
+          </p>
+        </article>
+        <article class="pn-beneficio" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="pn-beneficio-title">Como funciona o sistema de reserva online?</h3>
+          <p class="pn-beneficio-text">
+            Seus clientes acessam o Minha Quadra, escolhem a quadra, veem os horários disponíveis em tempo real e pagam online com Pix ou cartão de crédito. Você recebe o dinheiro diretamente e uma notificação da reserva. Sem ligações, sem mensagens no WhatsApp, sem "calote" de quem reserva e não aparece.
+          </p>
+        </article>
+        <article class="pn-beneficio" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="pn-beneficio-title">Quanto custa anunciar no Minha Quadra?</h3>
+          <p class="pn-beneficio-text">
+            O Plano Variável cobra apenas 20% sobre cada reserva feita pela plataforma — sem mensalidade. Você só paga quando ganha. O Plano Fixo custa R$149,90/mês e oferece destaque na plataforma, gerando mais visibilidade e reservas. Os dois planos incluem agenda digital, pagamento online e suporte dedicado.
+          </p>
+        </article>
       </div>
     </div>
   </section>
@@ -517,6 +703,63 @@ const steps = [
   }
   @media (min-width: 768px) {
     .pn-subtitle { font-size: 1.25rem; }
+  }
+
+  /* Updated date — small eyebrow above H1 */
+  .pn-updated {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.7rem;
+    color: rgba(245, 245, 245, 0.4);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* H2 SEO subtitle — discreet complement to H1 */
+  .pn-subtitle-seo {
+    margin-top: 0.75rem;
+    color: #e1ffa5;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    opacity: 0.85;
+  }
+  @media (min-width: 768px) {
+    .pn-subtitle-seo { font-size: 1.2rem; }
+  }
+
+  /* Authority stats — horizontal grid below CTA */
+  .pn-stats {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  @media (min-width: 768px) {
+    .pn-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+  .pn-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .pn-stat-number {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #b4fa50;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .pn-stat-label {
+    font-size: 0.875rem;
+    color: rgba(245, 245, 245, 0.75);
+    line-height: 1.4;
   }
 
   /* CTA button — mesmo estilo do hero da home (btn-accent base) */
@@ -839,6 +1082,50 @@ const steps = [
   :global(.pn-faq .prose-styles p),
   :global(.pn-faq .hs-accordion-content *) {
     color: #002d3c !important;
+  }
+
+  /* -- BENEFÍCIOS (Por que anunciar) -------------------- */
+  .pn-beneficios {
+    background-color: #002d3c;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .pn-beneficios-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 600;
+    color: #b4fa50;
+    line-height: 1.15;
+    max-width: 32ch;
+    margin-bottom: 3rem;
+  }
+  .pn-beneficios-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .pn-beneficios-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  }
+  .pn-beneficio {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(225, 255, 165, 0.12);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .pn-beneficio-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #e1ffa5;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .pn-beneficio-text {
+    color: rgba(245, 245, 245, 0.85);
+    font-size: 0.975rem;
+    line-height: 1.7;
+    margin: 0;
   }
 
   /* -- SEÇÃO 6 — PRICING -------------------------------- */
