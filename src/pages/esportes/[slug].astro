@@ -365,7 +365,7 @@ const faqSchema = {
             <div id="es-blog-posts-slider" class="swiper overflow-visible!" data-count={displayPosts.length}>
               <div class="swiper-wrapper overflow-visible! pb-10">
                 {displayPosts.map((post: any) => {
-                  const postHref = post.slug ? `/blog/${post.slug}/` : `/blog/creative/`;
+                  const postHref = post.slug ? `/blog/${post.slug}/` : `/blog/`;
                   return (
                     <div class="swiper-slide group/project-slide h-auto! overflow-hidden!">
                       <div class="text-light relative flex aspect-square w-full items-end p-5 md:p-8 after:from-theme-dark after:via-theme-dark/50 after:absolute after:start-0 after:-z-10 after:w-full after:bg-linear-to-t after:to-transparent after:transition-all after:duration-300 group-[.swiper-slide-active]/project-slide:after:h-full after:max-md:bottom-0 after:max-md:h-full after:md:-bottom-4 after:md:h-0 after:md:opacity-0 group-[.swiper-slide-active]/project-slide:after:bottom-0 group-[.swiper-slide-active]/project-slide:after:opacity-100">
