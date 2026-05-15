@@ -377,7 +377,7 @@ const steps = [
           elementWidthAuto: true,
           pauseOnHover: false,
           reverse: "",
-          duration: "55s",
+          duration: "44s",
         },
         list: [
           "Mais Reservas",
@@ -591,8 +591,12 @@ const steps = [
         enable: true,
         title: "",
         list: [
-          { alt: "Parceiro 1", src: "/images/clients/1.svg" },
-          { alt: "Parceiro 2", src: "/images/clients/2.svg" },
+          { alt: "All Sports Arena", src: "/images/parceiros/logos/logo-all-sports.png" },
+          { alt: "Astral Beach Sports", src: "/images/parceiros/logos/logo-astral.png" },
+          { alt: "Quadra do Don Don", src: "/images/parceiros/logos/logo-dondon.jpg" },
+          { alt: "Arena Guerreiro", src: "/images/parceiros/logos/logo-guerreiro.png" },
+          { alt: "Círculo Militar", src: "/images/parceiros/logos/logo-militar.png" },
+          { alt: "Arena ST88", src: "/images/parceiros/logos/logo-st88.png" },
         ],
         options: { appearance: "dark", columnsPerRow: 6 },
       }} />
@@ -654,14 +658,18 @@ const steps = [
     background-color: #b4fa50 !important;
     border-top: none;
     border-bottom: none;
+    /* −20% padding vertical (era py-4 = 1rem) */
+    padding-top: 0.8rem !important;
+    padding-bottom: 0.8rem !important;
   }
 
-  /* Texto do marquee — cor primary */
+  /* Texto do marquee — cor primary, −20% no tamanho */
   .pn-marquee-wrap :global(.bg-accent-blue span),
   .pn-marquee-wrap :global(.bg-accent-blue p),
   .pn-marquee-wrap :global(.bg-accent-blue li),
   .pn-marquee-wrap :global(.bg-accent-blue [class*="text"]) {
     color: #002d3c !important;
+    font-size: 0.8em !important;
   }
 
   /* Asterisco — cor alternate #007d8c */
@@ -750,7 +758,7 @@ const steps = [
     gap: 0.25rem;
   }
   .pn-stat-number {
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(3rem, 6vw, 4.5rem);
     font-weight: 700;
     color: #b4fa50;
     line-height: 1;
@@ -953,28 +961,33 @@ const steps = [
     outline-color: rgba(255, 255, 255, 0.12) !important;
   }
 
+  /* Mobile: 3 colunas × 2 linhas */
+  .pn-testi-logos :global(ul) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  @media (min-width: 1024px) {
+    .pn-testi-logos :global(ul) {
+      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    }
+  }
+
   /* Aumenta altura das logos e do container */
   .pn-testi-logos :global(.relative.h-8) {
-    height: 3.5rem !important;
+    height: 4.5rem !important;
   }
 
   .pn-testi-logos :global(.h-8) {
-    height: 3.5rem !important;
+    height: 4.5rem !important;
   }
 
   /* Corrige a translação do hover para a nova altura */
   .pn-testi-logos :global(li:hover img) {
-    transform: translateY(-3.5rem) !important;
+    transform: translateY(-4.5rem) !important;
   }
 
-  /* Inverte logos para ficarem brancos no fundo escuro */
+  /* Preserva as cores originais dos logos (sem grayscale/invert) */
   .pn-testi-logos :global(img) {
-    filter: brightness(0) invert(1);
-    opacity: 0.55;
-  }
-
-  .pn-testi-logos :global(li:hover img) {
-    opacity: 0.9;
+    object-fit: contain;
   }
 
   .pn-testimonials-wrap :global(section) {
