@@ -955,39 +955,48 @@ const steps = [
     padding-bottom: 0 !important;
   }
 
-  .pn-testi-logos :global(li),
+  /* UL: flex row, sem outline/grid, espaçamento uniforme */
   .pn-testi-logos :global(ul) {
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    outline-color: rgba(255, 255, 255, 0.12) !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1.5rem;
+    outline: none !important;
+    grid-template-columns: none !important;
   }
 
-  /* Mobile: 3 colunas × 2 linhas */
-  .pn-testi-logos :global(ul) {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-  @media (min-width: 1024px) {
-    .pn-testi-logos :global(ul) {
-      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-    }
-  }
-
-  /* Aumenta altura das logos e do container */
-  .pn-testi-logos :global(.relative.h-8) {
-    height: 4.5rem !important;
+  /* LI: sem borda, altura natural, padding pra respirar */
+  .pn-testi-logos :global(li) {
+    border: none !important;
+    outline: none !important;
+    height: auto !important;
+    width: auto !important;
+    padding: 10px;
+    flex: 0 1 auto;
+    background-color: transparent !important;
   }
 
-  .pn-testi-logos :global(.h-8) {
-    height: 4.5rem !important;
+  /* Container interno: sem overflow, sem altura fixa */
+  .pn-testi-logos :global(li > .relative) {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
   }
 
-  /* Corrige a translação do hover para a nova altura */
-  .pn-testi-logos :global(li:hover img) {
-    transform: translateY(-4.5rem) !important;
+  /* Esconde a segunda cópia da imagem (hover-swap não é mais usado) */
+  .pn-testi-logos :global(li > .relative > img + img) {
+    display: none !important;
   }
 
-  /* Preserva as cores originais dos logos (sem grayscale/invert) */
+  /* Imagens: max-height, contain, cores originais */
   .pn-testi-logos :global(img) {
+    max-height: 70px;
+    height: auto !important;
+    width: auto !important;
     object-fit: contain;
+    transform: none !important;
+    transition: none !important;
   }
 
   .pn-testimonials-wrap :global(section) {
