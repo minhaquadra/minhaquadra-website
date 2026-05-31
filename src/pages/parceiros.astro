@@ -377,7 +377,7 @@ const steps = [
           elementWidthAuto: true,
           pauseOnHover: false,
           reverse: "",
-          duration: "55s",
+          duration: "44s",
         },
         list: [
           "Mais Reservas",
@@ -591,8 +591,12 @@ const steps = [
         enable: true,
         title: "",
         list: [
-          { alt: "Parceiro 1", src: "/images/clients/1.svg" },
-          { alt: "Parceiro 2", src: "/images/clients/2.svg" },
+          { alt: "All Sports Arena", src: "/images/parceiros/logos/logo-all-sports.png" },
+          { alt: "Astral Beach Sports", src: "/images/parceiros/logos/logo-astral.png" },
+          { alt: "Quadra do Don Don", src: "/images/parceiros/logos/logo-dondon.jpg" },
+          { alt: "Arena Guerreiro", src: "/images/parceiros/logos/logo-guerreiro.png" },
+          { alt: "Círculo Militar", src: "/images/parceiros/logos/logo-militar.png" },
+          { alt: "Arena ST88", src: "/images/parceiros/logos/logo-st88.png" },
         ],
         options: { appearance: "dark", columnsPerRow: 6 },
       }} />
@@ -654,14 +658,18 @@ const steps = [
     background-color: #b4fa50 !important;
     border-top: none;
     border-bottom: none;
+    /* −20% padding vertical (era py-4 = 1rem) */
+    padding-top: 0.8rem !important;
+    padding-bottom: 0.8rem !important;
   }
 
-  /* Texto do marquee — cor primary */
+  /* Texto do marquee — cor primary, −20% no tamanho */
   .pn-marquee-wrap :global(.bg-accent-blue span),
   .pn-marquee-wrap :global(.bg-accent-blue p),
   .pn-marquee-wrap :global(.bg-accent-blue li),
   .pn-marquee-wrap :global(.bg-accent-blue [class*="text"]) {
     color: #002d3c !important;
+    font-size: 0.8em !important;
   }
 
   /* Asterisco — cor alternate #007d8c */
@@ -750,7 +758,7 @@ const steps = [
     gap: 0.25rem;
   }
   .pn-stat-number {
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(3rem, 6vw, 4.5rem);
     font-weight: 700;
     color: #b4fa50;
     line-height: 1;
@@ -947,34 +955,59 @@ const steps = [
     padding-bottom: 0 !important;
   }
 
-  .pn-testi-logos :global(li),
+  /* UL (container das 6 logos): flex limpo, sem bordas */
   .pn-testi-logos :global(ul) {
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    outline-color: rgba(255, 255, 255, 0.12) !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    outline: none !important;
+    border: none !important;
+    grid-template-columns: none !important;
+    background: transparent !important;
   }
 
-  /* Aumenta altura das logos e do container */
-  .pn-testi-logos :global(.relative.h-8) {
-    height: 3.5rem !important;
+  /* LI: sem borda, sem fundo, sem altura fixa */
+  .pn-testi-logos :global(li) {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    height: auto !important;
+    width: auto !important;
+    padding: 0 !important;
+    flex: 0 1 auto;
   }
 
-  .pn-testi-logos :global(.h-8) {
-    height: 3.5rem !important;
+  /* Container interno (.relative): sem overflow, sem padding, sem altura fixa */
+  .pn-testi-logos :global(li > .relative) {
+    overflow: visible !important;
+    height: auto !important;
+    width: auto !important;
+    padding: 0 !important;
+    background: transparent !important;
   }
 
-  /* Corrige a translação do hover para a nova altura */
-  .pn-testi-logos :global(li:hover img) {
-    transform: translateY(-3.5rem) !important;
+  /* Esconde a segunda cópia da imagem (hover-swap não é mais usado) */
+  .pn-testi-logos :global(li > .relative > img + img) {
+    display: none !important;
   }
 
-  /* Inverte logos para ficarem brancos no fundo escuro */
+  /* Imagens: contain, sem distorção, cores originais */
   .pn-testi-logos :global(img) {
-    filter: brightness(0) invert(1);
-    opacity: 0.55;
-  }
-
-  .pn-testi-logos :global(li:hover img) {
-    opacity: 0.9;
+    max-height: 80px;
+    max-width: 180px;
+    height: auto !important;
+    width: auto !important;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    transform: none !important;
+    transition: none !important;
+    background: transparent !important;
   }
 
   .pn-testimonials-wrap :global(section) {
