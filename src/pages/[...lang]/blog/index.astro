@@ -38,8 +38,8 @@ if (response) return response;
     <BlogLayout
       pageType="list"
       sidebar={{
-        enable: true,
-        sticky: true,
+        enable: false,
+        sticky: false,
       }}
       contentList={{
         options: {
@@ -151,6 +151,7 @@ if (response) return response;
     grid-template-columns: 1fr;
     gap: 24px !important;
     padding: 0 20px;
+    width: 100%;
   }
   @media (min-width: 480px) {
     .blog-content-bg .blog-search-results {
@@ -254,5 +255,28 @@ if (response) return response;
     position: absolute;
     inset: 0;
     z-index: 10;
+  }
+
+  /* ── Paginação (Anterior / Próxima / números) ──────────────────── */
+  .blog-content-bg #pagination {
+    margin-top: 3rem;
+    padding: 0 20px;
+  }
+  .blog-content-bg #pagination a,
+  .blog-content-bg #pagination span {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(225, 255, 165, 0.15) !important;
+    color: #f5f5f5 !important;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .blog-content-bg #pagination a:hover {
+    background-color: #b4fa50 !important;
+    color: #002d3c !important;
+    border-color: #b4fa50 !important;
+  }
+  .blog-content-bg #pagination [aria-current="page"] {
+    background-color: #b4fa50 !important;
+    color: #002d3c !important;
+    border-color: #b4fa50 !important;
   }
 </style>
