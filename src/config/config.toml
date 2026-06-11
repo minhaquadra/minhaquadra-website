@@ -4,7 +4,7 @@
   description       = "Encontre e reserve quadras esportivas perto de você. Futebol, tênis, beach tennis e muito mais." # Shared description for SEO and OpenGraph
   tagline           = "Minha Quadra"
   taglineSeparator = " | "
-  baseUrl          = "https://minhaquadra.com.br" # Base URL for the site and used in OpenGraph meta tags.
+  baseUrl          = "https://www.minhaquadra.com.br" # Base URL for the site and used in OpenGraph meta tags.
   logo              = "/images/logo-azul.png" # Path to the site's logo (fundo claro)
   logoAlternate    = "/images/logo-verde.png" # Path to the site's logo (fundo escuro)
   logoText         = "" # Text displayed next to the logo
