@@ -161,61 +161,30 @@
     gtag('js', new Date());
     gtag('config', 'G-78H3GP0VDX');
   </script>
-  <!-- GA4: track CTA clicks to app.minhaquadra.com.br -->
+  <!-- GA4: track CTA clicks to app.minhaquadra.com.br and inject UTMs before navigation -->
   <script>
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="app.minhaquadra.com.br"]');
-      if (link && typeof gtag === 'function') {
+      if (!link) return;
+      var path = window.location.pathname;
+      var medium = (path === '/' || path === '')
+        ? 'home'
+        : (path.match(/^\\/([^/]+)/) || [, 'other'])[1];
+      try {
+        var url = new URL(link.href);
+        url.searchParams.set('utm_source', 'site');
+        url.searchParams.set('utm_medium', medium);
+        url.searchParams.set('utm_campaign', path);
+        link.href = url.toString();
+      } catch (err) {}
+      if (typeof gtag === 'function') {
         gtag('event', 'cta_click_to_app', {
           'event_category': 'conversion',
           'event_label': link.textContent.trim().substring(0, 100),
           'link_url': link.href,
-          'page_path': window.location.pathname
+          'page_path': path
         });
       }
     });
-  </script>
-  <!-- UTM tagging for all app.minhaquadra.com.br links (runs at DOM ready) -->
-  <script>
-    (function() {
-      var path = window.location.pathname;
-      var ctx = null, m;
-      if ((m = path.match(/^\\/blog\\/([^/]+)\\/?$/))) {
-        ctx = { medium: 'blog', campaign: m[1] };
-      } else if ((m = path.match(/^\\/esportes\\/([^/]+)\\/?$/))) {
-        ctx = { medium: 'esportes', campaign: m[1] };
-      } else if ((m = path.match(/^\\/cidades\\/[^/]+\\/([^/]+)\\/([^/]+)\\/?$/))) {
-        ctx = { medium: 'cidades', campaign: m[1] + '-' + m[2] };
-      } else if ((m = path.match(/^\\/cidades\\/[^/]+\\/([^/]+)\\/?$/))) {
-        ctx = { medium: 'cidades', campaign: m[1] };
-      }
-      function applyUtm() {
-        var links = document.querySelectorAll('a[href*="app.minhaquadra.com.br"]');
-        for (var i = 0; i < links.length; i++) {
-          var a = links[i], medium, campaign;
-          if (a.closest('header.header')) {
-            medium = 'menu';
-            campaign = 'header-cta';
-          } else if (ctx) {
-            medium = ctx.medium;
-            campaign = ctx.campaign;
-          } else {
-            continue;
-          }
-          try {
-            var url = new URL(a.href);
-            url.searchParams.set('utm_source', 'site');
-            url.searchParams.set('utm_medium', medium);
-            url.searchParams.set('utm_campaign', campaign);
-            a.href = url.toString();
-          } catch (e) {}
-        }
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyUtm);
-      } else {
-        applyUtm();
-      }
-    })();
   </script>
   """
