@@ -1,0 +1,121 @@
+---
+/**
+ * AnalyticsHead — GA4 + Consent Mode v2 + cross-domain linker + CTA/UTM
+ * instrumentation (analytics Fase 1 / A1).
+ *
+ * Extracted from config.toml [head].content (raw TOML string was error-prone:
+ * regex double-escaping, no syntax checking). Behavior preserved, plus:
+ *  - Consent Mode v2 DEFAULT-DENIED before gtag loads (LGPD "balanceado":
+ *    GA4 é consent-gated; aceite via ConsentBanner.astro → granted).
+ *  - Cross-domain linker: site ↔ marketplace (app.minhaquadra.com.br hoje,
+ *    minhaquadra.app no web novo) — a sessão GA4 sobrevive ao clique mesmo
+ *    com rel="noreferrer" nos links.
+ *  - CTA listener + decorador UTM agora casam TAMBÉM minhaquadra.app
+ *    (cutover-proof; antes hard-match só app.minhaquadra.com.br).
+ *
+ * Spec: minhaquadra-app docs/superpowers/specs/2026-07-12-analytics-fase-1-web-design.md
+ */
+---
+
+<!-- Consent Mode v2: default DENIED before any Google tag runs (LGPD). -->
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500,
+  });
+  // Restore a previous choice (ConsentBanner writes mq_consent).
+  try {
+    if (localStorage.getItem("mq_consent") === "granted") {
+      gtag("consent", "update", { analytics_storage: "granted" });
+    }
+  } catch (e) {}
+</script>
+
+<!-- Google Analytics 4 (advanced consent mode: cookieless pings until granted) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-78H3GP0VDX"></script>
+<script is:inline>
+  gtag("js", new Date());
+  gtag("config", "G-78H3GP0VDX", {
+    linker: {
+      domains: [
+        "minhaquadra.com.br",
+        "www.minhaquadra.com.br",
+        "app.minhaquadra.com.br",
+        "minhaquadra.app",
+      ],
+    },
+  });
+</script>
+
+<!-- GA4: track CTA clicks to the marketplace (both domains) -->
+<script is:inline>
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest(
+      'a[href*="app.minhaquadra.com.br"], a[href*="minhaquadra.app"]'
+    );
+    if (link && typeof gtag === "function") {
+      gtag("event", "cta_click_to_app", {
+        event_category: "conversion",
+        event_label: link.textContent.trim().substring(0, 100),
+        link_url: link.href,
+        page_path: window.location.pathname,
+      });
+    }
+  });
+</script>
+
+<!-- UTM tagging for all marketplace links (runs at DOM ready) -->
+<script is:inline>
+  (function () {
+    var path = window.location.pathname;
+    var ctx = null,
+      m;
+    if ((m = path.match(/^\/blog\/([^/]+)\/?$/))) {
+      ctx = { medium: "blog", campaign: m[1] };
+    } else if ((m = path.match(/^\/esportes\/([^/]+)\/?$/))) {
+      ctx = { medium: "esportes", campaign: m[1] };
+    } else if ((m = path.match(/^\/cidades\/[^/]+\/([^/]+)\/([^/]+)\/?$/))) {
+      ctx = { medium: "cidades", campaign: m[1] + "-" + m[2] };
+    } else if ((m = path.match(/^\/cidades\/[^/]+\/([^/]+)\/?$/))) {
+      ctx = { medium: "cidades", campaign: m[1] };
+    }
+    function applyUtm() {
+      var links = document.querySelectorAll(
+        'a[href*="app.minhaquadra.com.br"], a[href*="minhaquadra.app"]'
+      );
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i],
+          medium,
+          campaign;
+        if (a.closest("header.header")) {
+          medium = "menu";
+          campaign = "header-cta";
+        } else if (ctx) {
+          medium = ctx.medium;
+          campaign = ctx.campaign;
+        } else {
+          continue;
+        }
+        try {
+          var url = new URL(a.href);
+          url.searchParams.set("utm_source", "site");
+          url.searchParams.set("utm_medium", medium);
+          url.searchParams.set("utm_campaign", campaign);
+          a.href = url.toString();
+        } catch (e) {}
+      }
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyUtm);
+    } else {
+      applyUtm();
+    }
+  })();
+</script>
