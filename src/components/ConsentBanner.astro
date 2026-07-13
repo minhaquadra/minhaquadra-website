@@ -1,0 +1,114 @@
+---
+/**
+ * ConsentBanner — LGPD consent for analytics cookies (Fase 1 / A1).
+ *
+ * Modelo "balanceado" (PO 2026-07-12): o GA4 roda em Consent Mode v2
+ * default-denied (sem cookies) até o aceite. Este banner aparece apenas
+ * quando não há escolha registrada; Aceitar → analytics_storage granted;
+ * Recusar → permanece denied. Escolha persistida em localStorage
+ * ("mq_consent") e respeitada em toda visita (AnalyticsHead restaura).
+ *
+ * Brand: teal-black #002D3C · Snow White #F5F5F5 · lime #B4FA50 · radius 4.
+ */
+---
+
+<div id="mq-consent-banner" class="mq-consent" hidden>
+  <p class="mq-consent__text">
+    Usamos cookies de análise (Google&nbsp;Analytics) para entender o uso do site e
+    melhorá-lo. Você aceita?
+    <a href="/politica-de-privacidade/">Política de Privacidade</a>
+  </p>
+  <div class="mq-consent__actions">
+    <button id="mq-consent-reject" type="button" class="mq-consent__btn mq-consent__btn--ghost">
+      Recusar
+    </button>
+    <button id="mq-consent-accept" type="button" class="mq-consent__btn mq-consent__btn--accept">
+      Aceitar
+    </button>
+  </div>
+</div>
+
+<style>
+  .mq-consent {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    padding: 0.875rem 1.25rem;
+    background: #002d3c;
+    color: #f5f5f5;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.25);
+  }
+  .mq-consent__text {
+    margin: 0;
+    max-width: 46rem;
+  }
+  .mq-consent__text a {
+    color: #b4fa50;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
+  .mq-consent__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  .mq-consent__btn {
+    border-radius: 4px;
+    padding: 0.5rem 1.125rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .mq-consent__btn:hover {
+    opacity: 0.85;
+  }
+  .mq-consent__btn--accept {
+    background: #b4fa50;
+    color: #002d3c;
+    border: 1px solid #b4fa50;
+  }
+  .mq-consent__btn--ghost {
+    background: transparent;
+    color: #f5f5f5;
+    border: 1px solid rgba(245, 245, 245, 0.55);
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var KEY = "mq_consent";
+    var banner = document.getElementById("mq-consent-banner");
+    if (!banner) return;
+    var stored = null;
+    try {
+      stored = localStorage.getItem(KEY);
+    } catch (e) {}
+    if (stored === "granted" || stored === "denied") return; // choice made — stay hidden
+    banner.hidden = false;
+    function choose(value) {
+      try {
+        localStorage.setItem(KEY, value);
+      } catch (e) {}
+      if (value === "granted" && typeof gtag === "function") {
+        gtag("consent", "update", { analytics_storage: "granted" });
+      }
+      banner.hidden = true;
+    }
+    document.getElementById("mq-consent-accept").addEventListener("click", function () {
+      choose("granted");
+    });
+    document.getElementById("mq-consent-reject").addEventListener("click", function () {
+      choose("denied");
+    });
+  })();
+</script>

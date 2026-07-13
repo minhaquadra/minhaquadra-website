@@ -5,6 +5,7 @@ import Favicons from "@/components/seo/Favicons.astro";
 import parseTomlToJson from "@/lib/utils/parseTomlToJson.ts";
 import JsonLD from "../widgets/JsonLD.astro";
 import Font from "../widgets/Font.astro";
+import AnalyticsHead from "./AnalyticsHead.astro";
 
 const config = parseTomlToJson("./src/config/config.toml");
 ---
@@ -33,6 +34,7 @@ const config = parseTomlToJson("./src/config/config.toml");
       <Fragment set:html={config.head?.content} />
     )
   }
+  <AnalyticsHead />
   <OpenGraph {...Astro.props} />
   <Favicons />
   <JsonLD
