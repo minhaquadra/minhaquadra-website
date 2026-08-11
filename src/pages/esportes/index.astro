@@ -1,25 +1,30 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "@/layouts/Base.astro";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 
 const SITE_URL = "https://www.minhaquadra.com.br";
 const esportes = await getCollection("esportes");
----
 
-<script type="application/ld+json" is:inline>
-{
+// Built in frontmatter rather than inlined as a literal, so the origin and the
+// entity id come from one place — same shape as /cidades/index.astro.
+const collectionSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Esportes — Minha Quadra",
-  "description": "Encontre quadras para alugar por esporte: beach tennis, padel, society, futsal, tênis, vôlei e mais.",
-  "url": "https://www.minhaquadra.com.br/esportes/",
-  "publisher": {
+  name: "Esportes — Minha Quadra",
+  description:
+    "Encontre quadras para alugar por esporte: beach tennis, padel, society, futsal, tênis, vôlei e mais.",
+  url: `${SITE_URL}/esportes/`,
+  publisher: {
     "@type": "Organization",
-    "name": "Minha Quadra",
-    "url": "https://www.minhaquadra.com.br"
-  }
-}
-</script>
+    "@id": ORGANIZATION_ID,
+    name: "Minha Quadra",
+    url: SITE_URL,
+  },
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
 
 <Base
   metaTitle="Esportes — Encontre Quadras para Alugar por Esporte | Minha Quadra"

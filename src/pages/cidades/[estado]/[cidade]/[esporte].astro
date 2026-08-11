@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "@/layouts/Base.astro";
 import CustomButton from "@/layouts/components/CustomButton.astro";
 import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 
 const SITE_URL = "https://www.minhaquadra.com.br";
 const APP_URL = "https://app.minhaquadra.com.br/";
@@ -275,6 +276,7 @@ const webPageSchema = {
   dateModified: lastUpdatedISO,
   publisher: {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     name: "Minha Quadra",
     url: SITE_URL,
     logo: `${SITE_URL}/images/logo-verde.png`,

@@ -9,6 +9,7 @@ import Social from "./widgets/Social.astro";
 import SocialData from "@/config/social.json";
 import type { CollectionEntry } from "astro:content";
 import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 import { render } from "astro:content";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -58,11 +59,13 @@ const articleSchema = {
   "dateModified": lastUpdatedISO,
   "author": {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     "name": "Minha Quadra",
     "url": siteUrl,
   },
   "publisher": {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     "name": "Minha Quadra",
     "url": siteUrl,
     "logo": {
