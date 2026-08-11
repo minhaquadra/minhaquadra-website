@@ -42,7 +42,7 @@ const t = await useTranslations(Astro.currentLocale as string);
 // Article JSON-LD
 import extractSlug from "@/lib/utils/extractSlug";
 const slug = extractSlug(content).split("/").pop();
-const siteUrl = "https://minhaquadra.com.br";
+const siteUrl = "https://www.minhaquadra.com.br";
 const pageUrl = `${siteUrl}/blog/${slug}/`;
 const imageUrl = image ? `${siteUrl}${image.startsWith("/src/assets") ? "" : "/images/blog/"}${image.replace(/^\/images\/blog\//, "")}` : "";
 const dateISO = date ? new Date(date).toISOString() : "";
