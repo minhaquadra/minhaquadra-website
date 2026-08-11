@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "@/layouts/Base.astro";
 
-const SITE_URL = "https://minhaquadra.com.br";
+const SITE_URL = "https://www.minhaquadra.com.br";
 
 const estados = (await getCollection("estados")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title, "pt-BR"),
