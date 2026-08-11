@@ -4,6 +4,7 @@ import CustomButton from "@/layouts/components/CustomButton.astro";
 import OptimizedImage from "@/layouts/components/utilities/OptimizedImage.astro";
 import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
 import Features from "@/layouts/components/sections/Features.astro";
+import { ORGANIZATION_ID, WEBSITE_ID } from "@/lib/utils/entityIds";
 
 // Coluna esquerda (de cima para baixo): Padel → Tênis → Vôlei de Praia → Beach Tennis → Futsal
 // aspect ratios variam como no portfolio masonry original (portrait, landscape, portrait, landscape, square)
@@ -104,6 +105,7 @@ const SITE_URL = "https://www.minhaquadra.com.br";
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": ORGANIZATION_ID,
   name: "Minha Quadra",
   url: SITE_URL,
   logo: `${SITE_URL}/images/logo-verde.png`,
@@ -136,6 +138,8 @@ const organizationSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": WEBSITE_ID,
+  publisher: { "@id": ORGANIZATION_ID },
   name: "Minha Quadra",
   url: SITE_URL,
   description:

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "@/layouts/Base.astro";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 
 const SITE_URL = "https://www.minhaquadra.com.br";
 
@@ -26,6 +27,7 @@ const collectionSchema = {
   url: `${SITE_URL}/cidades/`,
   publisher: {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     name: "Minha Quadra",
     url: SITE_URL,
   },
