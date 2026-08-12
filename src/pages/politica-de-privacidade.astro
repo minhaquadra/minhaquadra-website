@@ -15,7 +15,7 @@ import Base from "@/layouts/Base.astro";
         <h1 data-aos="reveal-anim-left">
           <span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line1">Política de </span><span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line2">privacidade.</span>
         </h1>
-        <p class="tu-date" data-aos="fade-up" data-aos-delay="200">Última atualização: 20 de março de 2026</p>
+        <p class="tu-date" data-aos="fade-up" data-aos-delay="200">Última atualização: 12 de agosto de 2026</p>
       </div>
     </div>
   </section>
@@ -90,9 +90,10 @@ import Base from "@/layouts/Base.astro";
             <li>Nome, descrição e fotos do estabelecimento</li>
             <li>CNPJ ou CPF para fins fiscais e contratuais</li>
             <li>Endereço completo com coordenadas geográficas para exibição em mapas</li>
-            <li>Dados bancários para recebimento via Stripe Connect</li>
-            <li>Documentos de identificação (RG, CNH ou passaporte) para verificação via Stripe</li>
-            <li>Informações biométricas (foto facial) quando solicitado pelo processo KYC da Stripe</li>
+            <li>Dados cadastrais e bancários para abertura e manutenção da conta de recebimento junto ao Asaas (Asaas Gestão Financeira Instituição de Pagamentos S.A.) — e, para contas habilitadas anteriormente, junto à Stripe (Stripe Connect)</li>
+            <li>Faturamento ou renda mensal declarada, natureza jurídica e quadro societário (PJ), exigidos pelo processo de verificação (KYC) da instituição de pagamento</li>
+            <li>Documentos de identificação (RG, CNH ou passaporte) para verificação junto à instituição de pagamento responsável (Asaas ou, em contas legadas, Stripe)</li>
+            <li>Informações biométricas (foto facial) quando solicitado pelo processo KYC da instituição de pagamento</li>
           </ul>
 
           <h3>2.2 Informações de Localização</h3>
@@ -131,7 +132,7 @@ import Base from "@/layouts/Base.astro";
           </ul>
 
           <h3>2.6 Dados Biométricos</h3>
-          <p>Coletamos dados biométricos exclusivamente para verificação de identidade no onboarding financeiro via Stripe Connect:</p>
+          <p>Coletamos dados biométricos exclusivamente para verificação de identidade no onboarding da conta de recebimento, junto à instituição de pagamento responsável (Asaas ou, em contas legadas, Stripe):</p>
           <ul>
             <li><strong>Reconhecimento facial:</strong> comparação entre foto do documento e selfie</li>
             <li><strong>Finalidade:</strong> prevenir fraude e cumprir requisitos KYC</li>
@@ -217,18 +218,23 @@ import Base from "@/layouts/Base.astro";
             <li>Seu CPF/CNPJ e dados bancários <strong>nunca</strong> são compartilhados com esportistas</li>
           </ul>
 
-          <h3>4.2 Com Processadores de Pagamento</h3>
-          <h4>Stripe Connect:</h4>
+          <h3>4.2 Com Instituições de Pagamento e Processadores</h3>
+          <h4>Asaas (Asaas Gestão Financeira Instituição de Pagamentos S.A.):</h4>
+          <ul>
+            <li>Dados cadastrais (nome/razão social, CPF/CNPJ, e-mail, telefone, endereço, data de nascimento), faturamento ou renda mensal declarada, documentos de identificação e demais dados exigidos pelo processo de verificação (KYC), além de dados das transações (valores, datas, pagador)</li>
+            <li>Finalidade: abertura e manutenção da conta de recebimento dos Donos de Quadra (conta de pagamento), verificação KYC, recebimento de reservas via PIX com repasse (split), transferências e prevenção à fraude — o Asaas é a instituição de pagamento prestadora dos serviços financeiros da plataforma, autorizada pelo Banco Central do Brasil (ver Seção 5.1 dos Termos de Uso)</li>
+          </ul>
+          <h4>Stripe:</h4>
           <ul>
             <li>Dados bancários, documentos de identidade, biometria facial, endereço, CPF/CNPJ</li>
-            <li>Finalidade: verificação KYC, processamento de pagamentos e transferências bancárias</li>
+            <li>Finalidade: adquirência de pagamentos com cartão e carteiras digitais (Apple Pay/Google Pay); e, para estabelecimentos habilitados anteriormente, verificação KYC e repasses via contas Stripe Connect legadas, em transição para as contas de recebimento junto ao Asaas</li>
           </ul>
           <h4>Mercado Pago:</h4>
           <ul>
             <li>Dados de transação, valor e descrição do pagamento</li>
             <li>Finalidade: processar pagamentos via PIX e outros métodos</li>
           </ul>
-          <div class="tu-callout">Esses processadores têm suas próprias políticas de privacidade. Recomendamos que você as leia: <a href="https://stripe.com/br/privacy" target="_blank" rel="noopener">Política de Privacidade da Stripe</a> | <a href="https://www.mercadopago.com.br/privacidade" target="_blank" rel="noopener">Política de Privacidade do Mercado Pago</a>.</div>
+          <div class="tu-callout">Essas instituições têm suas próprias políticas de privacidade. Recomendamos que você as leia: <a href="https://www.asaas.com/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade do Asaas</a> | <a href="https://stripe.com/br/privacy" target="_blank" rel="noopener">Política de Privacidade da Stripe</a> | <a href="https://www.mercadopago.com.br/privacidade" target="_blank" rel="noopener">Política de Privacidade do Mercado Pago</a>.</div>
 
           <h3>4.3 Com Provedores de Infraestrutura</h3>
           <h4>Google Firebase e Google Cloud Platform:</h4>
@@ -401,10 +407,14 @@ import Base from "@/layouts/Base.astro";
           <p>Alguns prestadores de serviço estão localizados fora do Brasil, especialmente nos Estados Unidos. Seus dados podem ser transferidos, armazenados e processados em outros países.</p>
 
           <h3>9.1 Para Onde Seus Dados Podem Ser Transferidos</h3>
+          <h4>Brasil:</h4>
+          <ul>
+            <li>Asaas: os dados tratados pela instituição de pagamento prestadora dos serviços financeiros permanecem no Brasil</li>
+          </ul>
           <h4>Estados Unidos:</h4>
           <ul>
             <li>Google Cloud Platform / Firebase: infraestrutura e banco de dados</li>
-            <li>Stripe: processamento de pagamentos e verificação de identidade</li>
+            <li>Stripe: adquirência de cartão/carteiras digitais e verificação de identidade (contas legadas)</li>
             <li>Meta (Facebook/Instagram): análise de marketing e publicidade</li>
             <li>Google (Analytics, Maps): análise de uso e geolocalização</li>
           </ul>
