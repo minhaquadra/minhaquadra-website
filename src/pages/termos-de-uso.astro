@@ -16,7 +16,7 @@ import Base from "@/layouts/Base.astro";
           <span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line1">Termos de </span><span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line2">uso.</span>
         </h1>
         <p class="tu-subtitle" data-aos="fade-up" data-aos-delay="200">
-          Última atualização: 20 de março de 2026
+          Última atualização: 12 de agosto de 2026
         </p>
       </div>
     </div>
@@ -87,11 +87,11 @@ import Base from "@/layouts/Base.astro";
         <p>O que fazemos:</p>
         <ul>
           <li>Fornecemos a tecnologia para facilitar a busca e reserva</li>
-          <li>Processamos pagamentos de forma segura através de processadores terceirizados</li>
+          <li>Integramos instituições de pagamento autorizadas pelo Banco Central do Brasil, que processam os pagamentos de forma segura (ver Seção 5)</li>
           <li>Oferecemos suporte para resolver problemas entre usuários</li>
           <li>Mantemos padrões de qualidade e segurança na plataforma</li>
         </ul>
-        <p>O contrato para prestação de serviços (uso da quadra, aulas, etc.) é estabelecido diretamente entre o Esportista e o Dono da Quadra. O Minha Quadra atua apenas como facilitador desta conexão e como agente de cobrança de pagamentos.</p>
+        <p>O contrato para prestação de serviços (uso da quadra, aulas, etc.) é estabelecido diretamente entre o Esportista e o Dono da Quadra. O Minha Quadra atua apenas como facilitador tecnológico desta conexão; os serviços financeiros e de pagamento são prestados pelas instituições identificadas na Seção 5.</p>
 
         <!-- DIVIDER: TERMOS GERAIS -->
         <div class="tu-divider">
@@ -225,16 +225,28 @@ import Base from "@/layouts/Base.astro";
         <!-- 5 -->
         <h2 id="sec-5" class="tu-section-title">5. Pagamentos e Taxas</h2>
 
-        <h3>5.1 Processamento de Pagamentos</h3>
-        <p>Todos os pagamentos na plataforma são processados através de:</p>
-        <ul>
-          <li>Stripe Connect: para a maioria das transações e repasses para Donos de Quadra</li>
-          <li>Mercado Pago: como alternativa ou complemento para pagamentos via PIX</li>
-        </ul>
-        <p>O Minha Quadra atua como agente de cobrança em nome dos Donos de Quadra, conforme detalhado em nossos Termos de Serviço de Pagamentos.</p>
+        <h3>5.1 Prestação de Serviços Financeiros</h3>
+        <p>Os serviços financeiros e de pagamentos disponibilizados por meio da presente plataforma, incluindo abertura e manutenção de conta de pagamento, processamento de transações, emissão de boletos, transferências, pagamentos e demais movimentações de valores, são prestados pelo ASAAS GESTÃO FINANCEIRA INSTITUIÇÃO DE PAGAMENTOS S.A., instituição de pagamento autorizada a funcionar pelo Banco Central do Brasil.</p>
+        <p>A <strong>MINHA QUADRA LTDA., inscrita no CNPJ sob o nº 56.099.723/0001-44</strong>, atua exclusivamente como integradora tecnológica e distribuidora da experiência do produto, não sendo instituição financeira ou de pagamento, nem realizando intermediação financeira em nome próprio.</p>
+        <p>O cliente declara ciência de que o relacionamento financeiro/de pagamentos e a responsabilidade regulatória pelos serviços acima descritos são do ASAAS GESTÃO FINANCEIRA S.A., nos termos da regulamentação vigente.</p>
+        <p>
+          <a href="https://asaas.com" target="_blank" rel="noopener noreferrer">
+            <img src="https://baas.asaas.com/selos/Servicos_financeiros_Asaas-Reduzida-Positivo.svg?id=c77930af-d177-41ba-b8d6-d206ff31030e"
+              alt="Selo Banco Asaas" width="160" height="48" style="display: inline-block;" loading="eager" />
+          </a>
+        </p>
+        <p><strong>Canais de suporte do Asaas</strong> para assuntos relacionados às operações financeiras de pagamentos: 0800 009 0037 (Pessoa Jurídica; atendimento por mensagens) · <a href="mailto:contato@asaas.com.br">contato@asaas.com.br</a>.</p>
 
-        <h3>5.2 Taxas de Serviço</h3>
-        <p>O Minha Quadra cobra taxas de serviço pelo direito de usar a plataforma. Estas taxas podem ser cobradas de:</p>
+        <h3>5.2 Processamento de Pagamentos</h3>
+        <p>Os pagamentos na plataforma são processados pelas seguintes instituições e processadores, cada um identificado pela função que efetivamente exerce:</p>
+        <ul>
+          <li><strong>Asaas</strong> (Asaas Gestão Financeira Instituição de Pagamentos S.A.): abertura e manutenção das contas de recebimento dos Donos de Quadra, recebimento de reservas via PIX com repasse (split) e transferências, conforme a Seção 5.1;</li>
+          <li><strong>Stripe</strong>: adquirência de pagamentos com cartão de crédito e carteiras digitais (Apple Pay e Google Pay). Estabelecimentos habilitados anteriormente podem manter contas Stripe Connect legadas para repasses, em processo de transição para as contas de recebimento junto ao Asaas;</li>
+          <li><strong>Mercado Pago</strong>: processamento alternativo de pagamentos via PIX.</li>
+        </ul>
+
+        <h3>5.3 Taxas de Serviço</h3>
+        <p>O Minha Quadra cobra <strong>taxas da plataforma</strong> — pelo uso do software e dos serviços tecnológicos — e nunca tarifas pela prestação de serviços financeiros, que são de responsabilidade das instituições identificadas na Seção 5.2. As taxas da plataforma podem ser cobradas de:</p>
         <h4>Esportistas:</h4>
         <ul>
           <li>Taxa de serviço por reserva (quando aplicável)</li>
@@ -244,22 +256,22 @@ import Base from "@/layouts/Base.astro";
         <ul>
           <li>Plano Fixo: mensalidade fixa para acesso ilimitado ao sistema</li>
           <li>Plano Variável: comissão de 20% sobre cada reserva realizada</li>
-          <li>Taxa de processamento de pagamento (quando aplicável)</li>
         </ul>
+        <p><strong>Tarifas do meio de pagamento:</strong> tarifas relativas ao processamento financeiro (por exemplo, tarifas de PIX, cartão ou transferência) são estabelecidas e cobradas pela instituição de pagamento responsável pela operação, e identificadas como tal nos extratos da plataforma.</p>
         <p><strong>Transparência:</strong> Todas as taxas aplicáveis são claramente divulgadas antes da confirmação de reserva (para Esportistas) ou antes da publicação de anúncio (para Donos de Quadra).</p>
         <p><strong>Mudanças nas taxas:</strong> Podemos alterar nossas taxas de serviço a qualquer momento. Notificaremos você com pelo menos 30 (trinta) dias de antecedência sobre qualquer aumento significativo. Alterações não afetam reservas já confirmadas.</p>
 
-        <h3>5.3 Métodos de Pagamento Aceitos</h3>
+        <h3>5.4 Métodos de Pagamento Aceitos</h3>
         <ul>
           <li>Cartão de crédito (Visa, Mastercard, Elo, etc.)</li>
           <li>PIX</li>
-          <li>Google Pay e Apple Pay (planejado)</li>
+          <li>Google Pay e Apple Pay</li>
         </ul>
 
-        <h3>5.4 Moeda</h3>
+        <h3>5.5 Moeda</h3>
         <p>Todos os preços são cotados em Reais (R$), a moeda oficial do Brasil.</p>
 
-        <h3>5.5 Impostos</h3>
+        <h3>5.6 Impostos</h3>
         <p><strong>Responsabilidade do Dono da Quadra:</strong> Os Donos de Quadra são responsáveis por determinar, calcular e recolher todos os impostos aplicáveis sobre as receitas geradas através da plataforma, incluindo mas não se limitando a:</p>
         <ul>
           <li>Imposto de Renda</li>
@@ -690,7 +702,7 @@ import Base from "@/layouts/Base.astro";
         </ul>
 
         <h3>15.4 Problemas Reportados pelo Esportista</h3>
-        <p>Se um Esportista reportar problemas: investigaremos a reclamação, você terá oportunidade de responder e, se o problema for válido, podemos emitir reembolso ao Esportista deduzido de seus pagamentos futuros.</p>
+        <p>Se um Esportista reportar problemas: investigaremos a reclamação, você terá oportunidade de responder e, se o problema for válido, podemos determinar um reembolso ao Esportista — executado pela instituição de pagamento responsável pela operação — deduzido de seus pagamentos futuros.</p>
 
         <!-- 16 -->
         <h2 id="sec-16" class="tu-section-title">16. Avaliações e Reputação</h2>
@@ -782,7 +794,7 @@ import Base from "@/layouts/Base.astro";
         </ul>
 
         <h3>19.3 Verificações e Segurança</h3>
-        <p>Podemos realizar verificações de identidade através do Stripe. Estas verificações não garantem confiabilidade, ausência de antecedentes criminais ou comportamento adequado futuro. "Verificado" significa apenas que o usuário completou um processo — NÃO é endosso ou garantia de qualidade.</p>
+        <p>Podemos realizar verificações de identidade junto às instituições de pagamento parceiras (como o Asaas e a Stripe). Estas verificações não garantem confiabilidade, ausência de antecedentes criminais ou comportamento adequado futuro. "Verificado" significa apenas que o usuário completou um processo — NÃO é endosso ou garantia de qualidade.</p>
 
         <!-- 20 -->
         <h2 id="sec-20" class="tu-section-title">20. Limitações de Responsabilidade</h2>
@@ -940,7 +952,7 @@ import Base from "@/layouts/Base.astro";
 
         <!-- RODAPÉ DO DOCUMENTO -->
         <div class="tu-doc-footer">
-          <p>Esta política foi atualizada em: <strong>30 de novembro de 2025</strong> — Versão: 1.0</p>
+          <p>Esta política foi atualizada em: <strong>12 de agosto de 2026</strong> — Versão: 1.1</p>
           <p>Para consultar versões anteriores ou fazer perguntas, entre em contato: <a href="mailto:minhaquadraapp@gmail.com">minhaquadraapp@gmail.com</a></p>
           <p class="tu-copyright">Este documento é propriedade da Minha Quadra®. Não copie ou reproduza sem permissão.</p>
         </div>
