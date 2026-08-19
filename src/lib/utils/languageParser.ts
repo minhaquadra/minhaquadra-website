@@ -202,11 +202,15 @@ export const getLocaleUrlCTM = (
 
   const isAbsoluteUrl = url.startsWith("http://") || url.startsWith("https://");
   let hash;
+  let search;
 
   // Handle absolute URLs by extracting the path (getRelativeLocaleUrl can't handle absolute URLs so we first need to convert it to a relative URL)
   if (isAbsoluteUrl) {
     // Extract the path from the absolute URL and update the URL to be relative
     updatedUrl = new URL(url).pathname;
+
+    // Check if url contain any query string (Remove it) and add it at the end to prevent expected behavior
+    search = new URL(url).search;
 
     // Check if url contain any hash (Remove it) and add it at the end to prevent expected behavior
     if (url.includes("#")) {
@@ -283,6 +287,10 @@ export const getLocaleUrlCTM = (
   // Reconstruct the complete URL if the original URL is absolute, meaning it includes both a protocol and a hostname.
   if (isAbsoluteUrl) {
     updatedUrl = new URL(url).origin + updatedUrl;
+
+    if (search) {
+      updatedUrl = `${updatedUrl}${search}`;
+    }
 
     if (hash) {
       updatedUrl = `${updatedUrl}#${hash}`;
