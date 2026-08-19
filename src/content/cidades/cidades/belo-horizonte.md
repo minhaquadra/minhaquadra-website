@@ -148,7 +148,7 @@ esportes:
       - title: "Quais são as melhores quadras de vôlei custo-benefício em BH?"
         content: "<p>Entre as opções mais acessíveis, a Arena Bandeirantes (R$100/h) na Pampulha e a Arena Barreiro (R$110/h) oferecem boa estrutura de areia por um preço competitivo. Para quem busca quadra coberta com estrutura premium, a All Sports Arena (R$145/h) é a referência com piso de taco de madeira.</p>"
       - title: "Como reservar uma quadra de vôlei em Belo Horizonte online?"
-        content: "<p>Reservar uma quadra de vôlei em BH pelo Minha Quadra é simples: acesse <a href=\"https://app.minhaquadra.com.br\" target=\"_blank\" rel=\"noopener noreferrer\">app.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
+        content: "<p>Reservar uma quadra de vôlei em BH pelo Minha Quadra é simples: acesse <a href=\"https://www.minhaquadra.com.br/\" target=\"_blank\" rel=\"noopener noreferrer\">www.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
     quadras:
       - nome: "Arena Tirol"
         endereco: "Av. Dr. Antonio Eustaquio Piazza, 4019 - Tirol (Barreiro), BH"
@@ -250,7 +250,7 @@ esportes:
       - title: "Quais são as melhores quadras de futsal para escolinhas em BH?"
         content: "<p>Para quem busca escolinhas de futsal em BH, duas opções se destacam: o Centro Esportivo Vila Rica oferece escolinha com metodologia Falcão, referência no desenvolvimento técnico. Já a Academia Galo Barreiro segue a metodologia oficial do Atlético Mineiro, com treinadores qualificados e foco na evolução de crianças e jovens.</p>"
       - title: "Como reservar uma quadra de futsal em Belo Horizonte online?"
-        content: "<p>Reservar uma quadra de futsal em BH pelo Minha Quadra é simples: acesse <a href=\"https://app.minhaquadra.com.br\" target=\"_blank\" rel=\"noopener noreferrer\">app.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
+        content: "<p>Reservar uma quadra de futsal em BH pelo Minha Quadra é simples: acesse <a href=\"https://www.minhaquadra.com.br/\" target=\"_blank\" rel=\"noopener noreferrer\">www.minhaquadra.com.br</a>, selecione o esporte, escolha a quadra e o horário disponível, e confirme sua reserva em poucos cliques. Sem precisar ligar ou enviar mensagem — tudo online e em tempo real.</p>"
     quadras:
       - nome: "All Sports Arena"
         endereco: "R. Vila Rica, 1168 - Monsenhor Messias, BH"

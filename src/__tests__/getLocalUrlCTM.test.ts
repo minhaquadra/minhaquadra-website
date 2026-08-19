@@ -87,6 +87,22 @@ describe("getLocaleUrlCTM", () => {
     );
   });
 
+  test("Handles absolute URLs and preserves query strings", () => {
+    const url = "http://localhost:4321/?esporte=padel";
+    const result = getLocaleUrlCTM(url, "en");
+    expect(result).toContain("?esporte=padel");
+  });
+
+  test("Handles absolute URLs and preserves query strings alongside anchors", () => {
+    const url = "http://localhost:4321/en/pricing/?plano=fixo#example-anchor";
+    const result = getLocaleUrlCTM(url, "en");
+    expect(result).toContain("?plano=fixo");
+    expect(result.endsWith("#example-anchor")).toBe(true);
+    expect(result.indexOf("?plano=fixo")).toBeLessThan(
+      result.indexOf("#example-anchor"),
+    );
+  });
+
   test("Handles relative URL with language directory in URL", () => {
     const url = "french/portfolio-01";
     const result = getLocaleUrlCTM(url, "en", prependValue);
