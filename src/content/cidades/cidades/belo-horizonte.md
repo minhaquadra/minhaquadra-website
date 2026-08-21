@@ -55,13 +55,6 @@ esportes:
         parceira: true
         appLink: "https://www.minhaquadra.com.br/quadras-esportivas/Belo%20Horizonte/quadra/all-sports-arena"
         imagem: "/images/blog/all-sports-arena.jpg"
-      - nome: "Arena Comercial"
-        endereco: "R. Américo Magalhães, 375 - Barreiro, BH"
-        preco: "R$120/hora"
-        descricao: "Um dos espaços mais completos do Barreiro, com 5 quadras de futebol society e um campo oficial para partidas 11 contra 11. Ambiente ideal para resenha com bar, pagode ao vivo e churrasqueira."
-        parceira: true
-        appLink: "https://www.minhaquadra.com.br/quadras-esportivas/belo-horizonte"
-        imagem: "/images/blog/arena-comercial.jpg"
       - nome: "Arena Betânia"
         endereco: "R. Úrsula Paulino, 2505 - Estrela do Oriente, BH"
         preco: "R$200/hora"
