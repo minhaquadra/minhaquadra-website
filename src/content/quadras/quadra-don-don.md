@@ -8,5 +8,5 @@ description: "Duas quadras de futsal que podem ser adaptadas para vôlei. Estrut
 sports:
   - "futsal"
   - "volei"
-appLink: "https://app.minhaquadra.com.br/"
+appLink: "https://www.minhaquadra.com.br/"
 ---

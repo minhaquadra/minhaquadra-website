@@ -8,5 +8,5 @@ description: "Clube com quadras esportivas de tênis e beach tennis em ambiente 
 sports:
   - "tenis"
   - "beach-tennis"
-appLink: "https://app.minhaquadra.com.br/"
+appLink: "https://www.minhaquadra.com.br/"
 ---
