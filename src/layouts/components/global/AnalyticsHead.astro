@@ -7,11 +7,14 @@
  * regex double-escaping, no syntax checking). Behavior preserved, plus:
  *  - Consent Mode v2 DEFAULT-DENIED before gtag loads (LGPD "balanceado":
  *    GA4 é consent-gated; aceite via ConsentBanner.astro → granted).
- *  - Cross-domain linker: site ↔ marketplace (app.minhaquadra.com.br hoje,
- *    minhaquadra.app no web novo) — a sessão GA4 sobrevive ao clique mesmo
- *    com rel="noreferrer" nos links.
- *  - CTA listener + decorador UTM agora casam TAMBÉM minhaquadra.app
- *    (cutover-proof; antes hard-match só app.minhaquadra.com.br).
+ *  - Cross-domain linker: site ↔ marketplace — a sessão GA4 sobrevive ao
+ *    clique mesmo com rel="noreferrer" nos links. (`app.minhaquadra.com.br`
+ *    saiu em 2026-08-20: o host foi aposentado e o marketplace passou a viver
+ *    na MESMA origem `www`, sob os paths do app Next.)
+ *  - CTA listener + decorador UTM casam por PATH, não por host: na origem
+ *    única, "link para o marketplace" = link para `www` cujo path NÃO é do
+ *    Astro (`/blog`, `/cidades`, `/esportes`, `/parceiros`, legais, assets).
+ *    `isMarketplaceLink` abaixo é a única definição; os dois scripts a usam.
  *
  * Spec: minhaquadra-app docs/superpowers/specs/2026-07-12-analytics-fase-1-web-design.md
  */
@@ -47,19 +50,34 @@
       domains: [
         "minhaquadra.com.br",
         "www.minhaquadra.com.br",
-        "app.minhaquadra.com.br",
         "minhaquadra.app",
       ],
     },
   });
 </script>
 
-<!-- GA4: track CTA clicks to the marketplace (both domains) -->
+<!-- Marketplace link predicate (single origin): www + non-Astro path -->
+<script is:inline>
+  window.__mqIsMarketplaceLink = function (a) {
+    try {
+      var u = new URL(a.href, window.location.href);
+    } catch (e) {
+      return false;
+    }
+    var hosts = ["www.minhaquadra.com.br", "minhaquadra.com.br", "minhaquadra.app"];
+    if (hosts.indexOf(u.hostname) === -1) return false;
+    // Paths served by this Astro site on the shared origin (routing table in
+    // minhaquadra-app docs/seo/2026-08-11-plano-cutover-dominio-unico.md).
+    var astro = /^\/(blog|cidades|esportes|parceiros|politicas|politica-de-privacidade|termos-de-uso|images|videos|_astro|plyr|sitemap)(\/|$)/;
+    return !astro.test(u.pathname);
+  };
+</script>
+
+<!-- GA4: track CTA clicks to the marketplace -->
 <script is:inline>
   document.addEventListener("click", function (e) {
-    var link = e.target.closest(
-      'a[href*="app.minhaquadra.com.br"], a[href*="minhaquadra.app"]'
-    );
+    var link = e.target.closest("a[href]");
+    if (link && !window.__mqIsMarketplaceLink(link)) link = null;
     if (link && typeof gtag === "function") {
       gtag("event", "cta_click_to_app", {
         event_category: "conversion",
@@ -87,8 +105,9 @@
       ctx = { medium: "cidades", campaign: m[1] };
     }
     function applyUtm() {
-      var links = document.querySelectorAll(
-        'a[href*="app.minhaquadra.com.br"], a[href*="minhaquadra.app"]'
+      var links = Array.prototype.filter.call(
+        document.querySelectorAll("a[href]"),
+        window.__mqIsMarketplaceLink
       );
       for (var i = 0; i < links.length; i++) {
         var a = links[i],

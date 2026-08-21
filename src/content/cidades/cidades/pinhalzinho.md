@@ -30,7 +30,7 @@ esportes:
         endereco: "Rua João Pessoa, 882 - Centro, Pinhalzinho, SC"
         descricao: "Quadra de areia na Academia Saúde Total com espaço moderno para beach tennis, futevôlei, vôlei de praia e treinos funcionais. Iluminação noturna, vestiários, área para churrasco e venda de bebidas."
         parceira: true
-        appLink: "https://app.minhaquadra.com.br/quadras-esportivas/Pinhalzinho/quadra/arena-st88"
+        appLink: "https://www.minhaquadra.com.br/quadras-esportivas/Pinhalzinho/quadra/arena-st88"
         imagem: "/images/blog/arena-st88-pinhalzinho.jpg.jpeg"
 ---
 
