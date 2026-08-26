@@ -215,6 +215,8 @@ const cidadesCollection = defineCollection({
                 descricao: z.string(),
                 preco: z.string().optional(),
                 parceira: z.boolean().default(false),
+                // Rótulo do selo de parceria; sem isso, usa "Parceira".
+                badgeLabel: z.string().optional(),
                 appLink: z.string().optional(),
                 imagem: z.string().optional(),
               }),

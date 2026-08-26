@@ -395,7 +395,7 @@ const webPageSchema = {
                 <header class="cd-court__header">
                   <h3 class="cd-court__name">
                     <span class="cd-court__index">{i + 1}.</span> {q.nome}
-                    {q.parceira && <span class="cd-court__badge">Parceira</span>}
+                    {q.parceira && <span class="cd-court__badge">{q.badgeLabel ?? "Parceira"}</span>}
                   </h3>
                 </header>
                 <p class="cd-court__address"><strong>Endereço:</strong> {q.endereco}</p>

@@ -15,7 +15,7 @@ esportes:
     resumo: "São Paulo é uma capital apaixonada por tênis, com clubes tradicionais que existem há décadas e redes modernas espalhadas por toda a cidade, do saibro clássico às quadras rápidas com iluminação profissional."
     tituloQuadras: "Quais são as melhores quadras de tênis em São Paulo?"
     lastUpdated: 2026-08-25
-    metaDescription: "São Paulo tem 10 quadras de tênis, de clubes tradicionais a redes como PlayTennis e Fast Tennis. As melhores: PlayTennis Morumbi, Limão Tênis e Academia Paulistana de Tênis. Compare estrutura e reserve pelo Minha Quadra."
+    metaDescription: "São Paulo tem 10 quadras de tênis, de clubes tradicionais a redes como PlayTennis e Fast Tennis. As melhores: Fast Tennis Morumbi, Limão Tênis e Academia Paulistana de Tênis. Compare estrutura e reserve pelo Minha Quadra."
     metaKeywords:
       - "quadras de tênis são paulo"
       - "onde jogar tênis em são paulo"
@@ -41,11 +41,12 @@ esportes:
       - question: "Como reservar uma quadra de tênis pelo Minha Quadra?"
         answer: "Acesse o Minha Quadra, selecione \"Tênis\", escolha São Paulo e a quadra desejada, veja os horários disponíveis e reserve online em poucos cliques."
     quadras:
-      - nome: "PlayTennis Morumbi"
+      - nome: "Fast Tennis Morumbi"
         endereco: "Av. Giovanni Gronchi, 3399 - Morumbi, São Paulo"
-        preco: "sob consulta"
+        preco: "R$150/hora"
         descricao: "Um verdadeiro clube de tênis no coração do Morumbi! São 10 quadras ao todo — 2 de saibro descobertas, 3 sintéticas cobertas e 5 sintéticas descobertas — além de uma quadra de squash pra variar o jogo. Estrutura completa de clube, com lanchonete, vestiário, lojinha e encordoamento na hora. E pra chegar sem estresse, tem estacionamento pago com manobrista."
-        parceira: false
+        parceira: true
+        badgeLabel: "Parceiro"
         appLink: "https://www.minhaquadra.com.br/quadras-esportivas/sao-paulo/quadra/fast-tennis-morumbi"
         imagem: "/images/blog/playtennis-morumbi.jpg"
       - nome: "PlayTennis Pompeia"
