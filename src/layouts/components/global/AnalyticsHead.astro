@@ -1,0 +1,140 @@
+---
+/**
+ * AnalyticsHead — GA4 + Consent Mode v2 + cross-domain linker + CTA/UTM
+ * instrumentation (analytics Fase 1 / A1).
+ *
+ * Extracted from config.toml [head].content (raw TOML string was error-prone:
+ * regex double-escaping, no syntax checking). Behavior preserved, plus:
+ *  - Consent Mode v2 DEFAULT-DENIED before gtag loads (LGPD "balanceado":
+ *    GA4 é consent-gated; aceite via ConsentBanner.astro → granted).
+ *  - Cross-domain linker: site ↔ marketplace — a sessão GA4 sobrevive ao
+ *    clique mesmo com rel="noreferrer" nos links. (`app.minhaquadra.com.br`
+ *    saiu em 2026-08-20: o host foi aposentado e o marketplace passou a viver
+ *    na MESMA origem `www`, sob os paths do app Next.)
+ *  - CTA listener + decorador UTM casam por PATH, não por host: na origem
+ *    única, "link para o marketplace" = link para `www` cujo path NÃO é do
+ *    Astro (`/blog`, `/cidades`, `/esportes`, `/parceiros`, legais, assets).
+ *    `isMarketplaceLink` abaixo é a única definição; os dois scripts a usam.
+ *
+ * Spec: minhaquadra-app docs/superpowers/specs/2026-07-12-analytics-fase-1-web-design.md
+ */
+---
+
+<!-- Consent Mode v2: default DENIED before any Google tag runs (LGPD). -->
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500,
+  });
+  // Restore a previous choice (ConsentBanner writes mq_consent).
+  try {
+    if (localStorage.getItem("mq_consent") === "granted") {
+      gtag("consent", "update", { analytics_storage: "granted" });
+    }
+  } catch (e) {}
+</script>
+
+<!-- Google Analytics 4 (advanced consent mode: cookieless pings until granted) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-78H3GP0VDX"></script>
+<script is:inline>
+  gtag("js", new Date());
+  gtag("config", "G-78H3GP0VDX", {
+    linker: {
+      domains: [
+        "minhaquadra.com.br",
+        "www.minhaquadra.com.br",
+        "minhaquadra.app",
+      ],
+    },
+  });
+</script>
+
+<!-- Marketplace link predicate (single origin): www + non-Astro path -->
+<script is:inline>
+  window.__mqIsMarketplaceLink = function (a) {
+    try {
+      var u = new URL(a.href, window.location.href);
+    } catch (e) {
+      return false;
+    }
+    var hosts = ["www.minhaquadra.com.br", "minhaquadra.com.br", "minhaquadra.app"];
+    if (hosts.indexOf(u.hostname) === -1) return false;
+    // Paths served by this Astro site on the shared origin (routing table in
+    // minhaquadra-app docs/seo/2026-08-11-plano-cutover-dominio-unico.md).
+    var astro = /^\/(blog|cidades|esportes|parceiros|politicas|politica-de-privacidade|termos-de-uso|images|videos|_astro|plyr|sitemap)(\/|$)/;
+    return !astro.test(u.pathname);
+  };
+</script>
+
+<!-- GA4: track CTA clicks to the marketplace -->
+<script is:inline>
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest("a[href]");
+    if (link && !window.__mqIsMarketplaceLink(link)) link = null;
+    if (link && typeof gtag === "function") {
+      gtag("event", "cta_click_to_app", {
+        event_category: "conversion",
+        event_label: link.textContent.trim().substring(0, 100),
+        link_url: link.href,
+        page_path: window.location.pathname,
+      });
+    }
+  });
+</script>
+
+<!-- UTM tagging for all marketplace links (runs at DOM ready) -->
+<script is:inline>
+  (function () {
+    var path = window.location.pathname;
+    var ctx = null,
+      m;
+    if ((m = path.match(/^\/blog\/([^/]+)\/?$/))) {
+      ctx = { medium: "blog", campaign: m[1] };
+    } else if ((m = path.match(/^\/esportes\/([^/]+)\/?$/))) {
+      ctx = { medium: "esportes", campaign: m[1] };
+    } else if ((m = path.match(/^\/cidades\/[^/]+\/([^/]+)\/([^/]+)\/?$/))) {
+      ctx = { medium: "cidades", campaign: m[1] + "-" + m[2] };
+    } else if ((m = path.match(/^\/cidades\/[^/]+\/([^/]+)\/?$/))) {
+      ctx = { medium: "cidades", campaign: m[1] };
+    }
+    function applyUtm() {
+      var links = Array.prototype.filter.call(
+        document.querySelectorAll("a[href]"),
+        window.__mqIsMarketplaceLink
+      );
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i],
+          medium,
+          campaign;
+        if (a.closest("header.header")) {
+          medium = "menu";
+          campaign = "header-cta";
+        } else if (ctx) {
+          medium = ctx.medium;
+          campaign = ctx.campaign;
+        } else {
+          continue;
+        }
+        try {
+          var url = new URL(a.href);
+          url.searchParams.set("utm_source", "site");
+          url.searchParams.set("utm_medium", medium);
+          url.searchParams.set("utm_campaign", campaign);
+          a.href = url.toString();
+        } catch (e) {}
+      }
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyUtm);
+    } else {
+      applyUtm();
+    }
+  })();
+</script>

@@ -10,5 +10,5 @@ sports:
   - "futsal"
   - "basquete"
   - "volei"
-appLink: "https://app.minhaquadra.com.br/"
+appLink: "https://www.minhaquadra.com.br/"
 ---

@@ -3,9 +3,10 @@ import { getCollection } from "astro:content";
 import Base from "@/layouts/Base.astro";
 import CustomButton from "@/layouts/components/CustomButton.astro";
 import AccordionList from "@/layouts/components/widgets/AccordionList.astro";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 
-const SITE_URL = "https://minhaquadra.com.br";
-const APP_URL = "https://app.minhaquadra.com.br/";
+const SITE_URL = "https://www.minhaquadra.com.br";
+const APP_URL = "https://www.minhaquadra.com.br/";
 
 export async function getStaticPaths() {
   const estados = await getCollection("estados");
@@ -89,7 +90,9 @@ const top3 = quadras.slice(0, 3).map((q: any) => q.nome);
 
 // ─── GEO: TL;DR text (parágrafo subtle, integrado ao fluxo) ──
 let tldrText = "";
-if (hasQuadras) {
+if (esporte.tldr) {
+  tldrText = esporte.tldr;
+} else if (hasQuadras) {
   const parts: string[] = [];
   parts.push(`${cidadeTitle} tem ${quadras.length} ${quadras.length === 1 ? "quadra" : "quadras"} de ${esporteNome.toLowerCase()} ${quadras.length === 1 ? "listada" : "listadas"} no Minha Quadra`);
   if (precoMin !== null && precoMax !== null) {
@@ -120,7 +123,9 @@ const lastUpdatedFmt = new Intl.DateTimeFormat("pt-BR", {
 // ─── GEO: Meta tags em linguagem natural ────────────────────
 const metaTitle = `Quadras de ${esporteNome} em ${cidadeTitle}, ${estadoSigla} — Encontre e Reserve | Minha Quadra`;
 let metaDescription: string;
-if (hasQuadras) {
+if (esporte.metaDescription) {
+  metaDescription = esporte.metaDescription;
+} else if (hasQuadras) {
   const top3Str = top3.length === 3 ? `As melhores: ${top3[0]}, ${top3[1]} e ${top3[2]}.` : top3.length ? `Em destaque: ${top3.join(", ")}.` : "";
   const priceFragment =
     precoMin !== null && precoMax !== null
@@ -142,12 +147,15 @@ if (hasQuadras) {
 
 // Meta keywords específicas por página (esporte + cidade)
 const esporteLower = esporteNome.toLowerCase();
-const metaKeywords = [
-  `quadras ${esporteLower} ${cidadeTitle.toLowerCase()}`,
-  `onde jogar ${esporteLower} ${cidadeTitle}`,
-  `alugar quadra ${esporteLower} ${cidadeTitle}`,
-  "Minha Quadra",
-];
+const metaKeywords =
+  esporte.metaKeywords && esporte.metaKeywords.length > 0
+    ? esporte.metaKeywords
+    : [
+        `quadras ${esporteLower} ${cidadeTitle.toLowerCase()}`,
+        `onde jogar ${esporteLower} ${cidadeTitle}`,
+        `alugar quadra ${esporteLower} ${cidadeTitle}`,
+        "Minha Quadra",
+      ];
 
 // Intro: usa override do frontmatter se disponível, senão fallback genérico
 const introParas =
@@ -242,7 +250,8 @@ const sportsLocationSchemas = quadras.map((q: any) => {
     sport: esporteNome,
   };
   if (q.appLink) obj.url = q.appLink;
-  if (q.preco) obj.priceRange = q.preco;
+  // Só expõe priceRange quando há valor numérico (evita "sob consulta" no schema)
+  if (q.preco && /\d/.test(q.preco)) obj.priceRange = q.preco;
   if (q.imagem) obj.image = `${SITE_URL}${q.imagem}`;
   return obj;
 });
@@ -275,6 +284,7 @@ const webPageSchema = {
   dateModified: lastUpdatedISO,
   publisher: {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     name: "Minha Quadra",
     url: SITE_URL,
     logo: `${SITE_URL}/images/logo-verde.png`,
@@ -391,7 +401,7 @@ const webPageSchema = {
                 <p class="cd-court__address"><strong>Endereço:</strong> {q.endereco}</p>
                 {q.preco && <p class="cd-court__price"><strong>A partir de:</strong> {q.preco}</p>}
                 <p class="cd-court__desc">{q.descricao}</p>
-                {q.parceira && q.appLink && (
+                {q.appLink && (
                   <p class="cd-court__cta-line">
                     👉 Quer reservar a {q.nome}?{" "}
                     <a href={q.appLink} class="cd-court__cta-link" target="_blank" rel="noopener noreferrer">

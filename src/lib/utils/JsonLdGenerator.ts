@@ -9,6 +9,7 @@ import { getLocaleUrlCTM } from "./languageParser";
 import removeEmptyKeys from "./removeEmptyKeys";
 import trailingSlashChecker from "./trailingSlashChecker";
 import social from "@/config/social.json";
+import { ORGANIZATION_ID } from "./entityIds";
 
 // This component dynamically generates appropriate JSON-LD data based on the page type
 export type JSONLDProps = {
@@ -78,8 +79,11 @@ export default function JsonLdGenerator(content: JSONLDProps, Astro: any) {
   }
 
   // Add `publisher` to jsonLdData
+  // `@id` ties every page on this project to the same organisation as the
+  // Next.js app that serves `/` on this origin. See `entityIds.ts`.
   jsonLdData.publisher = {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     name: config.seo.author,
     url: trailingSlashChecker(Astro.url.origin),
     sameAs: social.main.filter((item) => item.enable).map((item) => item.url),

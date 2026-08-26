@@ -4,7 +4,7 @@
   description       = "Encontre e reserve quadras esportivas perto de você. Futebol, tênis, beach tennis e muito mais." # Shared description for SEO and OpenGraph
   tagline           = "Minha Quadra"
   taglineSeparator = " | "
-  baseUrl          = "https://minhaquadra.com.br" # Base URL for the site and used in OpenGraph meta tags.
+  baseUrl          = "https://www.minhaquadra.com.br" # Base URL for the site and used in OpenGraph meta tags.
   logo              = "/images/logo-azul.png" # Path to the site's logo (fundo claro)
   logoAlternate    = "/images/logo-verde.png" # Path to the site's logo (fundo escuro)
   logoText         = "" # Text displayed next to the logo
@@ -126,7 +126,7 @@
   [settings.navigationButton]
     enable = true
     label  = "" # Check src/i18n/en.json and src/i18n/fr.json for changing the navigation button label in different languages or directly add value here if you are not using internationalization feature
-    url    = "https://app.minhaquadra.com.br"
+    url    = "https://www.minhaquadra.com.br"
 
   [settings.markup.tableOfContents]
     enable      = true
@@ -150,7 +150,6 @@
 # -----------------------------------------------------------------------------------------------------------------------------------
 [head]
   content = """
-  <noscript defer src="/umami.is.js" data-website-id=""></noscript>
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=clash-grotesk@400,500,600&display=swap" rel="stylesheet">
   <!-- Google Analytics 4 -->

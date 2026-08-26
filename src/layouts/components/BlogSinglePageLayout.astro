@@ -9,6 +9,7 @@ import Social from "./widgets/Social.astro";
 import SocialData from "@/config/social.json";
 import type { CollectionEntry } from "astro:content";
 import parseTomlToJson from "@/lib/utils/parseTomlToJson";
+import { ORGANIZATION_ID } from "@/lib/utils/entityIds";
 import { render } from "astro:content";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -42,7 +43,7 @@ const t = await useTranslations(Astro.currentLocale as string);
 // Article JSON-LD
 import extractSlug from "@/lib/utils/extractSlug";
 const slug = extractSlug(content).split("/").pop();
-const siteUrl = "https://minhaquadra.com.br";
+const siteUrl = "https://www.minhaquadra.com.br";
 const pageUrl = `${siteUrl}/blog/${slug}/`;
 const imageUrl = image ? `${siteUrl}${image.startsWith("/src/assets") ? "" : "/images/blog/"}${image.replace(/^\/images\/blog\//, "")}` : "";
 const dateISO = date ? new Date(date).toISOString() : "";
@@ -58,11 +59,13 @@ const articleSchema = {
   "dateModified": lastUpdatedISO,
   "author": {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     "name": "Minha Quadra",
     "url": siteUrl,
   },
   "publisher": {
     "@type": "Organization",
+    "@id": ORGANIZATION_ID,
     "name": "Minha Quadra",
     "url": siteUrl,
     "logo": {
