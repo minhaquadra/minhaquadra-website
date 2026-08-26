@@ -185,6 +185,11 @@ const cidadesCollection = defineCollection({
           resumo: z.string(),
           tituloQuadras: z.string().optional(),
           intro: z.array(z.string()).optional(),
+          // Overrides opcionais de SEO/GEO por página (esporte + cidade).
+          // Quando ausentes, a página usa os textos gerados a partir das quadras.
+          metaDescription: z.string().optional(),
+          metaKeywords: z.array(z.string()).optional(),
+          tldr: z.string().optional(),
           lastUpdated: z.coerce.date().optional(),
           faq: z
             .array(
