@@ -51,6 +51,15 @@
           "children": [
             { "enable": true, "name": "Pinhalzinho", "url": "/cidades/sc/pinhalzinho/" }
           ]
+        },
+        {
+          "enable": true,
+          "name": "São Paulo",
+          "url": "/cidades/sp/",
+          "hasChildren": true,
+          "children": [
+            { "enable": true, "name": "São Paulo", "url": "/cidades/sp/sao-paulo/" }
+          ]
         }
       ]
     },
