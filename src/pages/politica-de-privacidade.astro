@@ -15,7 +15,7 @@ import Base from "@/layouts/Base.astro";
         <h1 data-aos="reveal-anim-left">
           <span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line1">Política de </span><span class="text-display-5 md:text-display-4 leading-tight font-semibold tu-title-line2">privacidade.</span>
         </h1>
-        <p class="tu-date" data-aos="fade-up" data-aos-delay="200">Última atualização: 12 de agosto de 2026</p>
+        <p class="tu-date" data-aos="fade-up" data-aos-delay="200">Última atualização: 28 de agosto de 2026</p>
       </div>
     </div>
   </section>
@@ -145,7 +145,10 @@ import Base from "@/layouts/Base.astro";
             <li>Dados comportamentais e padrões de uso</li>
             <li>Dados de cookies de marketing (quando consentido)</li>
             <li>Dados compartilhados com Meta via Pixel e API de Conversões (visualizações, buscas, compras)</li>
+            <li><strong>Identificadores pseudônimos de análise:</strong> um identificador aleatório do dispositivo/navegador e um identificador de sessão, criados por nós e sem relação com seu nome, e-mail ou telefone. Quando você faz login, esses eventos passam a ser associados à sua conta</li>
+            <li><strong>Gravação de sessão:</strong> registramos a navegação pelas telas do site e do aplicativo para entender onde as pessoas travam. A gravação é <strong>mascarada na origem</strong>: todo texto e toda imagem são ocultados antes de sair do seu dispositivo — não capturamos o que você digita, nem senhas, nem dados de cartão, e as telas nativas de pagamento (Apple Pay, Google Pay, formulários do provedor) nunca entram na gravação</li>
           </ul>
+          <div class="tu-callout">Nossa base de análise é <strong>pseudonimizada por contrato</strong>: nome, e-mail, telefone e CPF nunca são gravados nos eventos de comportamento. No site, a gravação de sessão só começa depois que você aceita o aviso de cookies; recusar não afeta o uso da plataforma.</div>
 
           <h3>2.8 Informações de Terceiros</h3>
           <ul>
@@ -229,6 +232,11 @@ import Base from "@/layouts/Base.astro";
             <li>Dados bancários, documentos de identidade, biometria facial, endereço, CPF/CNPJ</li>
             <li>Finalidade: adquirência de pagamentos com cartão e carteiras digitais (Apple Pay/Google Pay); e, para estabelecimentos habilitados anteriormente, verificação KYC e repasses via contas Stripe Connect legadas, em transição para as contas de recebimento junto ao Asaas</li>
           </ul>
+          <h4>Pagar.me:</h4>
+          <ul>
+            <li>Dados de transação, valor, descrição do pagamento e dados do meio de pagamento informado no checkout</li>
+            <li>Finalidade: processar pagamentos com cartão, PIX e carteiras digitais</li>
+          </ul>
           <h4>Mercado Pago:</h4>
           <ul>
             <li>Dados de transação, valor e descrição do pagamento</li>
@@ -237,11 +245,26 @@ import Base from "@/layouts/Base.astro";
           <div class="tu-callout">Essas instituições têm suas próprias políticas de privacidade. Recomendamos que você as leia: <a href="https://www.asaas.com/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade do Asaas</a> | <a href="https://stripe.com/br/privacy" target="_blank" rel="noopener">Política de Privacidade da Stripe</a> | <a href="https://www.mercadopago.com.br/privacidade" target="_blank" rel="noopener">Política de Privacidade do Mercado Pago</a>.</div>
 
           <h3>4.3 Com Provedores de Infraestrutura</h3>
-          <h4>Google Firebase e Google Cloud Platform:</h4>
+          <h4>Supabase:</h4>
           <ul>
-            <li>Todos os dados armazenados na plataforma</li>
-            <li>Finalidade: hospedagem, autenticação, armazenamento e funções serverless</li>
-            <li>Localização: servidores nos Estados Unidos com réplicas para backup</li>
+            <li>Os dados da plataforma: conta e perfil, quadras, reservas, pedidos, mensagens e arquivos enviados</li>
+            <li>Finalidade: banco de dados, autenticação, armazenamento de arquivos e funções de servidor</li>
+            <li>Localização: servidores na <strong>região de São Paulo, no Brasil</strong></li>
+          </ul>
+          <h4>Vercel:</h4>
+          <ul>
+            <li>Dados de requisição (endereço IP, navegador, páginas acessadas) inerentes à entrega das páginas</li>
+            <li>Finalidade: hospedagem do site e do aplicativo web, servidos a partir da região de São Paulo</li>
+          </ul>
+          <h4>Google Firebase e Apple (APNs):</h4>
+          <ul>
+            <li>Identificador do dispositivo para envio de notificações (token de push)</li>
+            <li>Finalidade: entregar notificações push no seu aparelho. O Firebase <strong>não é mais</strong> o banco de dados nem o sistema de análise da plataforma</li>
+          </ul>
+          <h4>Sentry:</h4>
+          <ul>
+            <li>Relatórios técnicos de erro: mensagem do erro, tela onde ocorreu, versão do app e o identificador da sua conta</li>
+            <li>Finalidade: encontrar e corrigir falhas. Um filtro remove nome, e-mail e telefone antes do envio</li>
           </ul>
           <h4>Google Maps API:</h4>
           <ul>
@@ -256,16 +279,28 @@ import Base from "@/layouts/Base.astro";
             <li>Tecnologias: Meta Pixel e Conversions API</li>
             <li>Você pode controlar anúncios personalizados nas Configurações de Anúncios do Facebook</li>
           </ul>
-          <h4>Google Analytics e Firebase Analytics:</h4>
+          <h4>TikTok e Google Ads:</h4>
           <ul>
-            <li>Dados de uso, páginas visitadas, tempo de sessão e eventos no aplicativo</li>
-            <li>Dados são agregados e anonimizados sempre que possível</li>
+            <li>Eventos de conversão e dados comportamentais, com e-mail e telefone sempre em forma cifrada (hash)</li>
+            <li>Finalidade: medir e otimizar campanhas de anúncios</li>
+          </ul>
+          <h4>PostHog:</h4>
+          <ul>
+            <li>Eventos de comportamento pseudonimizados (telas vistas, buscas, etapas da reserva) e as gravações de sessão mascaradas descritas na Seção 2.7</li>
+            <li>Finalidade: entender o uso do produto e melhorar as telas. Os eventos são enviados a partir dos <strong>nossos próprios servidores</strong>, não diretamente do seu aparelho</li>
+            <li>Localização: servidores na <strong>União Europeia (Frankfurt)</strong></li>
+          </ul>
+          <h4>Google Analytics:</h4>
+          <ul>
+            <li>Dados de uso, páginas visitadas e tempo de sessão no site</li>
+            <li>Só é ativado após você aceitar o aviso de cookies; até lá funciona sem cookies (Consent Mode)</li>
+            <li>O <strong>Firebase Analytics foi descontinuado</strong> e não recebe mais dados</li>
           </ul>
 
           <h3>4.5 Com Provedores de Comunicação</h3>
           <ul>
-            <li><strong>WhatsApp Business:</strong> número de telefone e nome para notificações e suporte (com consentimento)</li>
-            <li><strong>Serviços de e-mail (SendGrid/Amazon SES):</strong> e-mail e nome para confirmações e notificações</li>
+            <li><strong>Infobip:</strong> número de telefone, e-mail e nome, para enviar mensagens de WhatsApp, SMS e e-mail — códigos de verificação, confirmações de reserva e avisos do seu pedido. É a empresa que opera hoje os três canais para nós</li>
+            <li><strong>WhatsApp (Meta):</strong> as mensagens trafegam pela infraestrutura do WhatsApp, sujeita à política da Meta</li>
           </ul>
 
           <h3>4.6 Com Serviços de Inteligência Artificial (Uso Interno)</h3>
@@ -297,7 +332,7 @@ import Base from "@/layouts/Base.astro";
           <h4>Tipos de cookies que usamos:</h4>
           <ul>
             <li><strong>Essenciais:</strong> necessários para funcionamento básico (login, sessão)</li>
-            <li><strong>Performance:</strong> medem como você usa a plataforma (Google Analytics, Firebase)</li>
+            <li><strong>Performance:</strong> medem como você usa a plataforma (Google Analytics e PostHog). No site, só passam a funcionar depois do seu aceite no aviso de cookies</li>
             <li><strong>Funcionalidade:</strong> lembram suas preferências (idioma, localização)</li>
             <li><strong>Marketing:</strong> usados para exibir anúncios relevantes (Meta Pixel)</li>
           </ul>
